@@ -1,3 +1,9 @@
 void uart_Init( unsigned int ubrr );
-void uart_Transmit( unsigned char data );
-unsigned char uart_Receive( void );
+
+int uart_Transmit(char data, FILE * file);
+
+int uart_Receive( FILE * file );
+
+
+int transmit(char data, FILE *);
+int receive(FILE *);

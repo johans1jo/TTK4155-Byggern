@@ -11,6 +11,11 @@ void main( void )
     uart_Init ( MYUBRR );
     while (1)
     {
-        uart_Transmit ('a');
+        if (uart_Receive()) {
+          unsigned char hei = uart_Receive();
+          uart_Transmit ('o');
+          uart_Transmit ('k');
+          uart_Transmit (hei);
+        }
     }
 }
