@@ -9,6 +9,8 @@
 void main( void )
 {
     uart_Init ( MYUBRR );
+    printf("Ting funker");
+    /*
     while (1)
     {
         if (uart_Receive()) {
@@ -17,5 +19,5 @@ void main( void )
           uart_Transmit ('k');
           uart_Transmit (hei);
         }
-    }
+    }*/
 }

@@ -1,5 +1,3 @@
-#include <avr/io.h>
-#include <stdio.h>
 #include "uart.h"
 
 void uart_Init( unsigned int ubrr ) {
