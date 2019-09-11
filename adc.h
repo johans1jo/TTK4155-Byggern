@@ -1,4 +1,4 @@
 #include <avr/io.h>
-void adc_init();
 
-void adc_test();
+void adc_init();
+uint8_t adc_read(int channel);
