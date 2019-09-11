@@ -1,7 +1,9 @@
 #include <avr/io.h>
 #include "uart.h"
 #include "sram.h"
-#include <avr/delay.h>
+
+#define F_CPU 4915200
+#include <util/delay.h>
 
 #define FOSC 4915200 // Clock Speed
 #define BAUD 9600
