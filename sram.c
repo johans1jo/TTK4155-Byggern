@@ -1,11 +1,11 @@
 #include "sram.h"
 
-void SRAM_init() {
+void sram_init() {
   MCUCR = (1 << SRE); //enable XMEM
   SFIOR = (1 << XMM2); //mask unused bits
 }
 
-void SRAM_test(void) {
+void sram_test(void) {
   volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM
   uint16_t ext_ram_size = 0x800;
   uint16_t write_errors = 0;

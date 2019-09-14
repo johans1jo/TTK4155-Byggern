@@ -2,5 +2,5 @@
 #include <avr/io.h>
 #include <stdio.h>
 
-void SRAM_init();
-void SRAM_test(void);
+void sram_init();
+void sram_test(void);
