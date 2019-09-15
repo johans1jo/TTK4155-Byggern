@@ -5,6 +5,15 @@ void sram_init() {
   SFIOR = (1 << XMM2); //mask unused bits
 }
 
+void sram_write(uint16_t address, uint8_t data) {
+  volatile char *ext_ram = (char *) 0x1800;
+  ext_ram[address] = data;
+}
+
+uint8_t sram_read(uint16_t address) {
+  return ext_ram[address];
+}
+
 void sram_test(void) {
   volatile char *ext_ram = (char *) 0x1800; // Start address for the SRAM
   uint16_t ext_ram_size = 0x800;
