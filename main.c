@@ -4,6 +4,7 @@
 #include "uart.h"
 #include "sram.h"
 #include "adc.h"
+#include "joystick.h"
 
 
 #define FOSC 4915200 // Clock Speed
@@ -11,7 +12,7 @@
 #define MYUBRR FOSC/16/BAUD-1 // 31
 
 
-void main(void) {
+int main(void) {
   uart_init(MYUBRR);
   adc_init();
 
@@ -21,5 +22,7 @@ void main(void) {
 
     _delay_ms(200);
   }
+
+  return 0;
 
 }

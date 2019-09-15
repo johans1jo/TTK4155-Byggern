@@ -11,6 +11,7 @@ void sram_write(uint16_t address, uint8_t data) {
 }
 
 uint8_t sram_read(uint16_t address) {
+  volatile char *ext_ram = (char *) 0x1800;
   return ext_ram[address];
 }
 
