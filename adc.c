@@ -1,11 +1,14 @@
 #include "adc.h"
 
+#define F_CPU 4915200
+#include <util/delay.h>
+
 void adc_init() {
   MCUCR = (1 << SRE); //enable XMEM
   SFIOR = (1 << XMM2); //mask unused bits
 }
 
-uint8_t adc_read(int channel) {
+int adc_read(int channel) {
   volatile char *adc = (char *) 0x1400;
   adc[0] = 3 + channel;
 
