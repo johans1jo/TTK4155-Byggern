@@ -41,8 +41,8 @@ int joy_read_y() {
 }
 
 int joy_dir() {
-  joy_read_x();
-  joy_read_y();
+  int x = joy_read_x();
+  int y = joy_read_y();
   //If X direction has largest value
   if (abs(x_pos) > abs(y_pos)) {
     if (x > 80) {
