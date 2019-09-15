@@ -17,7 +17,6 @@ int uart_transmit(char data, FILE * file) {
     while (! (UCSR0A & (1 << UDRE0)) );
     /* Put data into buffer, sends the data */
     UDR0 = data;
-
     return 0;
 }
 
