@@ -39,7 +39,7 @@ void oled_write_data(uint8_t data) {
 void oled_goto_line(int line) { //Line between 0-7
   oled_write_command(0x20);
   oled_write_command(0b10);
-  
+
   int command = 0xB0 + line;
   oled_write_command(command);
 }
@@ -62,14 +62,23 @@ void oled_goto_home() {
   oled_goto_pos(0,0);
 }
 
+void oled_clear_line(int line) {
+  oled_goto_line(line);
+  oled_goto_column(0);
+  for (int i=0; i<128; i++) {
+    oled_write_data(0x00);
+  }
+}
+
 void oled_clear() {
   for (int i=0; i < 8; i++) {
-    oled_goto_line(i);
-    oled_goto_column(0);
-    for (int j=0; j<128; j++) {
-      oled_write_data(0x00);
-    }
+    oled_clear_line(i);
   }
+}
+
+void oled_reset() {
+  oled_clear();
+  oled_goto_pos(0,0);
 }
 
 void oled_fill() {
