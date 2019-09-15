@@ -1,4 +1,6 @@
 #include <avr/io.h>
+#include <string.h>
+#include "uart.h"
 
 void oled_init();
 void oled_write_command(uint8_t command);
@@ -11,3 +13,5 @@ void oled_clear_line(int line);
 void oled_clear();
 void oled_reset();
 void oled_fill();
+void oled_print_char(char c);
+void oled_print(char c[]);

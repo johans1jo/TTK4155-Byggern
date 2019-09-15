@@ -1,4 +1,5 @@
 #include "oled.h"
+#include "fonts.h"
 
 void oled_init()
  {
@@ -88,5 +89,19 @@ void oled_fill() {
     for (int j=0; j<128; j++) {
       oled_write_data(0xFF);
     }
+  }
+}
+
+void oled_print_char(char c) {
+  c = c-32;
+  for (int i = 0; i < 7; i++) {
+    int hei = pgm_read_byte(&font8[c][i]);
+    oled_write_data(hei);
+  }
+}
+
+void oled_print(char c[]) {
+  for (int i = 0; i < strlen(c); i++) {
+    oled_print_char(c[i]);
   }
 }
