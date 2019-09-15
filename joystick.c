@@ -1,46 +1,62 @@
 #include "joystick.h"
 #include <stdlib.h>
+#include "uart.h"
 
 #define F_CPU 4915200
 #include <util/delay.h>
 
 
-uint8_t joy_x_min = 0;
-uint8_t joy_x_max = 255;
-uint8_t joy_y_min = 0;
-uint8_t joy_y_max = 255;
+int joy_x_min = 0;
+int joy_x_max = 255;
+int joy_y_min = 0;
+int joy_y_max = 255;
 
-volatile int x_offset;
-volatile int y_offset;
+volatile int x_offset = 125;
+volatile int y_offset = 125;
 
-uint8_t slide_left_V_min = 0;
-uint8_t slide_left_V_max = 255;
-uint8_t slide_right_V_min = 0;
-uint8_t slide_right_V_max = 255;
+int slide_left_V_min = 0;
+int slide_left_V_max = 255;
+int slide_right_V_min = 0;
+int slide_right_V_max = 255;
 
 
 //Compensates for natrual offset
-int joy_auto_calibrate(){
-  _delay_ms(1);
+int joy_calibrate(){
   x_offset = adc_read(JOYSTICK_X);
-
-  _delay_ms(1);
   y_offset = adc_read(JOYSTICK_Y);
 }
 
 //Returns joystick X value between -100 and 100
 int joy_read_x() {
-  x_pos = (((adc_read(JOYSTICK_X)-x_offset)*200 )/ (joy_x_max - joy_x_min)) - 128;
-  return 0;
+  //x_pos = (((adc_read(JOYSTICK_X)-x_offset)*200 )/ (joy_x_max - joy_x_min)) - 128;
+  //return 0;
+  int pos = (adc_read(JOYSTICK_X)-x_offset) * 100 / 127;
+  return pos;
 }
 
 //Returns joystick Y value between -100 and 100
 int joy_read_y() {
-  y_pos = (((adc_read(JOYSTICK_Y)-y_offset)*200 )/ (joy_y_max - joy_y_min)) - 128;
-  return 0;
+  //y_pos = (((adc_read(JOYSTICK_Y)-y_offset)*200 )/ (joy_y_max - joy_y_min)) - 128;
+  //return 0;
+  int pos = (adc_read(JOYSTICK_Y)-y_offset) * 100 / 127;
+  return pos;
 }
 
-int joy_dir() {
+int joy_read_dir() {
+  int x = joy_read_x();
+  int y = joy_read_y();
+  if (x > 70 && y < 70 && y > -70) {
+    return UP;
+  } else if (x < -70 && y < 70 && y > -70) {
+    return DOWN;
+  } else if (y > 70 && x < 70 && x > -70) {
+    return RIGHT;
+  } else if (y < -70 && x < 70 && x > -70) {
+    return LEFT;
+  } else {
+    return 0;
+  }
+  /*
   int x = joy_read_x();
   int y = joy_read_y();
   //If X direction has largest value
@@ -68,4 +84,5 @@ int joy_dir() {
     }
   }
   return 0;
+  */
 }

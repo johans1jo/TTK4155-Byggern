@@ -12,7 +12,7 @@ int adc_read(int channel) {
   volatile char *adc = (char *) 0x1400;
   adc[0] = 3 + channel;
 
-  //_delay_us(700);
+  _delay_us(200);
 
   uint8_t value = adc[0];
 
