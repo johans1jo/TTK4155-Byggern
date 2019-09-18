@@ -11,7 +11,6 @@
 #include "spi.h"
 #include "MCP2515.h"
 #include <avr/interrupt.h>
-_SEI();
 
 #define FOSC 4915200// Clock Speed
 #define BAUD 9600
@@ -19,25 +18,58 @@ _SEI();
 
 
 int main(void){
-    uart_init ( MYUBRR );
-    adc_init();
-    joy_calibrate();
 
-    oled_init();
-		oled_clear();
+	uart_init( MYUBRR );
+	spi_master_init();
+	spi_master_transmit(MCP_BITMOD);
+	spi_slave_receive();
+	spi_master_transmit(MCP_CANCTRL);
+	spi_slave_receive();
+	spi_master_transmit(MODE_LOOPBACK);
+	spi_slave_receive();
+	spi_master_transmit(MODE_LOOPBACK);
+	char a = spi_slave_receive();
+	printf("\r\n%d", a);
 
-		_delay_ms(1000);
 
-		spi_master_init();
+	//sei();
+	/*
+	uart_init ( MYUBRR );
 
-		//SS aka CS lav
-		DDRB = (1 << PB4);
-		PORTB = (0 << PB4);
+	printf("\r\n- troll: \r\n");
+	_delay_ms(1000);
 
-		//Loopback
+	spi_master_init();
+	printf("\r\nMSTR2 etter master init: %d", SPCR & (1 << MSTR));
+	PORTB = (0 << PB4);
+
+	printf("\r\nSPIF: %d", SPSR & (1 << SPIF));
+	printf("\r\nMSTR: %d", SPCR & (1 << MSTR));
+
+	//Loopback
+	spi_master_transmit(0b101);
+
+	printf("\r\nSPIF: %d", SPSR & (1 << SPIF));
+	printf("\r\nMSTR: %d", SPCR & (1 << MSTR));
+
+	//spi_slave_init();
+	char b = spi_slave_receive();
+	printf("\r\n%c\r\n", b);
+
+	spi_master_init();
+	//SS aka CS lav
+	DDRB = (1 << PB4);
+	PORTB = (0 << PB4);
+
+	printf("h");
+	printf("\r\nSPIF: %d", SPSR & (1 << SPIF));
+
+*/
+
+	printf("\r\nSLUTT\r\n");
+
+/*
 		spi_master_transmit(0b101);
-		printf("1");
-		spi_master_transmit(MCP_CANCTRL);
 		printf("2");
 		spi_master_transmit(MODE_LOOPBACK);
 		printf("3");
