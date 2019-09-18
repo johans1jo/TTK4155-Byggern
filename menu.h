@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "joystick.h"
 
 // MAX_SUBMENUS angir hvor mye plass i minnet som skal settes av til undermeny-array
 #define MAX_SUBMENUS 10

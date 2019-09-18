@@ -1,4 +1,5 @@
 #include "menu.h"
+#include "joystick.h"
 
 // Initierer en meny
 
@@ -19,8 +20,8 @@ menu_t menu_init() {
 	static menu_t sub1 = { "Sub1", &t0u0, &main1, {NULL} };
 	menu_add_sub(&main1, &sub1);
 
-	static menu_t sub2 = { "Sub2", &t0u1, &main1, {NULL} };
-	menu_add_sub(&main1, &sub2);
+		static menu_t sub2 = { "Sub2", &t0u1, &main1, {NULL} };
+		menu_add_sub(&main1, &sub2);
 
 	return menu;
 }
