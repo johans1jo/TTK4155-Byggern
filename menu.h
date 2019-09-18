@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "joystick.h"
 
 // MAX_SUBMENUS angir hvor mye plass i minnet som skal settes av til undermeny-array
 #define MAX_SUBMENUS 10
@@ -11,7 +12,7 @@ typedef struct Menu {
 	struct Menu * subMenu[MAX_SUBMENUS]; // Undermeny. Array av pekere til menyelementer
 } menu_t, *menu_ptr;
 
-menu_t menu_init(int type);
+menu_t menu_init();
 void menu_start(menu_ptr menu);
 menu_ptr menu_goto(menu_ptr currentMenu, int depth, int element);
 void menu_add_sub(menu_ptr menu, menu_ptr subMenu);

@@ -2,7 +2,7 @@
 
 // Initierer en meny
 
-menu_t menu_init(int type) {
+menu_t menu_init() {
 	static menu_t menu = {
 		"Hovedmeny",	// Menytekst
 		NULL,					// Funksjon
@@ -10,21 +10,17 @@ menu_t menu_init(int type) {
 		{ NULL }			// Undermeny
 	};
 
-	// Hovedmeny
-	if (type == 0) {
-		static menu_t main1 = { "Main1", NULL, &menu, {NULL} };
-		menu_add_sub(&menu, &main1);
+	static menu_t main1 = { "Main1", NULL, &menu, {NULL} };
+	menu_add_sub(&menu, &main1);
 
-		static menu_t main2 = { "Main2", &t0, &menu, {NULL} };
-		menu_add_sub(&menu, &main2);
+	static menu_t main2 = { "Main2", &t0, &menu, {NULL} };
+	menu_add_sub(&menu, &main2);
 
-		static menu_t sub1 = { "Sub1", &t0u0, &main1, {NULL} };
-		menu_add_sub(&main1, &sub1);
+	static menu_t sub1 = { "Sub1", &t0u0, &main1, {NULL} };
+	menu_add_sub(&main1, &sub1);
 
-		static menu_t sub2 = { "Sub2", &t0u1, &main1, {NULL} };
-		menu_add_sub(&main1, &sub2);
-
-	} // type == "main"
+	static menu_t sub2 = { "Sub2", &t0u1, &main1, {NULL} };
+	menu_add_sub(&main1, &sub2);
 
 	return menu;
 }
@@ -64,20 +60,23 @@ void menu_start(menu_ptr menu) {
 		}
 
 		// Henter input og går riktig vei i menyen
-		int input = 0;
-		scanf("%d", &input);
-		if (input == 1) {
+		while (joy_read_dir() != 0) {
+		};
+		while (joy_read_dir() == 0) {
+		};
+		int input = joy_read_dir();
+		if (input == RIGHT) {
 			depth++;
 			depthDirection = 1;
-		} else if (input == 2) {
+		} else if (input == LEFT) {
 			depth--;
 			depthDirection = -1;
-		} else if (input == 3) {
+		} else if (input == UP) {
 			// Passer på at vi ikke går over øverste menyelement
 			if (element > 0) {
 				element--;
 			}
-		} else if (input == 4) {
+		} else if (input == DOWN) {
 			// Passer på at vi ikke går under nederste menyelement
 			if (currentMenu->subMenu[element+1] != NULL) {
 				element++;
@@ -105,13 +104,15 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 	}
 
 	// List opp alle elementene i menyen vi har kommet til
+	oled_clear();
 	int i = 0;
 	while (currentMenu->subMenu[i] != NULL) {
+		oled_goto_line(i);
+		oled_goto_column(0);
 		if (i == element) {
-			printf("-> ");
+			oled_print("-> ");
 		}
-		printf(currentMenu->subMenu[i]->text);
-		printf("\r\n");
+		oled_print(currentMenu->subMenu[i]->text);
 		i++;
 	}
 

@@ -7,6 +7,7 @@
 
 #include "oled.h"
 #include <string.h>
+#include "menu.h"
 
 #define FOSC 4915200// Clock Speed
 #define BAUD 9600
@@ -19,14 +20,16 @@ int main(void){
     joy_calibrate();
 
     oled_init();
-    oled_clear();
+		oled_clear();
 
-    oled_goto_pos(3,10);
-    oled_print("x: ");
-    oled_goto_pos(5,10);
-    oled_print("y: ");
 
+		menu_t menu = menu_init();
+		menu_start(&menu);
+
+
+/*
     while (1) {
+			oled_clear();
       int dir = joy_read_dir();
       oled_goto_pos(1,10);
       switch(dir) {
@@ -43,9 +46,10 @@ int main(void){
           oled_print("Venstre");
           break;
       }
-      
+
       _delay_ms(1000);
     }
+		*/
 
     return 0;
 }
