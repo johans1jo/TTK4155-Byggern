@@ -19,17 +19,49 @@
 
 int main(void){
 
+	// SS
+	//PORTB = (1 << PB4);
+	PORTB = (0 << PB4);
+
 	uart_init( MYUBRR );
 	spi_master_init();
+
+	// Loopback
 	spi_master_transmit(MCP_BITMOD);
-	spi_slave_receive();
 	spi_master_transmit(MCP_CANCTRL);
-	spi_slave_receive();
 	spi_master_transmit(MODE_LOOPBACK);
-	spi_slave_receive();
 	spi_master_transmit(MODE_LOOPBACK);
-	char a = spi_slave_receive();
-	printf("\r\n%d", a);
+
+	// SS
+	PORTB = (1 << PB4);
+	_delay_ms(10);
+	PORTB = (0 << PB4);
+
+	// Load TX Buffer
+	spi_master_transmit(0b01000000); // ...abc // TX buffer 1
+	spi_master_transmit(0xFF); // Data
+
+	// SS
+	PORTB = (1 << PB4);
+	_delay_ms(10);
+	PORTB = (0 << PB4);
+
+	// Request to send
+	spi_master_transmit(0b10000001);
+
+	// SS
+	PORTB = (1 << PB4);
+	_delay_ms(10);
+	PORTB = (0 << PB4);
+
+	// Mottar
+	spi_master_transmit(MCP_READ);
+	spi_master_transmit(0b10010000); //...nm0 // Read RX buffer
+	uint8_t a = spi_slave_receive();
+	printf("\r\na: %d\r\n", a);
+
+
+	PORTB = (1 << PB4);
 
 
 	//sei();

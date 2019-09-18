@@ -15,7 +15,7 @@ void spi_master_init(void) {
 	/* Enable SPI, Master, set clock rate fck/16 */
 	DDRB = (1 << PB4);
 	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0)|(1<<SPIE);
-	//printf("\r\nMSTR etter master init: %d", SPCR & (1 << MSTR));
+	printf("\r\nMSTR etter master init: %x", SPCR & (1 << MSTR));
 
 }
 
