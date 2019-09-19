@@ -1,45 +1,41 @@
 #include "menu.h"
 #include "joystick.h"
+#include <stdlib.h>
 
-// Initierer en meny
+// Initierer og lager en meny
+menu_ptr menu_init() {
+	// Initierer menyen
+	menu_ptr menu = malloc(sizeof(menu_t));
 
-menu_t menu_init() {
-	static menu_t menu = {
-		"Hovedmeny",	// Menytekst
-		NULL,					// Funksjon
-		NULL,					// Parent
-		{ NULL }			// Undermeny
-	};
-
-	static menu_t main1 = { "Main1", NULL, &menu, {NULL} };
-	menu_add_sub(&menu, &main1);
-
-	static menu_t main2 = { "Main2", &t0, &menu, {NULL} };
-	menu_add_sub(&menu, &main2);
-
-	static menu_t score = { "Highscore", &highscore, &menu, {NULL} };
-	menu_add_sub(&menu, &score);
-
-	static menu_t sub1 = { "Sub1", &t0u0, &main1, {NULL} };
-	menu_add_sub(&main1, &sub1);
-
-	static menu_t sub2 = { "Sub2", &t0u1, &main1, {NULL} };
-	menu_add_sub(&main1, &sub2);
+	// Legger til menyelementer
+	menu_ptr menu_highscore = menu_add(menu, "Highscore", &highscore);
+	menu_ptr menu_play = menu_add(menu, "Play", NULL);
+	menu_ptr menu_game1 = menu_add(menu_play, "Game1", &game1);
+	menu_ptr menu_game2 = menu_add(menu_play, "Game2", &game2);
+	menu_ptr menu_game3 = menu_add(menu_play, "Game3", &game3);
+	menu_ptr menu_something = menu_add(menu, "Something", NULL);
+	menu_ptr menu_something1 = menu_add(menu_something, "Something1", &something1);
+	menu_ptr menu_something2 = menu_add(menu_something, "Something2", &something2);
 
 	return menu;
 }
 
-void highscore() {
-	printf("highscore");
-}
+// Legger et undermenyelement til "parent"-menyen.
+// Hvis et menyelement har en "function", så blir funksjonen utført uansett om menyen har en undermeny
+// Når man legger til et menyelement som skal ha en undermeny, så må "function" settes til NULL.
+menu_ptr menu_add(menu_ptr parent, char * text, void (*function)()) {
+	menu_ptr subMenu = malloc(sizeof(menu_t));
+	subMenu->text = text;
+	subMenu->function = function;
+	subMenu->parent = parent;
 
-//Legg til en undermeny på et menyelement
-void menu_add_sub(menu_ptr menu, menu_ptr subMenu) {
 	int i = 0;
-	while (menu->subMenu[i] != NULL) {
+	while (parent->subMenu[i] != NULL) {
 		i++;
 	}
-	menu->subMenu[i] = subMenu;
+	parent->subMenu[i] = subMenu;
+
+	return subMenu;
 }
 
 // Drar igang menyen og får den opp på skjermen
@@ -129,21 +125,21 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 }
 
 // Eksempelfunksjoner for testing
-void t0() {
-	printf("t0\r\n");
+void highscore() {
+	printf("Highscore\r\n");
 }
-void t0u0() {
-	printf("t0u0\r\n");
+void game1() {
+	printf("Game1\r\n");
 }
-void t0u1() {
-	printf("t0u1\r\n");
+void game2() {
+	printf("Game2\r\n");
 }
-void t0u2() {
-	printf("t0u2\r\n");
+void game3() {
+	printf("Game3\r\n");
 }
-void t1() {
-	printf("t1\r\n");
+void something1() {
+	printf("Something1\r\n");
 }
-void t2u0() {
-	printf("t2u0\r\n");
+void something2() {
+	printf("Something2\r\n");
 }

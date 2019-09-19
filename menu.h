@@ -12,17 +12,15 @@ typedef struct Menu {
 	struct Menu * subMenu[MAX_SUBMENUS]; // Undermeny. Array av pekere til menyelementer
 } menu_t, *menu_ptr;
 
-menu_t menu_init();
+menu_ptr menu_init();
 void menu_start(menu_ptr menu);
 menu_ptr menu_goto(menu_ptr currentMenu, int depth, int element);
-void menu_add_sub(menu_ptr menu, menu_ptr subMenu);
+menu_ptr menu_add(menu_ptr parent, char * text, void (*function)());
 
 // Eksempelfunksjoner for testing
-void t0();
-void t0u0();
-void t0u1();
-void t0u2();
-void t1();
-void t2u0();
-
 void highscore();
+void game1();
+void game2();
+void game3();
+void something1();
+void something2();
