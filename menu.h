@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "oled.h"
 
 // MAX_SUBMENUS angir hvor mye plass i minnet som skal settes av til undermeny-array
 #define MAX_SUBMENUS 10
@@ -23,3 +24,5 @@ void t0u1();
 void t0u2();
 void t1();
 void t2u0();
+
+void highscore();

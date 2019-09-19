@@ -17,6 +17,9 @@ menu_t menu_init() {
 	static menu_t main2 = { "Main2", &t0, &menu, {NULL} };
 	menu_add_sub(&menu, &main2);
 
+	static menu_t score = { "Highscore", &highscore, &menu, {NULL} };
+	menu_add_sub(&menu, &score);
+
 	static menu_t sub1 = { "Sub1", &t0u0, &main1, {NULL} };
 	menu_add_sub(&main1, &sub1);
 
@@ -24,6 +27,10 @@ menu_t menu_init() {
 		menu_add_sub(&main1, &sub2);
 
 	return menu;
+}
+
+void highscore() {
+	printf("highscore");
 }
 
 //Legg til en undermeny på et menyelement
