@@ -83,13 +83,11 @@ void menu_start(menu_ptr menu) {
 				element++;
 			}
 		}
-		printf("%c", currentMenu->parent);
 	}
-	printf("%c", currentMenu->parent);
 }
 
 // Gå til et menyelement, undermeny eller tilbake til "overmenyen"
-// Returnerer peker til man havner på etter å ha gått dit
+// Returnerer peker til menyen man havner på etter å ha gått dit
 // Returnerer NULL hvis menysystemet skal avsluttes
 menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 	// Fikser å gå til undermeny eller til overmeny
@@ -100,6 +98,9 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 		currentMenu = currentMenu->parent;
 	}
 
+	// Rydder skjermen før vi utfører funksjonen eller printer en ny meny
+	oled_clear();
+
 	// Hvis vi har kommet til et menyelement med en funksjon, så utføres funksjonen
 	if (currentMenu->function != NULL) {
 		currentMenu->function();
@@ -107,7 +108,6 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 	}
 
 	// List opp alle elementene i menyen vi har kommet til
-	oled_clear();
 	int i = 0;
 	while (currentMenu->subMenu[i] != NULL) {
 		oled_goto_line(i);
