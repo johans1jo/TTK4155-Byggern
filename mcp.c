@@ -26,9 +26,7 @@ void mcp_write(uint8_t address, uint8_t data) {
 
 void mcp_request_to_send(int buffer_number) {
 	spi_clear_ss();
-	if (buffer_number >= 3) {
-		buffer_number = buffer_number - 3;
-	}
+	buffer_number = buffer_number % 3; // Mapper buffernummer til 0, 1, 2
 	if (buffer_number == 0) {
 		char data = MCP_RTS_TX0;
 	} else if (buffer_number == 1) {
@@ -66,7 +64,7 @@ void mcp_reset() {
 
 void mcp_set_mode(uint8_t mode) {
 	spi_clear_ss();
-	mcp_bit_modify(CANCTRL, 0b11100000, mode);
+	mcp_bit_modify(CANCTRL, 0b11100000, mode); // Eller bare skrive rett til adressen?
 	spi_set_ss();
 }
 
