@@ -40,13 +40,12 @@ menu_ptr menu_add(menu_ptr parent, char * text, void (*function)()) {
 
 // Drar igang menyen og får den opp på skjermen
 void menu_start(menu_ptr menu) {
-	int depth = 0;
 	int depthDirection = 0;
 	int element = 0;
 	menu_ptr currentMenu = menu;
 
 	// Kjører inntil vi navigerer ut av menysystemet eller velger en funksjon
-	while (depth != -1) {
+	while (!(depthDirection == -1 && currentMenu->parent == NULL)) {
 		menu_ptr oldMenu = currentMenu;
 
 		// Går til riktig meny basert på input eller standardverdier
@@ -70,10 +69,8 @@ void menu_start(menu_ptr menu) {
 		};
 		int input = joy_read_dir();
 		if (input == RIGHT) {
-			depth++;
 			depthDirection = 1;
 		} else if (input == LEFT) {
-			depth--;
 			depthDirection = -1;
 		} else if (input == UP) {
 			// Passer på at vi ikke går over øverste menyelement
@@ -86,7 +83,9 @@ void menu_start(menu_ptr menu) {
 				element++;
 			}
 		}
+		printf("%c", currentMenu->parent);
 	}
+	printf("%c", currentMenu->parent);
 }
 
 // Gå til et menyelement, undermeny eller tilbake til "overmenyen"
