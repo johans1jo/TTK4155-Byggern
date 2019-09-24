@@ -25,6 +25,10 @@ void oled_init()
  oled_write_command(0xa4); //out follows RAM content
  oled_write_command(0xa6); //set normal display
  oled_write_command(0xaf); // display on
+
+ // Page addressing mode
+	oled_write_command(0x20);
+	oled_write_command(0b10);
 }
 
 void oled_write_command(uint8_t command) {
@@ -38,21 +42,14 @@ void oled_write_data(uint8_t data) {
 }
 
 void oled_goto_line(int line) { //Line between 0-7
-
-  oled_write_command(0x20);
-  oled_write_command(0b10);
-
   int command = 0xB0 + line;
   oled_write_command(command);
 
 }
 
-void oled_goto_column(int column) { //Column between 0-
-  oled_write_command(0x20);
-  oled_write_command(0b10);
-
-  oled_write_command(column/16);
-  oled_write_command(0x10 + column%16);
+void oled_goto_column(int column) {
+	  oled_write_command(0x00 + (column % 16)); // Lower nibble
+	  oled_write_command(0x10 + (column / 16)); // Higher nibble
 
 
 }
