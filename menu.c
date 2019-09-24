@@ -1,32 +1,5 @@
 #include "menu.h"
 #include "joystick.h"
-<<<<<<< HEAD
-
-// Initierer en meny
-
-menu_t menu_init() {
-	static menu_t menu = {
-		"Hovedmeny",	// Menytekst
-		NULL,					// Funksjon
-		NULL,					// Parent
-		{ NULL }			// Undermeny
-	};
-
-	static menu_t main1 = { "Main1", NULL, &menu, {NULL} };
-	menu_add_sub(&menu, &main1);
-
-	static menu_t main2 = { "Main2", &t0, &menu, {NULL} };
-	menu_add_sub(&menu, &main2);
-
-	static menu_t score = { "Highscore", &highscore, &menu, {NULL} };
-	menu_add_sub(&menu, &score);
-
-	static menu_t sub1 = { "Sub1", &t0u0, &main1, {NULL} };
-	menu_add_sub(&main1, &sub1);
-
-		static menu_t sub2 = { "Sub2", &t0u1, &main1, {NULL} };
-		menu_add_sub(&main1, &sub2);
-=======
 #include <stdlib.h>
 
 // Initierer og lager en meny
@@ -43,7 +16,6 @@ menu_ptr menu_init() {
 	menu_ptr menu_something = menu_add(menu, "Something", NULL);
 	menu_ptr menu_something1 = menu_add(menu_something, "Something1", &something1);
 	menu_ptr menu_something2 = menu_add(menu_something, "Something2", &something2);
->>>>>>> menu
 
 	return menu;
 }
