@@ -18,41 +18,12 @@
 
 
 int main(void){
+	uart_init( MYUBRR );
+	adc_init();
+	oled_init();
 
+	menu_ptr menu = menu_init();
+	menu_start(menu);
 
-
-/*
-
-		PORTB = (0 << PB4);
-
-		menu_t menu = menu_init();
-		menu_start(&menu);
-
-
-
-    while (1) {
-			oled_clear();
-      int dir = joy_read_dir();
-      oled_goto_pos(1,10);
-      switch(dir) {
-        case UP:
-          oled_print("Opp");
-          break;
-        case DOWN:
-          oled_print("Ned");
-          break;
-        case RIGHT:
-          oled_print("Hoyre");
-          break;
-        case LEFT:
-          oled_print("Venstre");
-          break;
-      }
-
-      _delay_ms(1000);
-    }
-
-		*/
-
-    return 0;
+	return 0;
 }

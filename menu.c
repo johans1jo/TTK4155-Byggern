@@ -1,5 +1,6 @@
 #include "menu.h"
 #include "joystick.h"
+<<<<<<< HEAD
 
 // Initierer en meny
 
@@ -25,32 +26,54 @@ menu_t menu_init() {
 
 		static menu_t sub2 = { "Sub2", &t0u1, &main1, {NULL} };
 		menu_add_sub(&main1, &sub2);
+=======
+#include <stdlib.h>
+
+// Initierer og lager en meny
+menu_ptr menu_init() {
+	// Initierer menyen
+	menu_ptr menu = malloc(sizeof(menu_t));
+
+	// Legger til menyelementer
+	menu_ptr menu_highscore = menu_add(menu, "Highscore", &highscore);
+	menu_ptr menu_play = menu_add(menu, "Play", NULL);
+	menu_ptr menu_game1 = menu_add(menu_play, "Game1", &game1);
+	menu_ptr menu_game2 = menu_add(menu_play, "Game2", &game2);
+	menu_ptr menu_game3 = menu_add(menu_play, "Game3", &game3);
+	menu_ptr menu_something = menu_add(menu, "Something", NULL);
+	menu_ptr menu_something1 = menu_add(menu_something, "Something1", &something1);
+	menu_ptr menu_something2 = menu_add(menu_something, "Something2", &something2);
+>>>>>>> menu
 
 	return menu;
 }
 
-void highscore() {
-	printf("highscore");
-}
+// Legger et undermenyelement til "parent"-menyen.
+// Hvis et menyelement har en "function", så blir funksjonen utført uansett om menyen har en undermeny
+// Når man legger til et menyelement som skal ha en undermeny, så må "function" settes til NULL.
+menu_ptr menu_add(menu_ptr parent, char * text, void (*function)()) {
+	menu_ptr subMenu = malloc(sizeof(menu_t));
+	subMenu->text = text;
+	subMenu->function = function;
+	subMenu->parent = parent;
 
-//Legg til en undermeny på et menyelement
-void menu_add_sub(menu_ptr menu, menu_ptr subMenu) {
 	int i = 0;
-	while (menu->subMenu[i] != NULL) {
+	while (parent->subMenu[i] != NULL) {
 		i++;
 	}
-	menu->subMenu[i] = subMenu;
+	parent->subMenu[i] = subMenu;
+
+	return subMenu;
 }
 
 // Drar igang menyen og får den opp på skjermen
 void menu_start(menu_ptr menu) {
-	int depth = 0;
 	int depthDirection = 0;
 	int element = 0;
 	menu_ptr currentMenu = menu;
 
 	// Kjører inntil vi navigerer ut av menysystemet eller velger en funksjon
-	while (depth != -1) {
+	while (!(depthDirection == -1 && currentMenu->parent == NULL)) {
 		menu_ptr oldMenu = currentMenu;
 
 		// Går til riktig meny basert på input eller standardverdier
@@ -74,10 +97,8 @@ void menu_start(menu_ptr menu) {
 		};
 		int input = joy_read_dir();
 		if (input == RIGHT) {
-			depth++;
 			depthDirection = 1;
 		} else if (input == LEFT) {
-			depth--;
 			depthDirection = -1;
 		} else if (input == UP) {
 			// Passer på at vi ikke går over øverste menyelement
@@ -94,7 +115,7 @@ void menu_start(menu_ptr menu) {
 }
 
 // Gå til et menyelement, undermeny eller tilbake til "overmenyen"
-// Returnerer peker til man havner på etter å ha gått dit
+// Returnerer peker til menyen man havner på etter å ha gått dit
 // Returnerer NULL hvis menysystemet skal avsluttes
 menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 	// Fikser å gå til undermeny eller til overmeny
@@ -105,6 +126,9 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 		currentMenu = currentMenu->parent;
 	}
 
+	// Rydder skjermen før vi utfører funksjonen eller printer en ny meny
+	oled_clear();
+
 	// Hvis vi har kommet til et menyelement med en funksjon, så utføres funksjonen
 	if (currentMenu->function != NULL) {
 		currentMenu->function();
@@ -112,7 +136,6 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 	}
 
 	// List opp alle elementene i menyen vi har kommet til
-	oled_clear();
 	int i = 0;
 	while (currentMenu->subMenu[i] != NULL) {
 		oled_goto_line(i);
@@ -129,21 +152,21 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 }
 
 // Eksempelfunksjoner for testing
-void t0() {
-	printf("t0\r\n");
+void highscore() {
+	printf("Highscore\r\n");
 }
-void t0u0() {
-	printf("t0u0\r\n");
+void game1() {
+	printf("Game1\r\n");
 }
-void t0u1() {
-	printf("t0u1\r\n");
+void game2() {
+	printf("Game2\r\n");
 }
-void t0u2() {
-	printf("t0u2\r\n");
+void game3() {
+	printf("Game3\r\n");
 }
-void t1() {
-	printf("t1\r\n");
+void something1() {
+	printf("Something1\r\n");
 }
-void t2u0() {
-	printf("t2u0\r\n");
+void something2() {
+	printf("Something2\r\n");
 }
