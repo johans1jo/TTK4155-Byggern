@@ -51,8 +51,8 @@ void oled_goto_column(int column) { //Column between 0-
   oled_write_command(0x20);
   oled_write_command(0b10);
 
-  oled_write_command(column);
-  oled_write_command(0x10 + column);
+  oled_write_command(column/16);
+  oled_write_command(0x10 + column%16);
 
 
 }
