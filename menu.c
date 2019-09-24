@@ -1,6 +1,7 @@
 #include "menu.h"
 #include "joystick.h"
 #include <stdlib.h>
+#include "draw.h"
 
 // Initierer og lager en meny
 menu_ptr menu_init() {
@@ -126,9 +127,22 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 // Eksempelfunksjoner for testing
 void highscore() {
 	printf("Highscore\r\n");
+
+	// Tegnegreier
+	point points[] = {
+		{0, 0},
+		{10, 10},
+		{50, 32}
+	};
+	draw_lines(points, sizeof(points)/sizeof(points[0]), 4);
+	draw_print();
+
 }
 void game1() {
 	printf("Game1\r\n");
+	draw_point(20,20,7);
+	draw_point(1,1,10);
+	draw_print();
 }
 void game2() {
 	printf("Game2\r\n");

@@ -11,16 +11,20 @@
 #include "spi.h"
 #include "MCP2515.h"
 #include <avr/interrupt.h>
+#include "sram.h"
+#include "draw.h"
 
 #define FOSC 4915200// Clock Speed
 #define BAUD 9600
-#define MYUBRR FOSC/16/BAUD-1
-
+#define UBRR FOSC/16/BAUD-1
 
 int main(void){
-	uart_init( MYUBRR );
+	uart_init(UBRR);
+	sram_init();
 	adc_init();
 	oled_init();
+	oled_clear();
+	draw_init();
 
 	menu_ptr menu = menu_init();
 	menu_start(menu);
