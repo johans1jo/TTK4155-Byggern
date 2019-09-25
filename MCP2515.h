@@ -15,13 +15,13 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 // Egne greier
 // Write-registre
-#define MCP_TXB0SIDH 0x31
-#define MCP_TXB1SIDH 0x41
-#define MCP_TXB2SIDH 0x51
+#define MCP_TXB0SIDH 0x31 // Send-buffer 0
+#define MCP_TXB1SIDH 0x41 // Send-buffer 1
+#define MCP_TXB2SIDH 0x51 // Send-buffer 2
 
 // Write-registre
-#define MCP_RXB0SIDH 0x61
-#define MCP_RXB1SIDH 0x71
+#define MCP_RXB0SIDH 0x61 // Motta-buffer 0
+#define MCP_RXB1SIDH 0x71 // Motta-buffer 1
 
 
 // Define MCP2515 register addresses
