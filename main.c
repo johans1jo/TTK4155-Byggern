@@ -33,13 +33,14 @@ ISR(INT0_vect) {
 int main(void){
 	uart_init(UBRR);
 
-	printf("hei\r\n");
-
-	// Interrupts
-	sei();
 	GICR |= (1 << INT0);
+	MCUCR |= (1 << ISC01);
+	MCUCR &= ~(1 << ISC00);
 
+	sei();
 
+	while(1) {
+	};
 
 	return 0;
 }
