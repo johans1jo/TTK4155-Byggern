@@ -11,12 +11,14 @@
 #define DD_SCK PB7
 
 void spi_master_init() {
+	printf("spcr1: %x\r\n", SPCR);
 	/* Set MOSI and SCK - og SS - output, all others input */
 	DDR_SPI = (1<<DD_MOSI)|(1<<DD_SCK)|(1<<DD_SS);
 	/* Enable SPI, Master, set clock rate fck/16 */
 	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0)|(1<<SPIE);
 
 	spi_set_ss();
+	printf("spcr2: %x\r\n", SPCR);
 }
 
 void spi_slave_init() {
