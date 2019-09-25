@@ -13,6 +13,17 @@ v1.00       2003/12/11  Initial release
 Copyright 2003 Kimberly Otten Software Consulting
 */
 
+// Egne greier
+// Write-registre
+#define MCP_TXB0SIDH 0x31
+#define MCP_TXB1SIDH 0x41
+#define MCP_TXB2SIDH 0x51
+
+// Write-registre
+#define MCP_RXB0SIDH 0x61
+#define MCP_RXB1SIDH 0x71
+
+
 // Define MCP2515 register addresses
 
 #define MCP_RXF0SIDH	0x00

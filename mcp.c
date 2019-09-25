@@ -2,16 +2,17 @@
 #include "mcp.h"
 #include "spi.h"
 #include "MCP2515.h"
+#include <stdio.h>
 
 void mcp_init() {
 	mcp_reset();
 }
 
-char mcp_read(uint8_t address) {
+uint8_t mcp_read(uint8_t address) {
 	spi_clear_ss();
 	spi_write(MCP_READ);
 	spi_write(address);
-	char data = spi_read();
+	uint8_t data = spi_read();
 	spi_set_ss();
 
 	return data;
@@ -59,9 +60,9 @@ void mcp_bit_modify(uint8_t address, uint8_t mask, uint8_t data) {
 }
 
 void mcp_reset() {
-	spi_set_ss();
-	spi_write(MCP_RESET);
 	spi_clear_ss();
+	spi_write(MCP_RESET);
+	spi_set_ss();
 }
 
 void mcp_set_mode(uint8_t mode) {

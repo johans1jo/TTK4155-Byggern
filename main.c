@@ -29,23 +29,21 @@ int main(void){
 	oled_clear();
 	draw_init();
 
+
 	spi_master_init();
 	mcp_init();
 
-	_delay_ms(10);
+	mcp_set_mode(MODE_LOOPBACK);
+	printf("mode: %x\r\n", mcp_read(MCP_CANSTAT));
 
-	mcp_write(MCP_CANCTRL, MODE_LOOPBACK);
+	mcp_write(MCP_TXB0SIDH, 0xA7);
+	mcp_request_to_send(0);
+	uint8_t byte = mcp_read(MCP_RXB0SIDH);
+	printf("mottar: %x\r\n", byte);
 
-	char mode = mcp_read(MCP_CANSTAT);
-	while (!mode) {
-		mode = mcp_read(MCP_CANSTAT);
-	}
-
-	printf("mode c: %c\r\n", mode);
-	printf("mode x: %x\r\n", mode);
-
+/*
 	menu_ptr menu = menu_init();
 	menu_start(menu);
-
+*/
 	return 0;
 }
