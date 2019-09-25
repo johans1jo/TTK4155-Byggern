@@ -16,34 +16,30 @@
 #include "draw.h"
 #include "MCP2515.h"
 #include "mcp.h"
+#include "can.h"
+
+//#define sei()
+//#define ISR(int0_vect)
 
 #define FOSC 4915200// Clock Speed
 #define BAUD 9600
 #define UBRR FOSC/16/BAUD-1
 
+// INT0-interruptfunksjon
+ISR(INT0_vect) {
+	printf("interrupt\r\n");
+}
+
 int main(void){
 	uart_init(UBRR);
-	sram_init();
-	adc_init();
-	oled_init();
-	oled_clear();
-	draw_init();
+
+	printf("hei\r\n");
+
+	// Interrupts
+	sei();
+	GICR |= (1 << INT0);
 
 
-	spi_master_init();
-	mcp_init();
 
-	mcp_set_mode(MODE_LOOPBACK);
-	printf("mode: %x\r\n", mcp_read(MCP_CANSTAT));
-
-	mcp_write(MCP_TXB0SIDH, 0xA7);
-	mcp_request_to_send(0);
-	uint8_t byte = mcp_read(MCP_RXB0SIDH);
-	printf("mottar: %x\r\n", byte);
-
-/*
-	menu_ptr menu = menu_init();
-	menu_start(menu);
-*/
 	return 0;
 }
