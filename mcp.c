@@ -4,8 +4,22 @@
 #include "MCP2515.h"
 #include <stdio.h>
 
+/*
 void mcp_init() {
 	mcp_reset();
+}
+*/
+
+// Init kokt rett fra Waseem
+void mcp_init() {
+	spi_master_init();
+	mcp_reset();
+
+	// Sjøltesting
+	uint8_t value = mcp_read(MCP_CANSTAT);
+	if ((value & MODE_MASK) != MODE_CONFIG) {
+		printf("MCP2515 er ikke i konfigurasjonsmodus etter reset. CANSTAT: %x \r\n", value);
+	}
 }
 
 uint8_t mcp_read(uint8_t address) {
@@ -66,13 +80,5 @@ void mcp_reset() {
 }
 
 void mcp_set_mode(uint8_t mode) {
-	spi_clear_ss();
 	mcp_bit_modify(MCP_CANCTRL, 0b11100000, mode); // Eller bare skrive rett til adressen?
-	spi_set_ss();
-}
-
-char mcp_get_mode() {
-	char data = mcp_read(MCP_CANSTAT); // Ikke spi_read()
-
-	return data;
 }

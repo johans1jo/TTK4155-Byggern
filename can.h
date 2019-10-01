@@ -1,13 +1,10 @@
 typedef struct Message {
-	uint8_t id;
+	unsigned int id;
 	uint8_t length;
-	unsigned char* data;
-} message_t;
+	char data[8];
+} message_t, *message_ptr;
 
-uint8_t can_id;
-uint8_t length;
-int can_i;
-char * can_data;
-
-void can_write(message_t message);
-void can_read();
+void can_init();
+void can_send(message_ptr message);
+message_t can_receive();
+void can_interrupt();

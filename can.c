@@ -5,36 +5,74 @@
 #include <stdio.h>
 #include <avr/interrupt.h>
 
-
-/*
-uint8_t can_id = 0;
-uint8_t can_length = 0;
-int can_i = 0;
-char * can_data = { 0 };
+/* Waseem sier at dette er fornuftig
+- can_init()
+– can_message_send()
+– can_error()
+– can_transmit_complete()
+– can_data_receive()
+– can_int_vect()
 */
 
-/*
-void can_write(message_t message) {
-	mcp_write(MCP_TXB0SIDH, message.id);
+void can_init() {
+	mcp_init();
+
+	// Interruptinit?
+
+}
+
+void can_send(message_ptr message) {
+	// Alt her foregår med buffer 0
+
+	/* Databladet:
+	Prior to sending the message, the MCU must initialize
+	the CANINTE.TXInE bit to enable or disable the
+	generation of an interrupt when the message is sent
+	*/
+
+	/*Også databladet:
+	The TXBnCTRL.TXREQ bit must be clear
+	(indicating the transmit buffer is not
+	pending transmission) before writing to
+	the transmit buffer
+	*/
+
+	// Id. TXBnSIDH og TXBnSIDL
+	mcp_write(MCP_TXB0SIDH, message->id / 8); // De åtte høyeste biteen i iden.
+	mcp_write(MCP_TXB0SIDL, message->id % 8); // De tre laveste bitene i iden. 2^3=8.
+
+	// Lengde. TXBnDLC
+	mcp_write(MCP_TXB0DLC, message->length);
+
+	// Melding. TXBnDm
+	for (int i = 0; i < message->length; i++) {
+		mcp_write(MCP_TXB0D0 + i, message->data[i]);
+	}
+
+	// Request to send
 	mcp_request_to_send(0);
-	mcp_write(MCP_TXB0SIDH, message.length);
-	mcp_request_to_send(0);
+}
+
+message_t can_receive() {
+	// Alt her foregår med buffer 0
+	message_t message = {};
+
+	// Id. RXBnSIDH og RXBnSIDL
+	uint8_t id_low = (mcp_read(MCP_RXB0SIDL) & 0b11100000)/0b100000;
+	uint8_t id_high = mcp_read(MCP_RXB0SIDH);
+	message.id = id_high * 0b1000 + id_low;
+
+	// Lengde. RXBnDLC
+	message.length = mcp_read(MCP_RXB0DLC);
+
+	// Melding. RXBnDM
 	for (int i = 0; i < message.length; i++) {
-		mcp_write(MCP_TXB0SIDH,message.data[i]);
-		mcp_request_to_send(0);
+		message.data[i] = mcp_read(MCP_RXB0D0 + i);
 	}
+
+	return message;
 }
 
-void can_read() {
-	if (!can_id) {
-		can_id = mcp_read(MCP_RXB0SIDH);
-		return;
-	} else if (can_id == 1) {
-		if (!can_length) {
-			can_id = mcp_read(MCP_RXB0SIDH);
-		} else {
-			can_data[can_i] = mcp_read(MCP_RXB0SIDH);
-		}
-	}
+void can_interrupt() {
+	printf("interrupt\r\n");
 }
-*/
