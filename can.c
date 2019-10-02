@@ -17,6 +17,7 @@
 void can_init() {
 	mcp_init();
 
+
 	// Interruptinit?
 
 }
@@ -39,7 +40,7 @@ void can_send(message_ptr message) {
 
 	// Id. TXBnSIDH og TXBnSIDL
 	mcp_write(MCP_TXB0SIDH, message->id / 8); // De åtte høyeste biteen i iden.
-	mcp_write(MCP_TXB0SIDL, message->id % 8); // De tre laveste bitene i iden. 2^3=8.
+	mcp_write(MCP_TXB0SIDL, (message->id % 8) << 5); // De tre laveste bitene i iden. 2^3=8.
 
 	// Lengde. TXBnDLC
 	mcp_write(MCP_TXB0DLC, message->length);
@@ -58,7 +59,9 @@ message_t can_receive() {
 	message_t message = {};
 
 	// Id. RXBnSIDH og RXBnSIDL
-	uint8_t id_low = (mcp_read(MCP_RXB0SIDL) & 0b11100000)/0b100000;
+	//uint8_t id_low = (mcp_read(MCP_RXB0SIDL) & 0b11100000)/0b100000;
+	//uint8_t id_high = mcp_read(MCP_RXB0SIDH);
+	uint8_t id_low = mcp_read(MCP_RXB0SIDL)/0b100000;
 	uint8_t id_high = mcp_read(MCP_RXB0SIDH);
 	message.id = id_high * 0b1000 + id_low;
 
@@ -74,5 +77,5 @@ message_t can_receive() {
 }
 
 void can_interrupt() {
-	printf("interrupt\r\n");
+	printf("2\r\n");
 }
