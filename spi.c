@@ -36,7 +36,7 @@ void spi_write(char cData) {
 }
 
 uint8_t spi_read() {
-	SPDR = 0;
+	SPDR = 0xFF;
 	/* Wait for reception complete */
 	while(!(SPSR & (1<<SPIF))) {
 	}
