@@ -1,19 +1,14 @@
 #include <avr/io.h>
 #include "uart.h"
-#include "joystick.h"
 #include <stdio.h>
 
 #define F_CPU 4915200
 #include <util/delay.h>
 
-#include "oled.h"
 #include <string.h>
-#include "menu.h"
 #include "spi.h"
 #include "MCP2515.h"
 #include <avr/interrupt.h>
-#include "sram.h"
-#include "draw.h"
 #include "MCP2515.h"
 #include "mcp.h"
 #include "can.h"
