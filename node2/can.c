@@ -15,8 +15,9 @@
 */
 
 void can_init() {
+	printf("caninit\r\n");
 	mcp_init();
-
+	printf("canint:)\r\n");
 
 	// Interruptinit?
 

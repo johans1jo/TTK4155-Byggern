@@ -1,15 +1,18 @@
 #include "uart.h"
 
-void uart_init(unsigned int ubrr) {
-    /* Set baud rate */
-    UBRR0H = (unsigned char)(ubrr >> 8);
-    UBRR0L = (unsigned char)ubrr;
-    /* Enable receiver and transmitter */
-    UCSR0B = (1 << RXEN0) | (1 << TXEN0);
-    /* Set frame format: 8data, 2stop bit */
-    UCSR0C = (1 << URSEL0) | (1 << USBS0) | (3 << UCSZ00);
+void uart_init(unsigned int baud) {
+	UBRR0H = 0;
+	UBRR0L = 0;
 
-    fdevopen(uart_transmit, uart_receive);
+	UCSR0C = (1<<USBS0); // 2 stoppbit
+	UCSR0C = (3<<UCSZ00); // 8 bits per character
+
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
+
+	UBRR0H = (baud >> 8); // 0
+	UBRR0L = baud; // 103
+
+	fdevopen(uart_transmit, uart_receive);
 }
 
 int uart_transmit(char data, FILE * file) {

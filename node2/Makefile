@@ -11,8 +11,8 @@ ifeq ($(PROGRAM_WITH_JTAG), yes)
 endif
 
 BUILD_DIR := build
-TARGET_CPU := atmega162
-TARGET_DEVICE := m162
+TARGET_CPU := atmega2560
+TARGET_DEVICE := m2560
 
 CC := avr-gcc
 CFLAGS := -O -std=c11 -mmcu=$(TARGET_CPU)
