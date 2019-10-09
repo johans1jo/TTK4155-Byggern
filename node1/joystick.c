@@ -1,6 +1,7 @@
 #include "joystick.h"
 #include <stdlib.h>
 #include "uart.h"
+#include "can.h"
 
 #define F_CPU 4915200
 #include <util/delay.h>
@@ -85,4 +86,27 @@ int joy_read_dir() {
   }
   return 0;
   */
+}
+
+void joy_send_coordinates() {
+		printf("send joystickkoordinater...\r\n");
+		while (1) {
+			int x = joy_read_x();
+			message_t x_coordinate = {
+				10,
+				3,
+				x
+			};
+			can_send(&x_coordinate);
+
+			int y = joy_read_y();
+			message_t y_coordinate = {
+				11,
+				3,
+				y
+			};
+			can_send(&y_coordinate);
+
+			_delay_ms(1000);
+		}
 }

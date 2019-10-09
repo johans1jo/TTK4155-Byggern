@@ -22,13 +22,24 @@
 #define BAUD 9600
 #define UBRR FOSC/16/BAUD-1
 
-volatile uint8_t test = 0;
-
 int main(void){
-	//printf("Main start\r\n");
 	uart_init(UBRR);
 	can_init(); // Denne initierer mcp, som initierer spi.
 	mcp_set_mode(MODE_NORMAL);
+
+	// Lab 6
+	adc_init();
+	sram_init();
+	oled_init();
+	oled_clear();
+	joy_calibrate();
+	menu_ptr menu = menu_init();
+	menu_start(menu);
+
+
+	//joy_send_coordinates();
+
+	/*
 
 	// Interruptgreier
 	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
@@ -57,6 +68,8 @@ int main(void){
 		printf("w");
 		_delay_ms(1000);
 	}
+
+	*/
 
 	return 0;
 }

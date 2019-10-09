@@ -18,6 +18,7 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depth, int element);
 menu_ptr menu_add(menu_ptr parent, char * text, void (*function)());
 
 // Eksempelfunksjoner for testing
+void send_joy();
 void highscore();
 void game1();
 void game2();

@@ -9,6 +9,7 @@ menu_ptr menu_init() {
 	menu_ptr menu = malloc(sizeof(menu_t));
 
 	// Legger til menyelementer
+	menu_ptr menu_send_joy = menu_add(menu, "Joystickverdier", &joy_send_coordinates);
 	menu_ptr menu_highscore = menu_add(menu, "Highscore", &highscore);
 	menu_ptr menu_play = menu_add(menu, "Play", NULL);
 	menu_ptr menu_game1 = menu_add(menu_play, "Game1", &game1);
@@ -125,6 +126,9 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 }
 
 // Eksempelfunksjoner for testing
+void send_joy() {
+	printf("send joystickkoordinater...\r\n");
+}
 void highscore() {
 	printf("Highscore\r\n");
 

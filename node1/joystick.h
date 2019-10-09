@@ -15,3 +15,5 @@ int joy_calibrate();
 int joy_read_x();
 int joy_read_y();
 int joy_read_dir();
+
+void joy_send_coordinates();

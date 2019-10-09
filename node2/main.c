@@ -67,13 +67,21 @@ int main(void){
 
 ISR(INT3_vect) {
 	message_t receive = can_receive(); // Mottar melding
-	if (receive.length > 8) {
-		printf("Kaos. Meldingslengde: %d\r\n", receive.length);
+	if (receive.id == 10) {
+		//x
+		printf("x: %d\r\n", receive.data[0]);
+	} else if (receive.id == 11) {
+		//y
+		printf("y: %d\r\n\r\n", receive.data[0]);
 	} else {
-		printf("Heisann sveisann, vi har fått ei melding.\r\n");
-		printf("Id: %d \r\n", receive.id);
-		printf("Lengde: %d \r\n", receive.length);
-		printf("Melding: %s \r\n\r\n", receive.data);
+		if (receive.length > 8) {
+			printf("Kaos. Meldingslengde: %d\r\n", receive.length);
+		} else {
+			printf("Heisann sveisann, vi har fått ei melding.\r\n");
+			printf("Id: %d \r\n", receive.id);
+			printf("Lengde: %d \r\n", receive.length);
+			printf("Melding: %s \r\n\r\n", receive.data);
+		}
 	}
 	// Resetter interrupt for motta-buffer0
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
