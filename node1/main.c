@@ -42,6 +42,7 @@ int main(void){
 	sei(); // Skrur på interrupts globalt
 	printf("etter sei\r\n");
 
+
 	// Sender melding
 	message_t message = {
 		1, // Id
@@ -49,8 +50,8 @@ int main(void){
 		"heiiii" // Data. Maks åtte byte
 	};
 	can_send(&message); // Sender melding
-
 	printf("har sendt melding\r\n");
+
 
 	while(1){
 		printf("w");
@@ -61,16 +62,24 @@ int main(void){
 }
 
 ISR(INT0_vect) {
-	//can_interrupt();
 	message_t receive = can_receive(); // Mottar melding
-	printf("Heisann sveisann, vi har fått ei melding.\r\n");
-	printf("Id: %d \r\n", receive.id);
-	printf("Lengde: %d \r\n", receive.length);
-	printf("Melding: %s \r\n\r\n", receive.data);
+	if (receive.length > 8) {
+		printf("Kaos. Meldingslengde: %d\r\n", receive.length);
+	} else {
+		printf("Heisann sveisann, vi har fått ei melding.\r\n");
+		printf("Id: %d \r\n", receive.id);
+		printf("Lengde: %d \r\n", receive.length);
+		printf("Melding: %s \r\n\r\n", receive.data);
+	}
+	// Resetter interrupt for motta-buffer0
+	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
 }
+
 ISR(SPI_STC_vect) {
 	//printf("\r\nSPI_STC_vect\r\n");
 }
+
+// EKSTRAPOENG!!!
 
 ISR(BADISR_vect) {
 	printf("b");

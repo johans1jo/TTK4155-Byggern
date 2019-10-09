@@ -27,8 +27,8 @@ int main(void){
 	mcp_set_mode(MODE_NORMAL);
 
 	// Interruptgreier
-	//mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
-	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b11111111); // Skrur på receive0-interrupt. Skrur av alt annet.
+	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
+	//mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b11111111); // Skrur på receive0-interrupt. Skrur av alt annet.
 
 	/* fra node1
 	GICR |= (1 << INT0); // Skrur på INT0-interrupt
@@ -49,7 +49,7 @@ int main(void){
 
 	// Sender melding
 	message_t message = {
-		2, // Id
+		0, // Id
 		3, // Lengde
 		"max" // Data. Maks åtte byte
 	};
@@ -75,6 +75,8 @@ ISR(INT3_vect) {
 		printf("Lengde: %d \r\n", receive.length);
 		printf("Melding: %s \r\n\r\n", receive.data);
 	}
+	// Resetter interrupt for motta-buffer0
+	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
 }
 
 ISR(SPI_STC_vect) {

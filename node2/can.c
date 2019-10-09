@@ -12,6 +12,7 @@ void can_init() {
 }
 
 void can_send(message_ptr message) {
+	cli();
 	// Alt her foregår med buffer 0
 
 	// Id. TXBnSIDH og TXBnSIDL
@@ -28,6 +29,7 @@ void can_send(message_ptr message) {
 
 	// Request to send
 	mcp_request_to_send(0);
+	sei();
 }
 
 message_t can_receive() {
