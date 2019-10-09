@@ -3,6 +3,8 @@
 #include "spi.h"
 #include "MCP2515.h"
 #include <stdio.h>
+#define F_CPU 16000000UL
+#include <util/delay.h>
 
 /*
 void mcp_init() {
@@ -14,6 +16,8 @@ void mcp_init() {
 void mcp_init() {
 	spi_master_init();
 	mcp_reset();
+
+	_delay_ms(1);
 
 	// Sjøltesting
 	uint8_t value = mcp_read(MCP_CANSTAT);

@@ -66,12 +66,15 @@ int main(void){
 }
 
 ISR(INT3_vect) {
-	printf("\r\nINT3_vect\r\n");
 	message_t receive = can_receive(); // Mottar melding
-	printf("Heisann sveisann, vi har fått ei melding.\r\n");
-	printf("Id: %d \r\n", receive.id);
-	printf("Lengde: %d \r\n", receive.length);
-	printf("Melding: %s \r\n\r\n", receive.data);
+	if (receive.length > 8) {
+		printf("Kaos. Meldingslengde: %d\r\n", receive.length);
+	} else {
+		printf("Heisann sveisann, vi har fått ei melding.\r\n");
+		printf("Id: %d \r\n", receive.id);
+		printf("Lengde: %d \r\n", receive.length);
+		printf("Melding: %s \r\n\r\n", receive.data);
+	}
 }
 
 ISR(SPI_STC_vect) {
