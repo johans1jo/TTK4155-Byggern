@@ -20,19 +20,9 @@
 #define UBRR 103
 
 int main(void){
-
-
-	EIMSK |= (1 << INT0);
-	//EICRA bør settes til å svare på fallende kant
-
-	printf("før sei\r\n");
-	sei(); // Skrur på interrupts globalt
-	printf("etter sei\r\n");
-
-	
-	//printf("Main start\r\n");
 	uart_init(UBRR);
 	can_init(); // Denne initierer mcp, som initierer spi.
+	printf("etter caninit\r\n");
 	mcp_set_mode(MODE_NORMAL);
 
 	// Interruptgreier

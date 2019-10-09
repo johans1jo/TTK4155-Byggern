@@ -41,17 +41,24 @@ message_t can_receive() {
 	//uint8_t id_low = (mcp_read(MCP_RXB0SIDL) & 0b11100000)/0b100000;
 	//uint8_t id_high = mcp_read(MCP_RXB0SIDH);
 	printf("he\r\n");
-	uint8_t id_low = mcp_read(MCP_RXB1SIDL)/0b100000;
+	uint8_t id_low = mcp_read(MCP_RXB0SIDL)/0b100000;
 	printf("eh\r\n");
-	uint8_t id_high = mcp_read(MCP_RXB1SIDH);
+	printf("id_low: %d\r\n", id_low);
+	uint8_t id_high = mcp_read(MCP_RXB0SIDH);
+	printf("id_high: %d\r\n", id_high);
 	message.id = id_high * 0b1000 + id_low;
 
 	// Lengde. RXBnDLC
-	message.length = mcp_read(MCP_RXB1DLC);
+	message.length = mcp_read(MCP_RXB0DLC);
+	printf("msg.length %d\r\n", message.length);
 
-	// Melding. RXBnDM
-	for (int i = 0; i < message.length; i++) {
-		message.data[i] = mcp_read(MCP_RXB1D0 + i);
+	if (message.length > 8) {
+		printf("Her har det skjedd noe kaos. Meldingslengde: %d\r\n", message.length);
+	} else {
+		// Melding. RXBnDM
+		for (int i = 0; i < message.length; i++) {
+			message.data[i] = mcp_read(MCP_RXB0D0 + i);
+		}
 	}
 
 	return message;
