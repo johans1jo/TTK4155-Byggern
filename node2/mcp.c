@@ -12,19 +12,14 @@ void mcp_init() {
 
 // Init kokt rett fra Waseem
 void mcp_init() {
-	printf("mcpinit\r\n");
 	spi_master_init();
 	mcp_reset();
-
-	printf("mcp_init 2\r\n");
 
 	// Sjøltesting
 	uint8_t value = mcp_read(MCP_CANSTAT);
 	if ((value & MODE_MASK) != MODE_CONFIG) {
 		printf("MCP2515 er ikke i konfigurasjonsmodus etter reset. CANSTAT: %x \r\n", value);
 	}
-
-	printf("mcp init :)\r\n");
 }
 
 uint8_t mcp_read(uint8_t address) {
@@ -79,7 +74,6 @@ void mcp_bit_modify(uint8_t address, uint8_t mask, uint8_t data) {
 }
 
 void mcp_reset() {
-	printf("mcp_reset\r\n");
 	spi_clear_ss();
 	spi_write(MCP_RESET);
 	spi_set_ss();

@@ -21,8 +21,9 @@
 
 int main(void){
 	uart_init(UBRR);
+	printf("\r\n\r\nstart\r\n");
+
 	can_init(); // Denne initierer mcp, som initierer spi.
-	printf("etter caninit\r\n");
 	mcp_set_mode(MODE_NORMAL);
 
 	// Interruptgreier
@@ -35,43 +36,48 @@ int main(void){
 	MCUCR &= ~(1 << ISC00); // ...
 	DDRD &=  ~(1 << PIND2);
 	*/
-	printf("hei1\r\n");
-/*
-	EIMSK |= (1 << INT0);
+
+	EIMSK |= (1 << INT3);
+	DDRB &= ~(1 << INT3);
 	//EICRA bør settes til å svare på fallende kant
+	EICRA |= (1 << ISC31);
+	EICRA &= ~(1 << ISC30);
 
-	printf("før sei\r\n");
+	//printf("før sei\r\n");
 	sei(); // Skrur på interrupts globalt
-	printf("etter sei\r\n");
-*/
+	//printf("etter sei\r\n");
 
-	message_t receive = can_receive(); // Mottar melding
-	printf("Heisann sveisann, vi har fått ei melding.\r\n");
-	printf("Id: %d \r\n", receive.id);
-	printf("Lengde: %d \r\n", receive.length);
-	printf("Melding: %s \r\n\r\n", receive.data);
+	// Sender melding
+	message_t message = {
+		2, // Id
+		3, // Lengde
+		"max" // Data. Maks åtte byte
+	};
+	can_send(&message); // Sender melding
+
+	printf("har sendt melding\r\n");
 
 	while(1){
-		printf("hei\r\n");
+		//printf("hei\r\n");
 		_delay_ms(1000);
 	}
 
 	return 0;
 }
 
-ISR(INT0_vect) {
-	printf("\r\nINT0\r\n");
-	/*message_t receive = can_receive(); // Mottar melding
+ISR(INT3_vect) {
+	printf("\r\nINT3_vect\r\n");
+	message_t receive = can_receive(); // Mottar melding
 	printf("Heisann sveisann, vi har fått ei melding.\r\n");
 	printf("Id: %d \r\n", receive.id);
 	printf("Lengde: %d \r\n", receive.length);
-	printf("Melding: %s \r\n\r\n", receive.data);*/
+	printf("Melding: %s \r\n\r\n", receive.data);
 }
 
 ISR(SPI_STC_vect) {
-	printf("\r\nSPI_STC_vect\r\n");
+	//printf("\r\nSPI_STC_vect\r\n");
 }
 
 ISR(BADISR_vect) {
-	printf("\r\nb\r\n");
+	printf("\r\nBADISR_vect\r\n");
 }
