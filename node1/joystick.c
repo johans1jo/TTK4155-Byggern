@@ -20,6 +20,12 @@ int slide_left_V_max = 255;
 int slide_right_V_min = 0;
 int slide_right_V_max = 255;
 
+int getxoffset() {
+  return x_offset;
+}
+int getyoffset() {
+  return y_offset;
+}
 
 //Compensates for natrual offset
 int joy_calibrate(){
@@ -31,7 +37,14 @@ int joy_calibrate(){
 int joy_read_x() {
   //x_pos = (((adc_read(JOYSTICK_X)-x_offset)*200 )/ (joy_x_max - joy_x_min)) - 128;
   //return 0;
-  int pos = (adc_read(JOYSTICK_X)-x_offset) * 100 / 127;
+  //int pos = (adc_read(JOYSTICK_X)-x_offset) * 100 / 127;
+  int pos = (adc_read(JOYSTICK_X) - x_offset) * 100 / 127;
+  int offset = 127 - x_offset; //2
+  if (pos > 0) {
+    pos = pos * 100 / (100 + offset);
+  } else if (pos < 0) {
+    pos = pos * 100 / (100 - offset);
+  }
   return pos;
 }
 
@@ -39,7 +52,14 @@ int joy_read_x() {
 int joy_read_y() {
   //y_pos = (((adc_read(JOYSTICK_Y)-y_offset)*200 )/ (joy_y_max - joy_y_min)) - 128;
   //return 0;
-  int pos = (adc_read(JOYSTICK_Y)-y_offset) * 100 / 127;
+  //int pos = (adc_read(JOYSTICK_Y)-y_offset) * 100 / 127;
+  int pos = (adc_read(JOYSTICK_Y) - y_offset) * 100 / 127;
+  int offset = 127 - y_offset; //-11
+  if (pos > 0) {
+    pos = pos * 100 / (92); //jalla
+  } else if (pos < 0) {
+    pos = pos * 100 / (106); //jalla
+  }
   return pos;
 }
 

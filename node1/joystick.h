@@ -17,3 +17,6 @@ int joy_read_y();
 int joy_read_dir();
 
 void joy_send_coordinates();
+
+int getxoffset();
+int getyoffset();
