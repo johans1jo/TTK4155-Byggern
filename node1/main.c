@@ -29,17 +29,14 @@ int main(void){
 
 	// Lab 6
 	adc_init();
-	sram_init();
-	oled_init();
-	oled_clear();
-	joy_calibrate();
-	menu_ptr menu = menu_init();
-	menu_start(menu);
+	//sram_init();
+	//oled_init();
+	//oled_clear();
+
+	//menu_ptr menu = menu_init();
+	//menu_start(menu);
 
 
-	//joy_send_coordinates();
-
-	/*
 
 	// Interruptgreier
 	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
@@ -53,7 +50,7 @@ int main(void){
 	sei(); // Skrur på interrupts globalt
 	printf("etter sei\r\n");
 
-
+/*
 	// Sender melding
 	message_t message = {
 		1, // Id
@@ -70,6 +67,16 @@ int main(void){
 	}
 
 	*/
+
+
+
+	joy_calibrate();
+
+  while (1) {
+    printf("hei");
+    joy_send_coordinates();
+    _delay_ms(10);
+  }
 
 	return 0;
 }

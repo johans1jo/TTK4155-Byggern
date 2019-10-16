@@ -13,7 +13,7 @@
 
 void spi_master_init() {
 	/* Set MOSI and SCK - og SS - output, all others input */
-	DDR_SPI = (1<<DD_MOSI)|(1<<DD_SCK)|(1<<DD_SS)|(1<<PB0);
+	DDR_SPI |= (1<<DD_MOSI)|(1<<DD_SCK)|(1<<DD_SS)|(1<<PB0);
 	/* Enable SPI, Master, set clock rate fck/16 */
 	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0)|(1<<SPIE);
 

@@ -20,3 +20,5 @@ void joy_send_coordinates();
 
 int getxoffset();
 int getyoffset();
+
+int joy_to_deg(int pos);

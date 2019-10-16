@@ -110,23 +110,23 @@ int joy_read_dir() {
 
 void joy_send_coordinates() {
 		printf("send joystickkoordinater...\r\n");
-		while (1) {
-			int x = joy_read_x();
-			message_t x_coordinate = {
-				10,
-				3,
-				x
-			};
-			can_send(&x_coordinate);
+		int x = joy_read_x();
+		message_t x_coordinate = {
+			10,
+			3,
+			x
+		};
+		can_send(&x_coordinate);
 
-			int y = joy_read_y();
-			message_t y_coordinate = {
-				11,
-				3,
-				y
-			};
-			can_send(&y_coordinate);
+		int y = joy_read_y();
+		message_t y_coordinate = {
+			11,
+			3,
+			y
+		};
+		can_send(&y_coordinate);
+}
 
-			_delay_ms(1000);
-		}
+int joy_to_deg(int pos) {
+  return pos * 90 / 100;
 }

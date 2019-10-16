@@ -14,6 +14,8 @@
 #include "mcp.h"
 #include "can.h"
 #include "pwm.h"
+#include <time.h>
+#include <stdlib.h>
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -24,22 +26,52 @@ int main(void){
   uart_init(UBRR);
   pwm_init();
 
-  int ms = 0;
+
+  printf("Hei");
+
+	can_init(); // Denne initierer mcp, som initierer spi.
+	mcp_set_mode(MODE_NORMAL);
+
+	// Interruptgreier
+	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
+	//mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b11111111); // Skrur på receive0-interrupt. Skrur av alt annet.
+
+	EIMSK |= (1 << INT3);
+	DDRB &= ~(1 << INT3);
+	//EICRA bør settes til å svare på fallende kant
+	EICRA |= (1 << ISC31);
+	EICRA &= ~(1 << ISC30);
+
+	//printf("før sei\r\n");
+	sei(); // Skrur på interrupts globalt
+	//printf("etter sei\r\n");
+
   while(1) {
-    pwm_set_ms(ms);
-    _delay_ms(1000);
-    ms = ms + 1;
+
   }
+
+/*
+  while(1) {
+    //servo_set_angle(rand()%180-90);
+    //servo_set_angle(-200);
+    //_delay_ms(2000);
+    servo_set_angle(-90);
+    _delay_ms(2000);
+    servo_set_angle(90);
+    _delay_ms(2000);
+  }*/
 
 	return 0;
 }
 
 ISR(INT3_vect) {
 	message_t receive = can_receive(); // Mottar melding
-	if (receive.id == 10) {
+	if (receive.id == 10) { //x
 		//x
 		printf("x: %d\r\n", receive.data[0]);
-	} else if (receive.id == 11) {
+    //servo_set_angle(receive.data[0]);
+    servo_set_angle(receive.data[0]);
+	} else if (receive.id == 11) { //y
 		//y
 		printf("y: %d\r\n\r\n", receive.data[0]);
 	} else {

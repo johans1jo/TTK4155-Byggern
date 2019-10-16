@@ -1,8 +1,8 @@
 #include <avr/io.h>
 
 enum {
-    JOYSTICK_X = 1,
-    JOYSTICK_Y,
+    JOYSTICK_Y = 1,
+    JOYSTICK_X,
     SLIDER_LEFT,
     SLIDER_RIGHT
 };
