@@ -13,6 +13,7 @@
 #include "MCP2515.h"
 #include "mcp.h"
 #include "can.h"
+#include "pwm.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -20,47 +21,10 @@
 #define UBRR 103
 
 int main(void){
-	uart_init(UBRR);
-	printf("\r\n\r\nstart\r\n");
+  pwm_init();
 
-	can_init(); // Denne initierer mcp, som initierer spi.
-	mcp_set_mode(MODE_NORMAL);
-
-	// Interruptgreier
-	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
-	//mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b11111111); // Skrur på receive0-interrupt. Skrur av alt annet.
-
-	/* fra node1
-	GICR |= (1 << INT0); // Skrur på INT0-interrupt
-	MCUCR |= (1 << ISC01); // Setter interrupts til å funke på fallende kant
-	MCUCR &= ~(1 << ISC00); // ...
-	DDRD &=  ~(1 << PIND2);
-	*/
-
-	EIMSK |= (1 << INT3);
-	DDRB &= ~(1 << INT3);
-	//EICRA bør settes til å svare på fallende kant
-	EICRA |= (1 << ISC31);
-	EICRA &= ~(1 << ISC30);
-
-	//printf("før sei\r\n");
-	sei(); // Skrur på interrupts globalt
-	//printf("etter sei\r\n");
-
-	// Sender melding
-	message_t message = {
-		0, // Id
-		3, // Lengde
-		"max" // Data. Maks åtte byte
-	};
-	can_send(&message); // Sender melding
-
-	printf("har sendt melding\r\n");
-
-	while(1){
-		//printf("hei\r\n");
-		_delay_ms(1000);
-	}
+  while(1) {
+  }
 
 	return 0;
 }

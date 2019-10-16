@@ -19,8 +19,8 @@ void pwm_init() {
   */
 
   // Set at BOTTOM, clear at compare match
-  TCCR1A |= (1 << COM1A1);
-  TCCR1A &= ~(1 << COM1A0);
+  TCCR1A |= (1 << COM1B1);
+  TCCR1A &= ~(1 << COM1B0);
 
   // Prescaler
   TCCR1B |= (1 << CS12);
@@ -31,9 +31,9 @@ void pwm_init() {
   ICR1 = 0x4444;
 
   //OCR1A sammenlignes kontinuerlig med counter (TCNT1)
-  OCR1A = 0x1111;
+  OCR1B = 0x3333;
 
   // Setter OC1A som output
-  DDRB |= (1 << PB5);
+  DDRB |= (1 << PB6);
 
 }
