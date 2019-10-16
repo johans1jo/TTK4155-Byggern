@@ -1,5 +1,8 @@
 #include "pwm.h"
 #include <avr/io.h>
+#include <stdio.h>
+
+static unsigned int pwm_period = 0x9C40; //40.000
 
 void pwm_init() {
   // Setter mode 14 aka 0b1110
@@ -22,18 +25,28 @@ void pwm_init() {
   TCCR1A |= (1 << COM1B1);
   TCCR1A &= ~(1 << COM1B0);
 
-  // Prescaler
-  TCCR1B |= (1 << CS12);
-  TCCR1B &= ~(1 << CS11);
+  // Prescaler = 8
+  TCCR1B &= ~(1 << CS12);
+  TCCR1B |= (1 << CS11);
   TCCR1B &= ~(1 << CS10);
 
   // Counter økes helt til den treffer ICR1 ?
-  ICR1 = 0x4444;
+  ICR1 = pwm_period; //40.000
 
   //OCR1A sammenlignes kontinuerlig med counter (TCNT1)
-  OCR1B = 0x3333;
+  pwm_set_ms(1);
 
   // Setter OC1A som output
   DDRB |= (1 << PB6);
 
+}
+
+void pwm_set_ms(int ms) {
+  if (ms < 0.9) {
+    ms = 0.9;
+  } else if (ms > 2.1) {
+    ms = 2.1;
+  }
+
+  OCR1B = (pwm_period/0x14)*ms;
 }

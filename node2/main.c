@@ -21,9 +21,14 @@
 #define UBRR 103
 
 int main(void){
+  uart_init(UBRR);
   pwm_init();
 
+  int ms = 0;
   while(1) {
+    pwm_set_ms(ms);
+    _delay_ms(1000);
+    ms = ms + 1;
   }
 
 	return 0;
