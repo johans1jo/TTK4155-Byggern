@@ -17,6 +17,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include "adc.h"
+#include "score.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -26,13 +27,16 @@
 int main(void){
   uart_init(UBRR);
   adc_init();
-  
-  while (1) {
-    adc_read();
-    _delay_ms(100);
-  }
 
-  adc_read();
+  while (1) {
+    int hei = adc_read();
+    //printf("hei %d\r\n", hei);
+    if (has_failed(hei)) {
+      add_fail();
+      printf("Antall bommerter: %d", get_fails());
+    }
+    _delay_ms(1);
+  }
 
 	return 0;
 }

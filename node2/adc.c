@@ -41,7 +41,7 @@ void adc_init() {
 
 }
 
-char adc_read() {
+int adc_read() {
   // single-ended ADC2 // Table 26-4
   //ADMUX |= (1 << MUX1);
 
@@ -51,6 +51,6 @@ char adc_read() {
 	while(!(ADCSRA & (1<<ADIF))) {
   }
   int adc = ADCH*0b100000000 + ADCL;
-  printf("ADC: %d\r\n", adc);
-  return ADC;
+  printf("adc %d - %x - %x \r\n", adc, ADCH, ADCL);
+  return adc;
 }

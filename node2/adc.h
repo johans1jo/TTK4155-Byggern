@@ -1,2 +1,2 @@
 void adc_init();
-char adc_read();
+int adc_read();
