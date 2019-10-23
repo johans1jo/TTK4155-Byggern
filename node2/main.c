@@ -16,6 +16,7 @@
 #include "pwm.h"
 #include <time.h>
 #include <stdlib.h>
+#include "adc.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -24,47 +25,20 @@
 
 int main(void){
   uart_init(UBRR);
-  pwm_init();
-
-
-  printf("Hei");
-
-	can_init(); // Denne initierer mcp, som initierer spi.
-	mcp_set_mode(MODE_NORMAL);
-
-	// Interruptgreier
-	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
-	//mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b11111111); // Skrur på receive0-interrupt. Skrur av alt annet.
-
-	EIMSK |= (1 << INT3);
-	DDRB &= ~(1 << INT3);
-	//EICRA bør settes til å svare på fallende kant
-	EICRA |= (1 << ISC31);
-	EICRA &= ~(1 << ISC30);
-
-	//printf("før sei\r\n");
-	sei(); // Skrur på interrupts globalt
-	//printf("etter sei\r\n");
-
-  while(1) {
-
+  adc_init();
+  
+  while (1) {
+    adc_read();
+    _delay_ms(100);
   }
 
-/*
-  while(1) {
-    //servo_set_angle(rand()%180-90);
-    //servo_set_angle(-200);
-    //_delay_ms(2000);
-    servo_set_angle(-90);
-    _delay_ms(2000);
-    servo_set_angle(90);
-    _delay_ms(2000);
-  }*/
+  adc_read();
 
 	return 0;
 }
 
 ISR(INT3_vect) {
+  /*
 	message_t receive = can_receive(); // Mottar melding
 	if (receive.id == 10) { //x
 		//x
@@ -86,6 +60,7 @@ ISR(INT3_vect) {
 	}
 	// Resetter interrupt for motta-buffer0
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
+  */
 }
 
 ISR(SPI_STC_vect) {
