@@ -18,24 +18,39 @@
 #include <stdlib.h>
 #include "adc.h"
 #include "score.h"
+#include "twi.h"
+#include "motor.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
 //#define UBRR (FOSC/(16*BAUD))-1 //103. Riktig for U2Xn=0
 #define UBRR 103
 
+#define SDA 20
+#define SCL 21
+
 int main(void){
   uart_init(UBRR);
   adc_init();
+  TWI_Master_Initialise();
+  sei();
 
+  //unsigned char address = 0b01010000;
+  //unsigned char command = 0;
+  //unsigned char data = 0b11111111;
+  /*
+  unsigned char msg[] = {80, 0, 200};
+  int msgSize = 3;
   while (1) {
-    int hei = adc_read();
-    //printf("hei %d\r\n", hei);
-    if (has_failed(hei)) {
-      add_fail();
-      printf("Antall bommerter: %d", get_fails());
-    }
-    _delay_ms(1);
+    TWI_Start_Transceiver_With_Data(msg, msgSize);
+    _delay_ms(10);
+  }*/
+
+  encoder_init();
+  while(1) {
+    int hei = encoder_read();
+    printf("encoder: %d", hei);
+    _delay_ms(100);
   }
 
 	return 0;
