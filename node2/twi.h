@@ -50,6 +50,11 @@ extern union TWI_statusReg TWI_statusReg;
 /****************************************************************************
   Function definitions
 ****************************************************************************/
+
+
+void twi_init();
+void twi_send(unsigned char *msg, unsigned char msgSize);
+
 void TWI_Master_Initialise( void );
 unsigned char TWI_Transceiver_Busy( void );
 unsigned char TWI_Get_State_Info( void );

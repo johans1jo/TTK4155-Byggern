@@ -26,17 +26,7 @@ int main(void){
 	uart_init(UBRR);
 	can_init(); // Denne initierer mcp, som initierer spi.
 	mcp_set_mode(MODE_NORMAL);
-
-	// Lab 6
-	adc_init();
-	//sram_init();
-	//oled_init();
-	//oled_clear();
-
-	//menu_ptr menu = menu_init();
-	//menu_start(menu);
-
-
+  joy_calibrate();
 
 	// Interruptgreier
 	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
@@ -50,30 +40,8 @@ int main(void){
 	sei(); // Skrur på interrupts globalt
 	printf("etter sei\r\n");
 
-/*
-	// Sender melding
-	message_t message = {
-		1, // Id
-		5, // Lengde
-		"heiiii" // Data. Maks åtte byte
-	};
-	can_send(&message); // Sender melding
-	printf("har sendt melding\r\n");
-
-
-	while(1){
-		printf("w");
-		_delay_ms(1000);
-	}
-
-	*/
-
-
-
-	joy_calibrate();
-
   while (1) {
-    printf("hei");
+    //printf("hei");
     joy_send_coordinates();
     _delay_ms(10);
   }
@@ -86,10 +54,12 @@ ISR(INT0_vect) {
 	if (receive.length > 8) {
 		printf("Kaos. Meldingslengde: %d\r\n", receive.length);
 	} else {
-		printf("Heisann sveisann, vi har fått ei melding.\r\n");
-		printf("Id: %d \r\n", receive.id);
-		printf("Lengde: %d \r\n", receive.length);
-		printf("Melding: %s \r\n\r\n", receive.data);
+    if (receive.id == 1) { // encoder
+  		/*printf("Heisann sveisann, vi har fått ei melding.\r\n");
+  		printf("Id: %d \r\n", receive.id);
+  		printf("Lengde: %d \r\n", receive.length);*/
+  		printf("Encoder: %s \r\n", receive.data);
+    }
 	}
 	// Resetter interrupt for motta-buffer0
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);

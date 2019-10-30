@@ -37,6 +37,15 @@ union TWI_statusReg TWI_statusReg = {0};            // TWI_statusReg is defined 
 Call this function to set up the TWI master to its initial standby state.
 Remember to enable interrupts from the main application after initializing the TWI.
 ****************************************************************************/
+
+void twi_init() {
+  TWI_Master_Initialise();
+}
+
+void twi_send(unsigned char *msg, unsigned char msgSize) {
+  TWI_Start_Transceiver_With_Data(msg, msgSize);
+}
+
 void TWI_Master_Initialise(void)
 {
   TWBR = TWI_TWBR;                                  // Set bit rate register (Baudrate). Defined in header file.

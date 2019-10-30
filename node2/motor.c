@@ -16,6 +16,8 @@
 void motor_init() {
   DDRH |= (1 << DIR); //DIR
   DDRH |= (1 << EN); //EN
+
+  motor_enable();
 }
 
 void motor_set_direction(direction_t dir) {

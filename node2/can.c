@@ -7,8 +7,9 @@
 
 void can_init() {
 	mcp_init();
+  mcp_set_mode(MODE_NORMAL);
 
-	// Interruptinit?
+  //interruptinit?
 }
 
 void can_send(message_ptr message) {
