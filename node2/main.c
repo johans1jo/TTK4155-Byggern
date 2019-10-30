@@ -33,7 +33,7 @@
 int main(void){
   uart_init(UBRR);
   adc_init();
-  twi_init();
+  TWI_Master_Initialise();
   pwm_init();
   motor_init();
   encoder_init();
@@ -41,6 +41,15 @@ int main(void){
 
   interrupt_init(); //inneholder litt CAN-interruptgreier
 
+  _delay_ms(1000);
+  motor_enable();
+
+  _delay_ms(1000);
+  printf("1\r\n");
+  motor_set_direction(LEFT);
+  motor_set_speed(100);
+
+  _delay_ms(1000);
   while(1) {
   }
 

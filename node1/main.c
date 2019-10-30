@@ -23,6 +23,7 @@
 #define UBRR FOSC/16/BAUD-1
 
 int main(void){
+  /*
 	uart_init(UBRR);
 	can_init(); // Denne initierer mcp, som initierer spi.
 	mcp_set_mode(MODE_NORMAL);
@@ -44,6 +45,8 @@ int main(void){
     //printf("hei");
     joy_send_coordinates();
     _delay_ms(10);
+  }*/
+  while(1) {
   }
 
 	return 0;
