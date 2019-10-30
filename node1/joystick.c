@@ -109,8 +109,12 @@ int joy_read_dir() {
 }
 
 void joy_send_coordinates() {
-		printf("send joystickkoordinater...\r\n");
+		//printf("sender j\r\n");
+
 		int x = joy_read_x();
+    int y = joy_read_y();
+    printf("%d , %d\r\n", x, y);
+
 		message_t x_coordinate = {
 			10,
 			3,
@@ -118,7 +122,6 @@ void joy_send_coordinates() {
 		};
 		can_send(&x_coordinate);
 
-		int y = joy_read_y();
 		message_t y_coordinate = {
 			11,
 			3,

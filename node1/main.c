@@ -23,13 +23,15 @@
 #define UBRR FOSC/16/BAUD-1
 
 int main(void){
-  /*
+
 	uart_init(UBRR);
 	can_init(); // Denne initierer mcp, som initierer spi.
 	mcp_set_mode(MODE_NORMAL);
+  adc_init();
   joy_calibrate();
 
 	// Interruptgreier
+
 	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
 	GICR |= (1 << INT0); // Skrur på INT0-interrupt
 	MCUCR |= (1 << ISC01); // Setter interrupts til å funke på fallende kant
@@ -41,12 +43,14 @@ int main(void){
 	sei(); // Skrur på interrupts globalt
 	printf("etter sei\r\n");
 
+
   while (1) {
-    //printf("hei");
-    joy_send_coordinates();
-    _delay_ms(10);
-  }*/
-  while(1) {
+    //printf("hei\r\n");
+    int xx = adc_read(JOYSTICK_X);
+    int yy = adc_read(JOYSTICK_Y);
+    printf("adc: %d , %d\r\n", xx, yy);
+    //joy_send_coordinates();
+    _delay_ms(100);
   }
 
 	return 0;

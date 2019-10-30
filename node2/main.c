@@ -44,6 +44,7 @@ int main(void){
   _delay_ms(1000);
   motor_enable();
 
+/*
   _delay_ms(1000);
   motor_set_direction(LEFT);
   motor_set_speed(255);
@@ -52,6 +53,7 @@ int main(void){
   motor_set_speed(70);
 
   _delay_ms(1000);
+  */
   while(1) {
   }
 
@@ -59,7 +61,7 @@ int main(void){
 }
 
 ISR(INT3_vect) {
-  printf("hei\r\n");
+  //printf("hhheiiiii\r\n");
 
 	message_t receive = can_receive(); // Mottar melding
 	if (receive.id == 10) { //x
@@ -72,12 +74,12 @@ ISR(INT3_vect) {
 		printf("y: %d\r\n\r\n", receive.data[0]);
     if (receive.data[0] > 0) {
       //høyre
-      motor_set_direction(RIGHT);
-      motor_set_speed(receive.data[0]);
+      //motor_set_direction(RIGHT);
+      //motor_set_speed(receive.data[0]);
     } else {
       //venstre
-      motor_set_direction(LEFT);
-      motor_set_speed(receive.data[0]);
+      //motor_set_direction(LEFT);
+      //motor_set_speed(receive.data[0]);
     }
 	} else {
 		if (receive.length > 8) {
@@ -89,10 +91,8 @@ ISR(INT3_vect) {
 			printf("Melding: %s \r\n\r\n", receive.data);
 		}
 	}
-  printf("isr1\r\n");
 	// Resetter interrupt for motta-buffer0
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
-  printf("isr2\r\n");
 
 }
 
