@@ -45,9 +45,11 @@ int main(void){
   motor_enable();
 
   _delay_ms(1000);
-  printf("1\r\n");
   motor_set_direction(LEFT);
-  motor_set_speed(100);
+  motor_set_speed(255);
+  _delay_ms(1000);
+  motor_set_direction(RIGHT);
+  motor_set_speed(70);
 
   _delay_ms(1000);
   while(1) {

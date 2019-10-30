@@ -26,6 +26,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "twi.h"
+#include <stdio.h>
 
 static unsigned char TWI_buf[ TWI_BUFFER_SIZE ];    // Transceiver buffer
 static unsigned char TWI_msgSize;                   // Number of bytes to be transmitted.
@@ -152,6 +153,7 @@ application.
 ****************************************************************************/
 ISR(TWI_vect)
 {
+  printf("twi_vect\r\n");
   static unsigned char TWI_bufPtr;
 
   switch (TWSR)
@@ -221,4 +223,6 @@ ISR(TWI_vect)
              (0<<TWEA)|(0<<TWSTA)|(0<<TWSTO)|           // No Signal requests
              (0<<TWWC);                                 //
   }
+
+    printf("twi_vect slutt\r\n");
 }
