@@ -35,9 +35,6 @@ int joy_calibrate(){
 
 //Returns joystick X value between -100 and 100
 int joy_read_x() {
-  //x_pos = (((adc_read(JOYSTICK_X)-x_offset)*200 )/ (joy_x_max - joy_x_min)) - 128;
-  //return 0;
-  //int pos = (adc_read(JOYSTICK_X)-x_offset) * 100 / 127;
   int pos = (adc_read(JOYSTICK_X) - x_offset) * 100 / 127;
   int offset = 127 - x_offset; //2
   if (pos > 0) {
@@ -50,9 +47,6 @@ int joy_read_x() {
 
 //Returns joystick Y value between -100 and 100
 int joy_read_y() {
-  //y_pos = (((adc_read(JOYSTICK_Y)-y_offset)*200 )/ (joy_y_max - joy_y_min)) - 128;
-  //return 0;
-  //int pos = (adc_read(JOYSTICK_Y)-y_offset) * 100 / 127;
   int pos = (adc_read(JOYSTICK_Y) - y_offset) * 100 / 127;
   int offset = 127 - y_offset; //-11
   if (pos > 0) {
@@ -77,40 +71,9 @@ int joy_read_dir() {
   } else {
     return 0;
   }
-  /*
-  int x = joy_read_x();
-  int y = joy_read_y();
-  //If X direction has largest value
-  if (abs(x_pos) > abs(y_pos)) {
-    if (x > 80) {
-      return RIGHT;
-    }
-    else if (x < 80) {
-      return LEFT;
-    }
-    else {
-      return 0;
-    }
-  }
-  //If Y direction has largest value
-    if (abs(y_pos) > abs(x_pos)) {
-    if (y > 80) {
-      return UP;
-    }
-    else if (y < 80) {
-      return DOWN;
-    }
-    else {
-      return 0;
-    }
-  }
-  return 0;
-  */
 }
 
 void joy_send_coordinates() {
-		//printf("sender j\r\n");
-
 		int x = joy_read_x();
     int y = joy_read_y();
     printf("%d , %d\r\n", x, y);

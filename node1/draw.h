@@ -7,7 +7,6 @@ typedef struct Point {
 	int y;
 } point;
 
-
 void draw_set_bit(int x, int y);
 void draw_clear_bit(int x, int y);
 void draw_print();

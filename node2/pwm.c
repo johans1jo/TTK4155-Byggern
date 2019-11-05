@@ -10,17 +10,6 @@ void pwm_init() {
   TCCR1A |= (1 << WGM11);
   TCCR1A &= ~(0 << WGM10);
 
-  // ICRn
-
-  //COMnx = 0: no action on the OCnx Register is to be performed on the next compare match
-  //If one or both of the COMnA1:0 bits are written to one, the OCnA output overrides the normal port functionality of the I/O pin it is connected to.
-  //However, note that the Data Direction Register (DDR) bit corresponding to the OCnA, OCnB or OCnC pin must be set in order to enable the output driver
-  /* The two Timer/Counter I/O locations (TCNTnH and TCNTnL, combined TCNTn) give direct access, both for read
-     and for write operations, to the Timer/Counter unit 16-bit counter. To ensure that both the high and low bytes are
-     read and written simultaneously when the CPU accesses these registers, the access is performed using an 8-bit
-     temporary High Byte Register (TEMP)
-  */
-
   // Set at BOTTOM, clear at compare match
   TCCR1A |= (1 << COM1B1);
   TCCR1A &= ~(1 << COM1B0);

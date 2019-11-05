@@ -50,8 +50,6 @@ void oled_goto_line(int line) { //Line between 0-7
 void oled_goto_column(int column) {
 	  oled_write_command(0x00 + (column % 16)); // Lower nibble
 	  oled_write_command(0x10 + (column / 16)); // Higher nibble
-
-
 }
 
 void oled_goto_pos(int line, int column) {

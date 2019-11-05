@@ -4,12 +4,6 @@
 #include "MCP2515.h"
 #include <stdio.h>
 
-/*
-void mcp_init() {
-	mcp_reset();
-}
-*/
-
 // Init kokt rett fra Waseem
 void mcp_init() {
 	spi_master_init();

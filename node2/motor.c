@@ -15,8 +15,8 @@
 
 
 void motor_init() {
-  DDRH |= (1 << DIR); //DIR
-  DDRH |= (1 << EN); //EN
+  DDRH |= (1 << DIR);
+  DDRH |= (1 << EN);
 }
 
 void motor_set_direction(direction_t dir) {
@@ -40,7 +40,7 @@ void motor_set_speed(int speedInt) {
   // Kommando: 0
   unsigned char msg[] = {80, 0, speed};
   int msgSize = 3;
-  TWI_Start_Transceiver_With_Data(msg, msgSize);
+  TWI_Start_Transceiver_With_Data(msg, msgSize); //twi_send()
 }
 
 void motor_enable() {

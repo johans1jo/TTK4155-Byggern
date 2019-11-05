@@ -11,7 +11,6 @@ void can_init() {
 
   // Interruptgreier
   mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
-  //mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b11111111);
 }
 
 void can_send(message_ptr message) {
@@ -40,8 +39,6 @@ message_t can_receive() {
 	message_t message = {};
 
 	// Id. RXBnSIDH og RXBnSIDL
-	//uint8_t id_low = (mcp_read(MCP_RXB0SIDL) & 0b11100000)/0b100000;
-	//uint8_t id_high = mcp_read(MCP_RXB0SIDH);
 	uint8_t id_low = mcp_read(MCP_RXB0SIDL)/0b100000;
 	uint8_t id_high = mcp_read(MCP_RXB0SIDH);
 	message.id = id_high * 0b1000 + id_low;

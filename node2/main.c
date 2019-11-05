@@ -33,7 +33,7 @@
 int main(void){
   uart_init(UBRR);
   adc_init();
-  TWI_Master_Initialise();
+  TWI_Master_Initialise(); //twi_init()
   pwm_init();
   motor_init();
   encoder_init();

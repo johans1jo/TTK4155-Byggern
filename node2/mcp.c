@@ -6,12 +6,6 @@
 #define F_CPU 16000000UL
 #include <util/delay.h>
 
-/*
-void mcp_init() {
-	mcp_reset();
-}
-*/
-
 // Init kokt rett fra Waseem
 void mcp_init() {
 	spi_master_init();
