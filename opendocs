@@ -1,0 +1,4 @@
+#!/bin/bash
+
+doxygen
+chromium-browser docs/index.html
