@@ -1,3 +1,8 @@
+/**
+ *@file
+ *@brief A driver for the CAN which implements communication between nodes over CAN
+ */
+
 typedef struct Message {
 	unsigned int id;
 	uint8_t length;
