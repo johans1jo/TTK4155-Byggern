@@ -3,10 +3,14 @@
  *@brief A driver for the CAN which implements communication between nodes over CAN
  */
 
+
+ /**
+  * @struct A struct with the id, length of the data, and the data of the message.
+  */
 typedef struct Message {
-	unsigned int id;
-	uint8_t length;
-	char data[8];
+	unsigned int id; /**< The id of the message */
+	uint8_t length;  /**< The length of the data bytes of the message */
+	char data[8];    /**< The data of the message */
 } message_t, *message_ptr;
 
 /**

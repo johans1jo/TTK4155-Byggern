@@ -5,6 +5,9 @@
 
 #include <avr/io.h>
 
+/**
+ * @enum An enumeration with the x- and y values of the joystick, in addition to the left and right slider
+ */
 enum {
     JOYSTICK_Y = 1,
     JOYSTICK_X,
