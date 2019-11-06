@@ -23,7 +23,6 @@
 #include "encoder.h"
 #include "interrupt.h"
 #include "controller.h"
-#include "timer.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -41,7 +40,7 @@ int main(void){
   motor_init();
   encoder_init();
   can_init(); // Denne initierer mcp, som initierer spi.
-	timer_init();
+	controller_timer_init();
   interrupt_init(); //inneholder litt CAN-interruptgreier
 
 	printf("\r\n\r\nMainstart :)\r\n");
