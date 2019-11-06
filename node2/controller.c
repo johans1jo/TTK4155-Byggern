@@ -1,8 +1,8 @@
 #include "controller.h"
 #include <stdio.h>
 
-int Kp = 5;
-int Ki = 1;
+int Kp = 3;
+int Ki = 0;
 int Tt = 20/1000;
 
 unsigned long total_error = 0;

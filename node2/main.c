@@ -23,6 +23,7 @@
 #include "encoder.h"
 #include "interrupt.h"
 #include "controller.h"
+#include "timer.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -40,6 +41,7 @@ int main(void){
   motor_init();
   encoder_init();
   can_init(); // Denne initierer mcp, som initierer spi.
+	timer_init();
   interrupt_init(); //inneholder litt CAN-interruptgreier
 
 	printf("\r\n\r\nMainstart :)\r\n");
@@ -50,7 +52,8 @@ int main(void){
 	motor_enable();
 	encoder_reset();
 
-	int reference = 1000;
+	/*
+	int reference = -2000;
   while(1) {
 		unsigned int encoder = encoder_read(); //ok
 		int e = reference - encoder; //ok
@@ -62,13 +65,13 @@ int main(void){
 		} else {
 			motor_set_direction(LEFT);
 		}
-		//motor_set_speed(speed);
+		motor_set_speed(speed);
 		printf("Referanse: %d Encoder: %d Avvik: %d Padrag: %d Speed %d\r\n", reference, encoder, e, u, speed);
 		_delay_ms(20);
   }
+	*/
 
 	while(1) {
-
 	}
 
 	return 0;
@@ -116,4 +119,13 @@ ISR(SPI_STC_vect) {
 
 ISR(BADISR_vect) {
 	printf("\r\nBADISR_vect\r\n");
+}
+
+ISR(TIMER3_OVF_vect) {
+	printf("\r\ntimer3-overflow\r\n");
+}
+
+ISR(TIMER3_COMPB_vect) {
+	printf("timer3-compare\r\n");
+	TCNT3 = 0;
 }
