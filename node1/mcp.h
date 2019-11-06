@@ -1,4 +1,16 @@
+/**
+ * @file
+ * @brief Implements the necessary functions for the can driver
+ */
+
+/**
+ * @brief Initializes the MCP2515
+ */
 void mcp_init();
+
+/**
+ * @brief Reads a message
+ */
 uint8_t mcp_read(uint8_t address);
 void mcp_write(uint8_t address, uint8_t data);
 void mcp_request_to_send(int buffer_number);

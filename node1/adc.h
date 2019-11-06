@@ -5,6 +5,9 @@
 
 #include <avr/io.h>
 
+/**
+ * @enum An enumeration with the x- and y values of the joystick, in addition to the left and right slider
+ */
 enum {
     JOYSTICK_Y = 1,
     JOYSTICK_X,
@@ -13,7 +16,8 @@ enum {
 };
 
 /**
- @brief Sets the SRE-bit in the MCU Control Register (MCUCR) of the ATmega162 to enable External Memory Interface. Releases Port C Pin 7-4 (PC7-4) for the JTAG.
+ * @brief Sets the SRE-bit in the MCU Control Register (MCUCR) of the ATmega162 to enable External Memory Interface. Releases Port C Pin 7-4 (PC7-4) for the JTAG.
+ *
  */
 void adc_init();
 

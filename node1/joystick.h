@@ -46,18 +46,18 @@ void joy_send_coordinates();
 
 /**
  * @brief A get-function for the x-offset of the joystick
- * @return The x-offset
+ * @return The x-offset.
  */
 int getxoffset();
 
 /**
  * @brief A get-function for the y-offset of the joystick
- * @return The y-offset
+ * @return The y-offset.
  */
 int getyoffset();
 
 /**
  * @brief Converts the joystick-value to degrees
- * @return The joystick-value in degrees
+ * @return The joystick-value in degrees.
  */
 int joy_to_deg(int pos);
