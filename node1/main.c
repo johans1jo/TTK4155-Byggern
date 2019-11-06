@@ -17,6 +17,7 @@
 #include "MCP2515.h"
 #include "mcp.h"
 #include "can.h"
+#include "buttons.h"
 
 #define FOSC 4915200// Clock Speed
 #define BAUD 9600
@@ -29,6 +30,7 @@ int main(void){
 	mcp_set_mode(MODE_NORMAL);
   adc_init();
   joy_calibrate();
+	buttons_init();
 
 	// Interruptgreier
 
@@ -43,13 +45,23 @@ int main(void){
 	sei(); // Skrur på interrupts globalt
 	printf("etter sei\r\n");
 
+	DDRB &= ~(1 << DDB1);
+
+	while(1) {
+		if (buttons_left()) {
+			printf("hei\r\n");
+		}
+	}
+
 
   while (1) {
     //printf("hei\r\n");
+		/*
     int xx = adc_read(JOYSTICK_X);
     int yy = adc_read(JOYSTICK_Y);
     printf("adc: %d , %d\r\n", xx, yy);
-    //joy_send_coordinates();
+		*/
+    joy_send_coordinates();
     _delay_ms(100);
   }
 
