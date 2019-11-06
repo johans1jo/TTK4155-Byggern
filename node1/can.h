@@ -28,10 +28,15 @@ void can_send(message_ptr message);
 
 /**
  @brief Reads a message sent over CAN. Assembles the id of the received message by reading the 8 higher bits in the RXB0SIDL register
- and the 3 lower bits in the RXB0SIDH register, reads the number of data bytes transmitted by reading RXB0DLC, and reads the data bytes
+ and the 3 lower bits in the RXB0SIDH register, reads the number of data bytes transmitted by reading the RXB0DLC register, and reads the data bytes
  from the RXBnDm register(s).
 
  @return The data byte(s) of the received message from the RXBnDm register(s).
  */
 message_t can_receive();
+
+
+/**
+ @brief Bare tull!
+ */
 void can_interrupt();
