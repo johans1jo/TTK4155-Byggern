@@ -23,6 +23,7 @@
 #include "encoder.h"
 #include "interrupt.h"
 #include "controller.h"
+#include "solenoid.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -42,6 +43,7 @@ int main(void){
   can_init(); // Denne initierer mcp, som initierer spi.
 	controller_timer_init();
   interrupt_init(); //inneholder litt CAN-interruptgreier
+	solenoid_init();
 
 	printf("\r\n\r\nMainstart :)\r\n");
 
@@ -51,6 +53,24 @@ int main(void){
 	motor_enable();
 	encoder_reset();
 
+	_delay_ms(1000);
+
+	solenoid_set();
+	_delay_ms(100);
+	solenoid_clear();
+
+	_delay_ms(1000);
+
+	solenoid_set();
+	_delay_ms(100);
+	solenoid_clear();
+
+	_delay_ms(1000);
+
+	solenoid_set();
+	_delay_ms(100);
+	solenoid_clear();
+
 	while(1) {
 	}
 
@@ -58,8 +78,6 @@ int main(void){
 }
 
 ISR(INT3_vect) {
-  //printf("hhheiiiii\r\n");
-
 	message_t receive = can_receive(); // Mottar melding
 	if (receive.id == 10) { //x
 		//x
@@ -69,15 +87,7 @@ ISR(INT3_vect) {
 	} else if (receive.id == 11) { //y
 		//y
 		printf("y: %d\r\n\r\n", receive.data[0]);
-    if (receive.data[0] > 0) {
-      //høyre
-      //motor_set_direction(RIGHT);
-      //motor_set_speed(receive.data[0]);
-    } else {
-      //venstre
-      //motor_set_direction(LEFT);
-      //motor_set_speed(receive.data[0]);
-    }
+		controller_set_value(receive.data[0]);
 	} else {
 		if (receive.length > 8) {
 			printf("Kaos. Meldingslengde: %d\r\n", receive.length);

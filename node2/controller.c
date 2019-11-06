@@ -12,6 +12,8 @@ int Kp = 3;
 int Ki = 0;
 int Tt = 20/1000;
 
+int value_from_node1 = 0;
+
 unsigned long total_error = 0;
 
 void controller_timer_init() {
@@ -50,9 +52,13 @@ int controller(int reference, int encoder_value) {
 	return u;
 }
 
+void controller_set_value(int value) {
+	value_from_node1 = value;
+}
+
 
 ISR(TIMER3_COMPB_vect) {
-	int reference = -2000;
+	int reference = value_from_node1*50;
 
 	unsigned int encoder = encoder_read(); //ok
 	int e = reference - encoder; //ok
