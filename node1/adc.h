@@ -15,8 +15,6 @@ enum {
 /**
  @brief Sets the SRE-bit in the MCU Control Register (MCUCR) of the ATmega162 to enable External Memory Interface. Releases Port C Pin 7-4 (PC7-4) for the JTAG.
 
- @param[in] (Enables External Memory Interface) KOMMENTAR: Funksjonen dukker ikke opp hvis den ikke har noen input-parameteren
-
  */
 void adc_init();
 
