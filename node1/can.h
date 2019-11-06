@@ -8,3 +8,4 @@ void can_init();
 void can_send(message_ptr message);
 message_t can_receive();
 void can_interrupt();
+void can_send_everything();

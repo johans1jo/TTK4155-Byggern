@@ -2,6 +2,7 @@
 #include "joystick.h"
 #include <stdlib.h>
 #include "draw.h"
+#include "can.h"
 
 // Initierer og lager en meny
 menu_ptr menu_init() {
@@ -9,7 +10,7 @@ menu_ptr menu_init() {
 	menu_ptr menu = malloc(sizeof(menu_t));
 
 	// Legger til menyelementer
-	menu_ptr menu_send_joy = menu_add(menu, "Joystickverdier", &joy_send_coordinates);
+	menu_ptr menu_send_joy = menu_add(menu, "Joystickverdier", &can_send_everything);
 	menu_ptr menu_highscore = menu_add(menu, "Highscore", &highscore);
 	menu_ptr menu_play = menu_add(menu, "Play", NULL);
 	menu_ptr menu_game1 = menu_add(menu_play, "Game1", &game1);

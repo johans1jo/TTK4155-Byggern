@@ -47,6 +47,7 @@ int main(void){
 
 	printf("\r\n\r\nMainstart :)\r\n");
 
+
 	_delay_ms(1000);
 	motor_set_direction(RIGHT);
 	motor_set_speed(0);
@@ -78,11 +79,11 @@ int main(void){
 }
 
 ISR(INT3_vect) {
+	/*
 	message_t receive = can_receive(); // Mottar melding
 	if (receive.id == 10) { //x
 		//x
 		printf("x: %d\r\n", receive.data[0]);
-    //servo_set_angle(receive.data[0]);
     servo_set_angle(receive.data[0]);
 	} else if (receive.id == 11) { //y
 		//y
@@ -100,7 +101,7 @@ ISR(INT3_vect) {
 	}
 	// Resetter interrupt for motta-buffer0
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
-
+	*/
 }
 
 ISR(SPI_STC_vect) {

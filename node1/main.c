@@ -40,28 +40,12 @@ int main(void){
 	MCUCR &= ~(1 << ISC00); // ...
 	DDRD &=  ~(1 << PIND2);
 
-	printf("før sei\r\n");
 	//GIFR = 0;
 	sei(); // Skrur på interrupts globalt
-	printf("etter sei\r\n");
 
-	DDRB &= ~(1 << DDB1);
-
-	while(1) {
-		if (buttons_left()) {
-			printf("hei\r\n");
-		}
-	}
-
-
+	printf("Sender litt CAN-meldinger :)\r\n");
   while (1) {
-    //printf("hei\r\n");
-		/*
-    int xx = adc_read(JOYSTICK_X);
-    int yy = adc_read(JOYSTICK_Y);
-    printf("adc: %d , %d\r\n", xx, yy);
-		*/
-    joy_send_coordinates();
+		can_send_everything();
     _delay_ms(100);
   }
 

@@ -4,6 +4,9 @@
 #include "MCP2515.h"
 #include <stdio.h>
 #include <avr/interrupt.h>
+#include "adc.h"
+#include "joystick.h"
+#include "buttons.h"
 
 /* Waseem sier at dette også er fornuftig:
 – can_error()
@@ -59,4 +62,28 @@ message_t can_receive() {
 
 void can_interrupt() {
 	printf("2\r\n");
+}
+
+void can_send_everything() {
+		int x = joy_read_x();
+    int y = joy_read_y();
+		int button_joystick = buttons_joystick();
+		int button_left = buttons_left();
+		int button_right = buttons_right();
+		int slider_left = adc_read(SLIDER_LEFT);
+		int slider_right = adc_read(SLIDER_RIGHT);
+    //printf("x %d y %d bj %d bl %d br %d sl %d sr %d\r\n", x, y, button_joystick, button_left, button_right, slider_left, slider_right);
+
+		message_t everything = {
+			10,
+			7,
+			x,
+			y,
+			button_joystick,
+			button_left,
+			button_right,
+			slider_left,
+			slider_right
+		};
+		can_send(&everything);
 }
