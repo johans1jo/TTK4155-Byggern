@@ -4,9 +4,9 @@ Prosjekt i faget **TTK4155 - Industrielle og innbygde datasystemers konstruksjon
 
 Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 
-* Jo Aleksander Johansen ([@johans1jo](https://github.com/johans1jo))
-* Max Robertson ([@maxmrmr](https://github.com/maxmrmr))
-* Erlend Blomseth ([@erlendb](https://github.com/erlendb))
+* National Integration Orchastrator **Jo Aleksander Johansen** ([@johans1jo](https://github.com/johans1jo))
+* Key Account Manager **Max Robertson** ([@maxmrmr](https://github.com/maxmrmr))
+* Dynamic Mobility Operator **Erlend Blomseth** ([@erlendb](https://github.com/erlendb))
 
 ## Bugs
 * OLEDen er jo helt kaos, hva skjer

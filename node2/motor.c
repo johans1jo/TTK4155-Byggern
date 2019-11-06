@@ -16,7 +16,8 @@
 
 void motor_init() {
   DDRH |= (1 << DIR);
-  DDRH |= (1 << EN);
+  //DDRH |= (1 << EN);
+	motor_disable();
 }
 
 void motor_set_direction(direction_t dir) {
@@ -49,32 +50,4 @@ void motor_enable() {
 }
 void motor_disable() {
   PORTH &= ~(1 << EN);
-}
-
-void encoder_init() {
-  DDRH |= (1 << SEL)|(1 << OE)|(1 << RST);
-  DDRK = 0;
-
-  PORTH &= ~(1 << RST);
-  PORTH |= (1 << RST);
-  PORTH |= (1 << OE);
-}
-
-int encoder_read() {
-  PORTH &= ~(1 << OE);
-  PORTH &= ~(1 << SEL);
-  _delay_us(20);
-  //Les MSB A8-A15
-  int msb = PINK;
-  PORTH |= (1<< SEL);
-  _delay_us(20);
-  int lsb = PINK;
-  PORTH |= (1 << OE);
-
-  return msb*0b100000000 + lsb;
-}
-
-void encoder_reset() {
-  PORTH &= ~(1 << RST);
-  PORTH |= (1 << RST);
 }

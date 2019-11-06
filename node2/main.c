@@ -20,7 +20,9 @@
 #include "score.h"
 #include "twi.h"
 #include "motor.h"
+#include "encoder.h"
 #include "interrupt.h"
+#include "controller.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -38,24 +40,36 @@ int main(void){
   motor_init();
   encoder_init();
   can_init(); // Denne initierer mcp, som initierer spi.
-
   interrupt_init(); //inneholder litt CAN-interruptgreier
 
-  _delay_ms(1000);
-  motor_enable();
+	printf("\r\n\r\nMainstart :)\r\n");
 
-/*
-  _delay_ms(1000);
-  motor_set_direction(LEFT);
-  motor_set_speed(255);
-  _delay_ms(1000);
-  motor_set_direction(RIGHT);
-  motor_set_speed(70);
+	_delay_ms(1000);
+	motor_set_direction(RIGHT);
+	motor_set_speed(0);
+	motor_enable();
+	encoder_reset();
 
-  _delay_ms(1000);
-  */
+	int reference = 1000;
   while(1) {
+		unsigned int encoder = encoder_read(); //ok
+		int e = reference - encoder; //ok
+		int u = controller(reference, encoder);
+		int speed = u/40;
+		if (u < 0) {
+			motor_set_direction(RIGHT);
+			speed = -speed;
+		} else {
+			motor_set_direction(LEFT);
+		}
+		//motor_set_speed(speed);
+		printf("Referanse: %d Encoder: %d Avvik: %d Padrag: %d Speed %d\r\n", reference, encoder, e, u, speed);
+		_delay_ms(20);
   }
+
+	while(1) {
+
+	}
 
 	return 0;
 }
