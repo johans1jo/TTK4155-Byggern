@@ -12,7 +12,7 @@ typedef struct Message {
 /**
  @brief Initializes the CAN by calling the function mcp_init
 
- //@param[in] Dummy :))
+ 
  */
 void can_init();
 
