@@ -51,25 +51,6 @@ int main(void){
 	motor_enable();
 	encoder_reset();
 
-	/*
-	int reference = -2000;
-  while(1) {
-		unsigned int encoder = encoder_read(); //ok
-		int e = reference - encoder; //ok
-		int u = controller(reference, encoder);
-		int speed = u/40;
-		if (u < 0) {
-			motor_set_direction(RIGHT);
-			speed = -speed;
-		} else {
-			motor_set_direction(LEFT);
-		}
-		motor_set_speed(speed);
-		printf("Referanse: %d Encoder: %d Avvik: %d Padrag: %d Speed %d\r\n", reference, encoder, e, u, speed);
-		_delay_ms(20);
-  }
-	*/
-
 	while(1) {
 	}
 
@@ -122,9 +103,4 @@ ISR(BADISR_vect) {
 
 ISR(TIMER3_OVF_vect) {
 	printf("\r\ntimer3-overflow\r\n");
-}
-
-ISR(TIMER3_COMPB_vect) {
-	printf("timer3-compare\r\n");
-	TCNT3 = 0;
 }

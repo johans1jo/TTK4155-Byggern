@@ -1,6 +1,11 @@
 #include "controller.h"
 #include <stdio.h>
 #include <avr/io.h>
+#define F_CPU 16000000UL
+#include <util/delay.h>
+#include "motor.h"
+#include "encoder.h"
+#include <avr/interrupt.h>
 
 
 int Kp = 3;
@@ -41,6 +46,27 @@ int controller(int reference, int encoder_value) {
 	unsigned int u = Kp*e + Tt*Ki*total_error;
 	int k_ledd = Kp*e;
 	int i_ledd = Tt*Ki*total_error;
-	printf("total_error: %lu K-ledd: %d I-ledd: %d ", total_error, k_ledd, i_ledd);
+	//printf("total_error: %lu K-ledd: %d I-ledd: %d ", total_error, k_ledd, i_ledd);
 	return u;
+}
+
+
+ISR(TIMER3_COMPB_vect) {
+	int reference = -2000;
+
+	unsigned int encoder = encoder_read(); //ok
+	int e = reference - encoder; //ok
+	int u = controller(reference, encoder);
+	int speed = u/40;
+	if (u < 0) {
+		motor_set_direction(RIGHT);
+		speed = -speed;
+	} else {
+		motor_set_direction(LEFT);
+	}
+	motor_set_speed(speed);
+	//printf("Referanse: %d Encoder: %d Avvik: %d Padrag: %d Speed %d\r\n", reference, encoder, e, u, speed);
+	_delay_ms(20);
+
+	TCNT3 = 0;
 }
