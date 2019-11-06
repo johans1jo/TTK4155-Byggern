@@ -6,6 +6,9 @@
 #include "motor.h"
 #include "encoder.h"
 #include <avr/interrupt.h>
+#include "values.h"
+#include "solenoid.h"
+#include "pwm.h"
 
 
 int Kp = 3;
@@ -58,8 +61,9 @@ void controller_set_value(int value) {
 
 
 ISR(TIMER3_COMPB_vect) {
-	int reference = value_from_node1*50;
-
+	/*
+	// Motor
+	int reference = sr*50;
 	unsigned int encoder = encoder_read(); //ok
 	int e = reference - encoder; //ok
 	int u = controller(reference, encoder);
@@ -72,7 +76,17 @@ ISR(TIMER3_COMPB_vect) {
 	}
 	motor_set_speed(speed);
 	//printf("Referanse: %d Encoder: %d Avvik: %d Padrag: %d Speed %d\r\n", reference, encoder, e, u, speed);
-	_delay_ms(20);
+	//_delay_ms(20);
+
+	// Solenoid
+	if (bl && !solenoid_is_set()) {
+		solenoid_fire();
+	}
+
+	// Servo
+	int angle = joy_to_deg(y);
+	servo_set_angle(angle);
 
 	TCNT3 = 0;
+	*/
 }

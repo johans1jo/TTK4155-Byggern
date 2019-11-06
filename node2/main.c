@@ -24,6 +24,7 @@
 #include "interrupt.h"
 #include "controller.h"
 #include "solenoid.h"
+#include "values.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -45,15 +46,18 @@ int main(void){
   interrupt_init(); //inneholder litt CAN-interruptgreier
 	solenoid_init();
 
-	printf("\r\n\r\nMainstart :)\r\n");
-
-
 	_delay_ms(1000);
 	motor_set_direction(RIGHT);
 	motor_set_speed(0);
 	motor_enable();
 	encoder_reset();
 
+	printf("\r\n\r\nMainstart :)\r\n");
+
+	_delay_ms(1000);
+	encoder_calibrate();
+
+	/*
 	_delay_ms(1000);
 
 	solenoid_set();
@@ -71,8 +75,12 @@ int main(void){
 	solenoid_set();
 	_delay_ms(100);
 	solenoid_clear();
+	*/
 
 	while(1) {
+
+	//printf("x %d y %d bj %d bl %d br %d sl %d sr %d\r\n", x, y, bj, bl, br, sl, sr);
+	//_delay_ms(100);
 	}
 
 	return 0;
@@ -81,14 +89,23 @@ int main(void){
 ISR(INT3_vect) {
 	/*
 	message_t receive = can_receive(); // Mottar melding
-	if (receive.id == 10) { //x
-		//x
-		printf("x: %d\r\n", receive.data[0]);
-    servo_set_angle(receive.data[0]);
+	if (receive.id == 10) { //Alle greier
+		values_set_x(receive.data[0]);
+		values_set_y(receive.data[1]);
+		values_set_bj(receive.data[2]);
+		values_set_bl(receive.data[3]);
+		values_set_br(receive.data[4]);
+		uint8_t sl_val = receive.data[5];
+		values_set_sl(sl_val);
+		uint8_t sr_val = receive.data[6];
+		values_set_sr(sr_val);
+
+		//printf("x: %d\r\n", receive.data[0]);
+    //servo_set_angle(receive.data[0]);
 	} else if (receive.id == 11) { //y
 		//y
-		printf("y: %d\r\n\r\n", receive.data[0]);
-		controller_set_value(receive.data[0]);
+		//printf("y: %d\r\n\r\n", receive.data[0]);
+		//controller_set_value(receive.data[0]);
 	} else {
 		if (receive.length > 8) {
 			printf("Kaos. Meldingslengde: %d\r\n", receive.length);
