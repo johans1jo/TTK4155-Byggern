@@ -5,9 +5,6 @@
 
 #include <avr/io.h>
 
-/**
- * An enumeration with the x- and y values of the joystick, in addition to the left and right slider
- */
 enum {
     JOYSTICK_Y = 1,
     JOYSTICK_X,
@@ -21,7 +18,7 @@ enum {
 void adc_init();
 
 /**
- * @brief Allocates the adress space of the ADC at base address 0x1400 in the External Memory space. Creates a pointer to the base address, and reads the value from the memory address.
+ * @brief Allocates the adress space of heihei the ADC at base address 0x1400 in the External Memory space. Creates a pointer to the base address, and reads the value from the memory address.
  *
  * @param[in] channel The channel from the ADC
  *
