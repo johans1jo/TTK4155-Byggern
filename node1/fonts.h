@@ -1,3 +1,8 @@
+/**
+ *@file
+ *@brief Initializes the sizes of the fonts
+ */
+
 /*
  * fonts.h
  *
