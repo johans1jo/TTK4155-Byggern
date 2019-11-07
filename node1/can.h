@@ -1,3 +1,5 @@
+#include <avr/io.h>
+
 typedef struct Message {
 	unsigned int id;
 	uint8_t length;
@@ -7,5 +9,4 @@ typedef struct Message {
 void can_init();
 void can_send(message_ptr message);
 message_t can_receive();
-void can_interrupt();
 void can_send_everything();

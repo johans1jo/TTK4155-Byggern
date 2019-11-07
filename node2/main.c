@@ -32,6 +32,16 @@
 #define SCL 21
 
 int main(void){
+
+	/*
+	Må se på:
+
+	ir-adc
+	solenoid
+	game?
+	pwm_init()
+	*/
+
 	printf("\r\n\r\nMainstart :)\r\n");
   uart_init(UBRR);
   adc_init();

@@ -72,7 +72,3 @@ int joy_read_dir() {
     return 0;
   }
 }
-
-int joy_to_deg(int pos) {
-  return pos * 90 / 100;
-}

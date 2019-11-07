@@ -1,0 +1,1 @@
+void highscore_show();

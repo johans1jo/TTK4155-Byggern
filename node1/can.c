@@ -17,6 +17,8 @@
 void can_init() {
 	mcp_init();
 
+	mcp_set_mode(MODE_NORMAL);
+
 	// Interruptinit?
 
 }
@@ -60,10 +62,6 @@ message_t can_receive() {
 	return message;
 }
 
-void can_interrupt() {
-	printf("2\r\n");
-}
-
 void can_send_everything() {
 		int x = joy_read_x();
     int y = joy_read_y();
@@ -75,7 +73,7 @@ void can_send_everything() {
     //printf("x %d y %d bj %d bl %d br %d sl %d sr %d\r\n", x, y, button_joystick, button_left, button_right, slider_left, slider_right);
 
 		message_t everything = {
-			10,
+			101, //Multifunk-verdier-id
 			7,
 			x,
 			y,

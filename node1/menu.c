@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "draw.h"
 #include "can.h"
+#include "highscore.h"
 
 // Initierer og lager en meny
 menu_ptr menu_init() {
@@ -10,15 +11,8 @@ menu_ptr menu_init() {
 	menu_ptr menu = malloc(sizeof(menu_t));
 
 	// Legger til menyelementer
-	menu_ptr menu_send_joy = menu_add(menu, "Joystickverdier", &can_send_everything);
-	menu_ptr menu_highscore = menu_add(menu, "Highscore", &highscore);
-	menu_ptr menu_play = menu_add(menu, "Play", NULL);
-	menu_ptr menu_game1 = menu_add(menu_play, "Game1", &game1);
-	menu_ptr menu_game2 = menu_add(menu_play, "Game2", &game2);
-	menu_ptr menu_game3 = menu_add(menu_play, "Game3", &game3);
-	menu_ptr menu_something = menu_add(menu, "Something", NULL);
-	menu_ptr menu_something1 = menu_add(menu_something, "Something1", &something1);
-	menu_ptr menu_something2 = menu_add(menu_something, "Something2", &something2);
+	menu_add(menu, "Spill :)", &can_send_everything);
+	menu_add(menu, "Highscore", &highscore_show);
 
 	return menu;
 }
@@ -124,40 +118,4 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 
 	// Returnerer peker til menyen vi har kommet til
 	return currentMenu;
-}
-
-// Eksempelfunksjoner for testing
-void send_joy() {
-	printf("send joystickkoordinater...\r\n");
-}
-void highscore() {
-	printf("Highscore\r\n");
-
-	// Tegnegreier
-	point points[] = {
-		{0, 0},
-		{10, 10},
-		{50, 32}
-	};
-	draw_lines(points, sizeof(points)/sizeof(points[0]), 4);
-	draw_print();
-
-}
-void game1() {
-	printf("Game1\r\n");
-	draw_point(20,20,7);
-	draw_point(1,1,10);
-	draw_print();
-}
-void game2() {
-	printf("Game2\r\n");
-}
-void game3() {
-	printf("Game3\r\n");
-}
-void something1() {
-	printf("Something1\r\n");
-}
-void something2() {
-	printf("Something2\r\n");
 }
