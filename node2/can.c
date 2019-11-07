@@ -11,6 +11,13 @@ void can_init() {
 
   // Interruptgreier
   mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
+
+	//interrupt_init()
+  EIMSK |= (1 << INT3);
+  DDRB &= ~(1 << INT3);
+  //EICRA bør settes til å svare på fallende kant
+  EICRA |= (1 << ISC31);
+  EICRA &= ~(1 << ISC30);
 }
 
 void can_send(message_ptr message) {
@@ -31,7 +38,7 @@ void can_send(message_ptr message) {
 
 	// Request to send
 	mcp_request_to_send(0);
-	sei();
+	sei(); //dobbelt opp!
 }
 
 message_t can_receive() {
@@ -54,8 +61,4 @@ message_t can_receive() {
 	}
 
 	return message;
-}
-
-void can_interrupt() {
-	printf("2\r\n");
 }

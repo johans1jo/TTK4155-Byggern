@@ -15,9 +15,9 @@
 #define OE PH5
 #define RST PH6
 
-int encoder_init_value = 0;
-int encoder_max_left = 0;
-int encoder_max_right = 0;
+int initial_value = 0;
+int max_left = 0;
+int max_right = 0;
 
 void encoder_init() {
   DDRH |= (1 << SEL)|(1 << OE)|(1 << RST);
@@ -26,6 +26,13 @@ void encoder_init() {
   PORTH &= ~(1 << RST);
   PORTH |= (1 << RST);
   PORTH |= (1 << OE);
+
+	encoder_reset();
+}
+
+void encoder_reset() {
+  PORTH &= ~(1 << RST);
+  PORTH |= (1 << RST);
 }
 
 void encoder_calibrate() {
@@ -37,7 +44,7 @@ void encoder_calibrate() {
 		enc = encoder_read();
 		_delay_ms(100);
 	}
-	encoder_max_left = enc;
+	int left = enc;
 	motor_set_speed(100);
 	motor_set_direction(RIGHT);
 	enc = encoder_read();
@@ -46,10 +53,11 @@ void encoder_calibrate() {
 		enc = encoder_read();
 		_delay_ms(100);
 	}
-	encoder_max_right = enc;
+	int right = enc;
 
-	int diff = abs(encoder_max_left - encoder_max_right);
-	//blablabla
+	int diff = abs(left - right);
+	max_left = -diff/2;
+	max_right = diff/2;
 }
 
 int encoder_read() {
@@ -63,13 +71,5 @@ int encoder_read() {
   int lsb = PINK;
   PORTH |= (1 << OE);
 
-  return msb*0b100000000 + lsb - encoder_init_value;
-}
-
-void encoder_reset() {
-  PORTH &= ~(1 << RST);
-  PORTH |= (1 << RST);
-
-	encoder_init_value = encoder_read();
-	printf("Init: %d\r\n", encoder_init_value);
+  return msb*0b100000000 + lsb - initial_value;
 }

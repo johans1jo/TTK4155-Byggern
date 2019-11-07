@@ -6,10 +6,14 @@
 
 int solenoid_on = 0;
 
+// Interruptdrevet solenoid!
+
 void solenoid_init() {
   // Set ADC1 as input
   DDRF |= (1 << PF1);
 	PORTF |= (1 << PF1); //high
+
+	// Sett opp solenoid-timer-interrupt
 }
 
 void solenoid_set() {
@@ -27,8 +31,18 @@ int solenoid_is_set() {
 }
 
 void solenoid_fire() {
-	solenoid_set();
-	printf("solenoid!\r\n");
-	_delay_ms(100);
-	solenoid_clear();
+	if (!solenoid_is_set()) {
+		solenoid_set();
+		// Start timer for å stoppe solenoiden
+		_delay_ms(100);
+		solenoid_clear();
+	}
 }
+
+/*
+ISR {
+	solenoid_clear();
+
+	// Stopp clear-timer
+}
+*/

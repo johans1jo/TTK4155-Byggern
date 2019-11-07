@@ -3,6 +3,8 @@
 #define F_CPU 16000000UL
 #include <util/delay.h>
 #include "twi.h"
+#include <stdio.h>
+#include "encoder.h"
 
 #define SDA 20
 #define SCL 21
@@ -13,11 +15,55 @@
 #define OE PH5
 #define RST PH6
 
+int Kp = 3;
+int Ki = 0;
+int Tt = 20/1000; // float!
+
+unsigned long total_error = 0;
 
 void motor_init() {
+	twi_init();
+
   DDRH |= (1 << DIR);
   //DDRH |= (1 << EN);
 	motor_disable();
+
+	motor_set_speed(0);
+	motor_set_direction(RIGHT);
+	motor_enable();
+}
+
+void motor_controller_init() {
+	// In CTC mode the counter is cleared to zero when the counter value (TCNTn) matches either the OCRnA (WGMn3:0 = 4)
+  // Setter mode CTC (4)
+  TCCR3B &= ~(1 << WGM33);
+	TCCR3B |= (1 << WGM32);
+  TCCR3A &= ~(1 << WGM31); //obs
+  TCCR3A &= ~(0 << WGM30);
+
+  // Normal port operation
+  TCCR3A &= ~(1 << COM3B1);
+  TCCR3A &= ~(1 << COM3B0);
+
+  // Prescaler = 1024
+  TCCR3B |= (1 << CS32);
+  TCCR3B &= ~(1 << CS31);
+  TCCR3B |= (1 << CS30);
+
+  //OCR3B sammenlignes kontinuerlig med counter (TCNT1)
+	OCR3B = (F_CPU/1024)*0.02;
+	printf("OCR3B: %x\r\n", OCR3B);
+
+	// Enable timer 3 interrupt, compare match
+	TIMSK3 |= (1 << OCIE3B); //(1 << TOIE3) overflow
+}
+
+void motor_enable() {
+  PORTH |= (1 << EN);
+}
+
+void motor_disable() {
+  PORTH &= ~(1 << EN);
 }
 
 void motor_set_direction(direction_t dir) {
@@ -26,7 +72,6 @@ void motor_set_direction(direction_t dir) {
   } else {
     PORTH |= (1 << DIR);
   }
-
 }
 
 void motor_set_speed(int speedInt) {
@@ -41,13 +86,24 @@ void motor_set_speed(int speedInt) {
   // Kommando: 0
   unsigned char msg[] = {80, 0, speed};
   int msgSize = 3;
-  TWI_Start_Transceiver_With_Data(msg, msgSize); //twi_send()
+  twi_send(msg, msgSize); //TWI_Start_Transceiver_With_Data()
 }
 
-void motor_enable() {
-  PORTH |= (1 << EN);
-
-}
-void motor_disable() {
-  PORTH &= ~(1 << EN);
+void motor_set_position(int reference) {
+	unsigned int encoder_value = encoder_read(); //ok
+	int e = reference - encoder_value;
+	total_error = total_error + e;
+	unsigned int u = Kp*e + Tt*Ki*total_error;
+	int k_ledd = Kp*e;
+	int i_ledd = Tt*Ki*total_error;
+	//printf("total_error: %lu K-ledd: %d I-ledd: %d ", total_error, k_ledd, i_ledd);
+	int speed = u/40;
+	if (u < 0) {
+		motor_set_direction(RIGHT);
+		speed = -speed;
+	} else {
+		motor_set_direction(LEFT);
+	}
+	motor_set_speed(speed);
+	//printf("Referanse: %d Encoder: %d Avvik: %d Padrag: %d Speed %d\r\n", reference, encoder, e, u, speed);
 }

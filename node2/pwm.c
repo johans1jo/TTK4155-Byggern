@@ -39,13 +39,3 @@ void pwm_set_ms(double ms) {
 
   OCR1B = (pwm_period/0x14)*ms;
 }
-
-void servo_set_angle(double angle) {
-  angle = (angle + 30) * 1.8;
-  double ms = 1.5 + (0.5 / 90.0) * angle;
-  pwm_set_ms(ms);
-}
-
-int joy_to_deg(int pos) {
-  return pos * 90 / 100;
-}
