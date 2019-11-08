@@ -30,6 +30,6 @@ int adc_read() {
 	while(!(ADCSRA & (1<<ADIF))) {
   }
   int adc = ADCH*0b100000000 + ADCL;
-  //printf("adc %d - %x - %x \r\n", adc, ADCH, ADCL);
+  //////printf("adc %d - %x - %x \r\n", adc, ADCH, ADCL);
   return adc;
 }

@@ -6,6 +6,8 @@
 #include "ir.h"
 #include "encoder.h"
 #include <stdio.h>
+#define F_CPU 16000000UL
+#include <util/delay.h>
 
 // Verdier fra multifunk
 /*
@@ -34,16 +36,20 @@ int score = 0;
 
 void game_init() {
 	encoder_calibrate();
+	motor_controller_init();
+	_delay_ms(100);
+	motor_set_speed(0);
+	motor_set_position(0);
+	_delay_ms(1000);
 }
 
 void game_play() {
-	cli();
+	//printf("\r\n\r\n");
 	game_on = 1;
-	printf("game_play 1\r\n");
+	////printf("game_play 1\r\n");
 	game_init();
-	printf("game_play 2\r\n");
+	////printf("game_play 2\r\n");
 	game_initialized = 1;
-	sei();
 	//aktiver sett verdier-interrupt?
 }
 
@@ -51,9 +57,13 @@ int game_is_on() {
 	return game_on;
 }
 
+int game_is_initialized() {
+	return game_initialized;
+}
+
 void game_set_everything() {
 	// Motor
-	int reference = sr*50;
+	int reference = -(sr - 127)*30;
 	motor_set_position(reference);
 
 	// Solenoid
@@ -62,7 +72,7 @@ void game_set_everything() {
 	// Servo
 	servo_set_from_joystick(y);
 
-	printf("game_set_everything x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
+	//printf("game_set_everything x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
 
 void game_update_from_node1(char* data) {
@@ -74,7 +84,14 @@ void game_update_from_node1(char* data) {
 	sl = data[5];
 	sr = data[6];
 
-	printf("game_update_from_node1 x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
+	if (sl < 0) {
+		sl = (255 + sl);
+	}
+	if (sr < 0) {
+		sr = (255 + sr);
+	}
+	//printf("sl %d\r\n", sl);
+	//printf("game_update_from_node1 x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
 
 int game_is_goal() {
@@ -86,10 +103,10 @@ int game_is_goal() {
 }
 
 ISR(TIMER3_COMPB_vect) {
-	printf("TIMER3_COMPB_vect\r\n");
-	printf("init %d\r\n", game_initialized);
+	////printf("TIMER3_COMPB_vect\r\n");
+	////printf("init %d\r\n", game_initialized);
 	if (game_initialized) {
-		printf("set things\r\n");
+		////printf("set things\r\n");
 		game_set_everything();
 	}
 	TCNT3 = 0; // Resetter telleren

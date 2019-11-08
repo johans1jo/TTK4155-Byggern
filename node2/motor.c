@@ -5,6 +5,7 @@
 #include "twi.h"
 #include <stdio.h>
 #include "encoder.h"
+#include <stdlib.h>
 
 #define SDA 20
 #define SCL 21
@@ -15,11 +16,9 @@
 #define OE PH5
 #define RST PH6
 
-int Kp = 3;
+int Kp = 1;
 int Ki = 0;
 int Tt = 20/1000; // float!
-
-unsigned long total_error = 0;
 
 void motor_init() {
 	twi_init();
@@ -52,7 +51,7 @@ void motor_controller_init() {
 
   //OCR3B sammenlignes kontinuerlig med counter (TCNT1)
 	OCR3B = (F_CPU/1024)*0.02;
-	//printf("OCR3B: %x\r\n", OCR3B);
+	//////printf("OCR3B: %x\r\n", OCR3B);
 
 	// Enable timer 3 interrupt, compare match
 	TIMSK3 |= (1 << OCIE3B); //(1 << TOIE3) overflow
@@ -90,20 +89,23 @@ void motor_set_speed(int speedInt) {
 }
 
 void motor_set_position(int reference) {
+	reference = encoder_map(reference);
 	unsigned int encoder_value = encoder_read(); //ok
 	int e = reference - encoder_value;
-	total_error = total_error + e;
+	unsigned long total_error = 0;
+	total_error = total_error + e; //feilfeilfeil
 	unsigned int u = Kp*e + Tt*Ki*total_error;
 	int k_ledd = Kp*e;
 	int i_ledd = Tt*Ki*total_error;
 	//printf("total_error: %lu K-ledd: %d I-ledd: %d ", total_error, k_ledd, i_ledd);
-	int speed = u/40;
-	if (u < 0) {
+	int speed = abs(u)/40;
+	if (e < 0) {
+		//printf("right\r\n");
 		motor_set_direction(RIGHT);
-		speed = -speed;
 	} else {
+		//printf("left\r\n");
 		motor_set_direction(LEFT);
 	}
 	motor_set_speed(speed);
-	//printf("Referanse: %d Encoder: %d Avvik: %d Padrag: %d Speed %d\r\n", reference, encoder, e, u, speed);
+	//printf("Referanse: %d Encoder: %d Avvik: %d Padrag: %d Speed %d\r\n", reference, encoder_value, e, u, speed);
 }

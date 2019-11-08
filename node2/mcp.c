@@ -16,7 +16,7 @@ void mcp_init() {
 	// Sjøltesting
 	uint8_t value = mcp_read(MCP_CANSTAT);
 	if ((value & MODE_MASK) != MODE_CONFIG) {
-		printf("MCP2515 er ikke i konfigurasjonsmodus etter reset. CANSTAT: %x \r\n", value);
+		////printf("MCP2515 er ikke i konfigurasjonsmodus etter reset. CANSTAT: %x \r\n", value);
 	}
 }
 

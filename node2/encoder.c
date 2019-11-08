@@ -36,30 +36,23 @@ void encoder_reset() {
 }
 
 void encoder_calibrate() {
-	motor_set_speed(100);
-	motor_set_direction(LEFT);
 	int enc = encoder_read();
+	motor_set_speed(90);
+	motor_set_direction(LEFT);
 	_delay_ms(1000);
 	while (abs(enc - encoder_read()) > 100) {
 		enc = encoder_read();
-		_delay_ms(100);
+		_delay_ms(1000);
 	}
-	printf("a\r\n");
-	int left = enc;
-	motor_set_speed(100);
+	max_left = enc;
+	//motor_set_speed(100);
 	motor_set_direction(RIGHT);
-	enc = encoder_read();
 	_delay_ms(1000);
 	while (abs(enc - encoder_read()) > 100) {
 		enc = encoder_read();
 		_delay_ms(100);
 	}
-	printf("b");
-	int right = enc;
-
-	int diff = abs(left - right);
-	max_left = -diff/2;
-	max_right = diff/2;
+	max_right = enc;
 }
 
 int encoder_read() {
@@ -74,4 +67,11 @@ int encoder_read() {
   PORTH |= (1 << OE);
 
   return msb*0b100000000 + lsb - initial_value;
+}
+
+int encoder_map(int reference) {
+	int diff = max_left - max_right;
+	int middle = max_right + diff/2;
+	int mapped = middle + reference;
+	return mapped;
 }
