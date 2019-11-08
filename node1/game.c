@@ -1,6 +1,9 @@
 #include "game.h"
 #include "can.h"
 #include "mode.h"
+#define F_CPU 4915200
+#include <util/delay.h>
+#include <stdio.h>
 
 void game_play() {
 		printf("Sender CAN-mode-melding\r\n");

@@ -18,6 +18,7 @@
 #include "draw.h"
 #include "buttons.h"
 #include "mode.h"
+#include "game.h"
 
 #define FOSC 4915200// Clock Speed
 #define BAUD 9600
@@ -40,12 +41,7 @@ int main(void){
 	//GIFR = 0;
 	sei(); // Skrur på interrupts globalt
 
-	oled_clear();
-	draw_init();
-
-	menu_ptr menu = menu_init();
-	menu_start(menu);
-
+	game_play();
 
 	return 0;
 }
