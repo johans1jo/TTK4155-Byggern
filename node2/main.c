@@ -51,15 +51,27 @@ int main(void){
 	motor_controller_init();
   encoder_init();
 	solenoid_init();
+	/*
 	sei();
-
-	printf("game_play:\r\n");
-	game_play();
 
 	while(1) {
 		if (mode_get() == GAME && !game_is_on()) {
+			printf("Setter mode :)\r\n");
 			game_play();
 		}
+	}
+	*/
+
+	printf("motortest");
+	motor_set_direction(RIGHT);
+	motor_set_speed(200);
+	_delay_ms(1000);
+
+	motor_set_direction(LEFT);
+	motor_set_speed(100);
+	_delay_ms(1000);
+	while(1) {
+
 	}
 
 	printf("return 0:\r\n");
@@ -73,14 +85,16 @@ ISR(INT3_vect) {
 	message_t receive = can_receive();
 	if (receive.id == 100) {
 		// Setter riktig modus
+		printf("Setter modus\r\n");
 		mode_set(receive.data[0]); // 1 = GAME
 	} else if (receive.id == 101) {
 		// Tar imot multifunk-verdier
 		if (mode_get() == GAME) {
+			printf("Oppdaterer verdier\rn");
 			game_update_from_node1(receive.data);
 		}
 	} else {
-		printf("CAN: Ukjent id\r\n");
+		printf("CAN: Ukjent id %d\r\n", receive.id);
 	}
 	// Resetter interrupt for motta-buffer0
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);

@@ -49,6 +49,8 @@ int main(void){
 	};
 	can_send(&mode_msg);
 	_delay_ms(100);
+
+	printf("Sender multifunkverdier\r\n");
   while (1) {
 		can_send_everything();
     _delay_ms(100);

@@ -52,7 +52,7 @@ void motor_controller_init() {
 
   //OCR3B sammenlignes kontinuerlig med counter (TCNT1)
 	OCR3B = (F_CPU/1024)*0.02;
-	printf("OCR3B: %x\r\n", OCR3B);
+	//printf("OCR3B: %x\r\n", OCR3B);
 
 	// Enable timer 3 interrupt, compare match
 	TIMSK3 |= (1 << OCIE3B); //(1 << TOIE3) overflow

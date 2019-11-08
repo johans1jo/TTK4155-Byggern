@@ -44,6 +44,7 @@ void encoder_calibrate() {
 		enc = encoder_read();
 		_delay_ms(100);
 	}
+	printf("a\r\n");
 	int left = enc;
 	motor_set_speed(100);
 	motor_set_direction(RIGHT);
@@ -53,6 +54,7 @@ void encoder_calibrate() {
 		enc = encoder_read();
 		_delay_ms(100);
 	}
+	printf("b");
 	int right = enc;
 
 	int diff = abs(left - right);

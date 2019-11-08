@@ -1,8 +1,7 @@
 #include "oled.h"
 #include "fonts.h"
 
-void oled_init()
- {
+void oled_init() {
  oled_write_command(0xae); // display off
  oled_write_command(0xa1); //segment remap
  oled_write_command(0xda); //common pads hardware: alternative

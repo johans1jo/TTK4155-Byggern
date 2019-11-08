@@ -5,6 +5,7 @@
 #include "servo.h"
 #include "ir.h"
 #include "encoder.h"
+#include <stdio.h>
 
 // Verdier fra multifunk
 /*
@@ -36,9 +37,13 @@ void game_init() {
 }
 
 void game_play() {
+	cli();
 	game_on = 1;
+	printf("game_play 1\r\n");
 	game_init();
+	printf("game_play 2\r\n");
 	game_initialized = 1;
+	sei();
 	//aktiver sett verdier-interrupt?
 }
 
@@ -56,16 +61,20 @@ void game_set_everything() {
 
 	// Servo
 	servo_set_from_joystick(y);
+
+	printf("game_set_everything x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
 
 void game_update_from_node1(char* data) {
-	int x = data[0];
-	int y = data[1];
-	int bj = data[2];
-	int bl = data[3];
-	int sl = data[4];
-	int br = data[5];
-	int sr = data[6];
+	x = data[0];
+	y = data[1];
+	bj = data[2];
+	bl = data[3];
+	br = data[4];
+	sl = data[5];
+	sr = data[6];
+
+	printf("game_update_from_node1 x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
 
 int game_is_goal() {
@@ -77,7 +86,10 @@ int game_is_goal() {
 }
 
 ISR(TIMER3_COMPB_vect) {
+	printf("TIMER3_COMPB_vect\r\n");
+	printf("init %d\r\n", game_initialized);
 	if (game_initialized) {
+		printf("set things\r\n");
 		game_set_everything();
 	}
 	TCNT3 = 0; // Resetter telleren
