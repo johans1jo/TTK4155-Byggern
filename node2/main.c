@@ -53,7 +53,7 @@ int main(void){
 	solenoid_init();
 	sei();
 
-	/*
+/*
 	encoder_calibrate();
 	_delay_ms(1000);
 	motor_set_speed(0);
@@ -62,8 +62,7 @@ int main(void){
 		motor_set_position(-1000);
 	}
 	_delay_ms(1000);
-	*/
-
+*/
 	while(1) {
 		if (mode_get() == GAME && !game_is_on()) {
 			////printf("Setter mode :)\r\n");

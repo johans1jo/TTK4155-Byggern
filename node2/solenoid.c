@@ -9,8 +9,7 @@ int solenoid_on = 0;
 // Interruptdrevet solenoid!
 
 void solenoid_init() {
-  // Set ADC1 as input
-  DDRF |= (1 << PF1);
+	DDRF |= (1 << PF1); //output ADC1
 	PORTF |= (1 << PF1); //high
 
 	// Sett opp solenoid-timer-interrupt
@@ -31,7 +30,7 @@ int solenoid_is_set() {
 }
 
 void solenoid_fire() {
-	printf("solenoid_fire\r\n");
+	//printf("solenoid_fire\r\n");
 	if (!solenoid_is_set()) {
 		solenoid_set();
 		// Start timer for å stoppe solenoiden

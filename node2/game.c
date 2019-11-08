@@ -67,9 +67,12 @@ void game_set_everything() {
 	motor_set_position(reference);
 
 	// Solenoid
-	solenoid_fire();
+	if (bl) {
+		solenoid_fire();
+	}
 
 	// Servo
+	//printf("y %d", y);
 	servo_set_from_joystick(y);
 
 	//printf("game_set_everything x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
