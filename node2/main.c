@@ -48,10 +48,10 @@ int main(void){
   can_init();
   pwm_init();
   motor_init();
-	//motor_controller_init();
-  encoder_init();
+	encoder_init();
 	solenoid_init();
 	sei();
+	printf("Main start\r\n");
 
 /*
 	encoder_calibrate();
@@ -63,17 +63,13 @@ int main(void){
 	}
 	_delay_ms(1000);
 */
+
 	while(1) {
 		if (mode_get() == GAME && !game_is_on()) {
 			////printf("Setter mode :)\r\n");
 			game_play();
 		}
 	}
-
-	/*
-	while(1) {
-	}
-	*/
 
 	////printf("return 0:\r\n");
 	return 0;

@@ -22,6 +22,8 @@ int inputs = {
 }
 */
 
+#define SCORE_TRESHOLD 200
+
 int x = 0;
 int y = 0;
 int bj = 0;
@@ -33,6 +35,7 @@ int sr = 0;
 int game_on = 0;
 int game_initialized = 0;
 int score = 0;
+int scoring_now = 0;
 
 void game_init() {
 	encoder_calibrate();
@@ -68,6 +71,7 @@ void game_set_everything() {
 
 	// Solenoid
 	if (bl) {
+		printf("bl %d\r\n", bl);
 		solenoid_fire();
 	}
 
@@ -75,7 +79,17 @@ void game_set_everything() {
 	servo_set_from_joystick(y);
 
 	// IR
-	// 
+	int ir = ir_read();
+	if (!scoring_now) {
+		int increase_score = (ir < SCORE_TRESHOLD);
+		if (increase_score) {
+			score++;
+			scoring_now = 1;
+		}
+	} else if (ir > 300) {
+		scoring_now = 0;
+	}
+	printf("score %d\r\n", score);
 
 	//printf("game_set_everything x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
@@ -99,6 +113,7 @@ void game_update_from_node1(char* data) {
 	//printf("game_update_from_node1 x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
 
+/*
 int game_is_goal() {
 	int ir = ir_get();
 	if (ir < 300) {
@@ -106,6 +121,7 @@ int game_is_goal() {
 	}
 	return 0;
 }
+*/
 
 ISR(TIMER3_COMPB_vect) {
 	////printf("TIMER3_COMPB_vect\r\n");

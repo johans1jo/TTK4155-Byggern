@@ -4,24 +4,26 @@
 #define F_CPU 16000000UL
 #include <util/delay.h>
 
+#define SOLENOID_PIN PF1
+
 int solenoid_on = 0;
 
 // Interruptdrevet solenoid!
 
 void solenoid_init() {
-	DDRF |= (1 << PF1); //output ADC1
-	PORTF |= (1 << PF1); //high
+	DDRF |= (1 << SOLENOID_PIN); //output ADC1
+	PORTF |= (1 << SOLENOID_PIN); //high
 
 	// Sett opp solenoid-timer-interrupt
 }
 
 void solenoid_set() {
-	PORTF &= ~(1 << PF1); //low
+	PORTF &= ~(1 << SOLENOID_PIN); //low
 	solenoid_on = 1;
 }
 
 void solenoid_clear() {
-	PORTF |= (1 << PF1); //high
+	PORTF |= (1 << SOLENOID_PIN); //high
 	solenoid_on = 0;
 }
 

@@ -1,2 +1,2 @@
 void ir_init();
-int ir_get();
+int ir_read();
