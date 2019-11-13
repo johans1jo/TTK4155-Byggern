@@ -85,11 +85,11 @@ void game_set_everything() {
 		if (increase_score) {
 			score++;
 			scoring_now = 1;
+			printf("score %d\r\n", score);
 		}
 	} else if (ir > 300) {
 		scoring_now = 0;
 	}
-	printf("score %d\r\n", score);
 
 	//printf("game_set_everything x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }

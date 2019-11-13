@@ -4,6 +4,7 @@
 #include "draw.h"
 #include "can.h"
 #include "highscore.h"
+#include "game.h"
 
 // Initierer og lager en meny
 menu_ptr menu_init() {
@@ -11,7 +12,7 @@ menu_ptr menu_init() {
 	menu_ptr menu = malloc(sizeof(menu_t));
 
 	// Legger til menyelementer
-	menu_add(menu, "Spill :)", &can_send_everything);
+	menu_add(menu, "Spill :)", &game_play);
 	menu_add(menu, "Highscore", &highscore_show);
 
 	return menu;

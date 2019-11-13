@@ -29,7 +29,13 @@ int main(void){
 	can_init(); // Denne initierer mcp, som initierer spi.
   adc_init();
   joy_calibrate();
+	sram_init();
 	buttons_init();
+	printf("hei\r\n");
+
+	oled_init();
+	oled_clear();
+	draw_init();
 
 	// Interruptgreier
 	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
@@ -38,11 +44,15 @@ int main(void){
 	MCUCR &= ~(1 << ISC00); // ...
 	DDRD &=  ~(1 << PIND2);
 
-	//GIFR = 0;
+	//? GIFR = 0;
 	sei(); // Skrur på interrupts globalt
+
+	//menu_ptr menu = menu_init();
+	//menu_start(menu);
 
 	game_play();
 
+	printf("farvel\r\n");
 	return 0;
 }
 

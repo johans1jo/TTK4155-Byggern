@@ -60,6 +60,7 @@ int joy_read_y() {
 int joy_read_dir() {
   int x = joy_read_x();
   int y = joy_read_y();
+	//printf("x %d y %d\r\n", x, y);
   if (x > 70 && y < 70 && y > -70) {
     return UP;
   } else if (x < -70 && y < 70 && y > -70) {
