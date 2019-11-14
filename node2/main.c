@@ -32,17 +32,6 @@
 #define SCL 21
 
 int main(void){
-
-	/*
-	Må se på:
-
-	ir-adc
-	solenoid
-	game?
-	pwm_init()
-	*/
-
-	////printf("\r\n\r\nMainstart :)\r\n");
   uart_init(UBRR);
   adc_init();
   can_init();
@@ -51,22 +40,12 @@ int main(void){
 	encoder_init();
 	solenoid_init();
 	sei();
-	printf("Main start\r\n");
-
-/*
-	encoder_calibrate();
-	_delay_ms(1000);
-	motor_set_speed(0);
-	_delay_ms(1000);
-	while(1) {
-		motor_set_position(-1000);
-	}
-	_delay_ms(1000);
-*/
+	printf("Node2 starter :)\r\n");
 
 	while(1) {
 		if (mode_get() == GAME && !game_is_on()) {
 			////printf("Setter mode :)\r\n");
+			printf("starter spillet\r\n");
 			game_play();
 		}
 	}
@@ -78,17 +57,22 @@ int main(void){
 // Tar imot CAN-melding
 // 100: modus
 // 101: multifunk-data
+// 102: stopp spill
 ISR(INT3_vect) {
 	message_t receive = can_receive();
 	//game_update_from_node1(receive.data);
 	if (receive.id == 100) {
 		// Setter riktig modus
-		mode_set(receive.data[0]); // 1 = GAME
+		mode_set(receive.data[0]); // 0 = IDLE, 1 = GAME
 	} else if (receive.id == 101) {
 		// Tar imot multifunk-verdier
 		if (mode_get() == GAME && game_is_initialized()) {
 			game_update_from_node1(receive.data);
 		}
+	} else if (receive.id == 102) {
+		//Avslutter spillet
+		game_stop();
+		mode_set(IDLE);
 	} else {
 		printf("CAN: Ukjent id %d\r\n", receive.id);
 	}

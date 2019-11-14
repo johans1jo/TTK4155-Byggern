@@ -19,6 +19,7 @@
 #include "buttons.h"
 #include "mode.h"
 #include "game.h"
+#include "highscore.h"
 
 #define FOSC 4915200// Clock Speed
 #define BAUD 9600
@@ -32,7 +33,7 @@ int main(void){
 	sram_init();
 	buttons_init();
 	game_init();
-	printf("hei\r\n");
+	printf("Node1 starter :)\r\n");
 
 	oled_init();
 	oled_clear();
@@ -48,10 +49,7 @@ int main(void){
 	//? GIFR = 0;
 	sei(); // Skrur på interrupts globalt
 
-	menu_ptr menu_main = menu_init(MAIN);
-	while(1) {
-		menu_start(menu_main);
-	}
+	menu_start_main();
 
 	printf("farvel\r\n");
 	return 0;
@@ -59,8 +57,9 @@ int main(void){
 
 ISR(INT0_vect) {
 	message_t receive = can_receive(); // Mottar melding
-	if (receive.id == 1) {
-		printf("CAN: Mottok id 1\r\n");
+	if (receive.id == 200) {
+		// Tar imot score
+		highscore_save(receive.data[0]);
 	} else {
 		printf("CAN: ukjent id\r\n");
 	}

@@ -7,6 +7,12 @@
 #include "game.h"
 #define F_CPU 4915200
 #include <util/delay.h>
+#include "buttons.h"
+
+void menu_start_main() {
+		menu_ptr menu_main = menu_init(MAIN);
+		menu_start(menu_main);
+}
 
 // Initierer og lager en meny
 menu_ptr menu_init(menu_type_t menu_type) {
@@ -68,10 +74,11 @@ void menu_start(menu_ptr menu) {
 		}
 
 		// Henter input og går riktig vei i menyen
-		while (joy_read_dir() != 0) {
+		//printf("condition: %d\r\n", game_is_on() == (buttons_right() > 0));
+		while (joy_read_dir() != 0 || !(game_is_on() == (buttons_right() > 0))) {
 			_delay_ms(10);
 		};
-		while (joy_read_dir() == 0) {
+		while (joy_read_dir() == 0 || !(game_is_on() == (buttons_right() > 0))) {
 			_delay_ms(10);
 		};
 		int input = joy_read_dir();

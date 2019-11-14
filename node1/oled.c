@@ -1,6 +1,8 @@
 #include "oled.h"
 #include "fonts.h"
 
+//int oled_write = 0;
+
 void oled_init() {
  oled_write_command(0xae); // display off
  oled_write_command(0xa1); //segment remap
@@ -36,6 +38,8 @@ void oled_write_command(uint8_t command) {
 }
 
 void oled_write_data(uint8_t data) {
+	//printf("ow %d\r\n", oled_write);
+	//oled_write++;
   volatile char *ext_oled_data = (char *) 0x1200;
   ext_oled_data[0] = data;
 }

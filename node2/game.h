@@ -5,3 +5,5 @@ void game_set_everything();
 void game_update_from_node1(char* data);
 //int game_is_goal();
 int game_is_initialized();
+
+void game_stop();

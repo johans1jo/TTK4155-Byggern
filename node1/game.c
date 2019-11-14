@@ -10,6 +10,10 @@
 
 int game_on = 0;
 
+int game_is_on() {
+	return game_on;
+}
+
 void game_init() {
 	// In CTC mode the counter is cleared to zero when the counter value (TCNTn) matches either the OCRnA (WGMn3:0 = 4)
   // Setter mode CTC (4)
@@ -66,11 +70,13 @@ void game_play() {
 
 	// Setter igang timer-interrupt for p sende multifunkverdier
 	game_timer_enable();
+	game_on = 1;
 
 	menu_ptr menu_in_game = menu_init(IN_GAME);
 	menu_start(menu_in_game);
 
-	game_on = 1;
+	// Her er vi stuck i while-løkka til menyen!
+
 }
 
 void game_stop() {
@@ -78,16 +84,20 @@ void game_stop() {
 
 	game_timer_disable();
 
-	message_t mode_msg = {
-		103, //Stop-id
+	message_t stop_msg = {
+		102, //Stop-id
 		0,
 	};
-	can_send(&mode_msg);
+	can_send(&stop_msg);
 	_delay_ms(100);
+
+	game_on = 0;
+
+	menu_start_main();
 }
 
 ISR(TIMER3_COMPB_vect) {
-	printf("Sender multifunkverdier\r\n");
+	//printf("Sender multifunkverdier\r\n");
 	can_send_everything();
 
 	TCNT3 = 0; // Resetter telleren

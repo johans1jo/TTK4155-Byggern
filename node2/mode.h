@@ -1,5 +1,6 @@
 enum {
-    GAME = 1
+	IDLE = 0,
+  GAME = 1
 };
 
 void mode_set(int m);

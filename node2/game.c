@@ -8,6 +8,7 @@
 #include <stdio.h>
 #define F_CPU 16000000UL
 #include <util/delay.h>
+#include "can.h"
 
 // Verdier fra multifunk
 /*
@@ -38,6 +39,7 @@ int score = 0;
 int scoring_now = 0;
 
 void game_init() {
+	motor_enable();
 	encoder_calibrate();
 	motor_controller_init();
 	_delay_ms(100);
@@ -54,6 +56,22 @@ void game_play() {
 	////printf("game_play 2\r\n");
 	game_initialized = 1;
 	//aktiver sett verdier-interrupt?
+}
+
+void game_stop() {
+	game_on = 0;
+	motor_disable();
+
+	// Sender score til node1
+	message_t score_msg = {
+		200, //Score
+		1,
+		score
+	};
+	can_send(&score_msg);
+
+	score = 0;
+
 }
 
 int game_is_on() {
