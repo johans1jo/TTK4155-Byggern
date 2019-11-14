@@ -10,3 +10,5 @@ void motor_disable();
 void motor_set_direction(direction_t dir);
 void motor_set_speed(int speed);
 void motor_set_position(int reference);
+
+void motor_set_controller_parameters(int param_p, int param_i);

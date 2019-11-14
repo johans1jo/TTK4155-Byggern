@@ -39,7 +39,6 @@ void game_init() {
   TCCR3A &= ~(1 << COM3B1);
   TCCR3A &= ~(1 << COM3B0);
 
-
 	// Enable timer 3 interrupt, compare match
 	//node1: TIMSK3 |= (1 << OCIE3B); //(1 << TOIE3) overflow
 	//ETIMSK |= (1 << OCIE3B); //(1 << TOIE3) overflow
@@ -68,15 +67,14 @@ void game_play() {
 	can_send(&mode_msg);
 	_delay_ms(100);
 
-	// Setter igang timer-interrupt for p sende multifunkverdier
+	// Setter igang timer-interrupt for å sende multifunkverdier
 	game_timer_enable();
 	game_on = 1;
 
 	menu_ptr menu_in_game = menu_init(IN_GAME);
-	menu_start(menu_in_game);
+	menu_start(menu_in_game, CLEAR);
 
-	// Her er vi stuck i while-løkka til menyen!
-
+	// Her er vi stuck i while-løkka til in-game-menyen
 }
 
 void game_stop() {
@@ -92,8 +90,29 @@ void game_stop() {
 	_delay_ms(100);
 
 	game_on = 0;
+}
 
-	menu_start_main();
+void game_pause() {
+	//pause?
+}
+
+void game_set_difficulty_hard() {
+	game_set_controller_parameters(1,1);
+}
+void game_set_difficulty_medium() {
+	game_set_controller_parameters(1,1);
+}
+void game_set_difficulty_easy() {
+	game_set_controller_parameters(1,1);
+}
+void game_set_controller_parameters(int param_p, int param_i) {
+	message_t controller_msg = {
+		103,
+		2,
+		param_p,
+		param_i
+	};
+	can_send(&controller_msg);
 }
 
 ISR(TIMER3_COMPB_vect) {

@@ -73,6 +73,9 @@ ISR(INT3_vect) {
 		//Avslutter spillet
 		game_stop();
 		mode_set(IDLE);
+	} else if (receive.id == 103) {
+		// Sett vanskelighetsgrad
+		motor_set_controller_parameters(receive.data[0], receive.data[1]);
 	} else {
 		printf("CAN: Ukjent id %d\r\n", receive.id);
 	}

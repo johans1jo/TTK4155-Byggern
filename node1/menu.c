@@ -9,23 +9,31 @@
 #include <util/delay.h>
 #include "buttons.h"
 
-void menu_start_main() {
-		menu_ptr menu_main = menu_init(MAIN);
-		menu_start(menu_main);
-}
-
 // Initierer og lager en meny
 menu_ptr menu_init(menu_type_t menu_type) {
 	// Initierer menyen
 	menu_ptr menu = malloc(sizeof(menu_t));
+	printf("malloc %d\r\n", menu);
 
 	if (menu_type == MAIN) {
 		// Legger til menyelementer
 		menu_add(menu, "Spill :)", &game_play);
+		menu_ptr menu_settings = menu_add(menu, "Innstillinger", NULL);
+			menu_ptr menu_difficulty = menu_add(menu_settings, "Vanskegrad", NULL);
+				menu_add(menu_difficulty, "Vanskelig", &game_set_difficulty_hard);
+				menu_add(menu_difficulty, "Middels", &game_set_difficulty_medium);
+				menu_add(menu_difficulty, "Lett", &game_set_difficulty_easy);
+			menu_ptr menu_users = menu_add(menu_settings, "Velg bruker", NULL);
+				menu_add(menu_users, "Lag ny bruker", NULL);
+				// Mulig å velge eksisterende bruker
 		menu_add(menu, "Highscore", &highscore_show);
+
 	} else if (menu_type == IN_GAME) {
 		menu_add(menu, "Avslutt :o", &game_stop);
-		menu_add(menu, "Pause :/", &game_stop);
+		menu_add(menu, "Pause :/", &game_pause);
+
+	} else if (menu_type == HIGHSCORE) {
+		menu_add(menu, "Til hovedmeny", &go_to_main_menu);
 	}
 
 	return menu;
@@ -50,7 +58,7 @@ menu_ptr menu_add(menu_ptr parent, char * text, void (*function)()) {
 }
 
 // Drar igang menyen og får den opp på skjermen
-void menu_start(menu_ptr menu) {
+void menu_start(menu_ptr menu, int clear) {
 	int depthDirection = 0;
 	int element = 0;
 	menu_ptr currentMenu = menu;
@@ -60,7 +68,7 @@ void menu_start(menu_ptr menu) {
 		menu_ptr oldMenu = currentMenu;
 
 		// Går til riktig meny basert på input eller standardverdier
-		currentMenu = menu_goto(currentMenu, depthDirection, element);
+		currentMenu = menu_goto(currentMenu, depthDirection, element, clear);
 		depthDirection = 0;
 
 		// Går ut av menysystemet hvis vi har kommet til et menyelement med en funksjon
@@ -103,7 +111,7 @@ void menu_start(menu_ptr menu) {
 // Gå til et menyelement, undermeny eller tilbake til "overmenyen"
 // Returnerer peker til menyen man havner på etter å ha gått dit
 // Returnerer NULL hvis menysystemet skal avsluttes
-menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
+menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int clear) {
 	// Fikser å gå til undermeny eller til overmeny
 	if (depthDirection > 0) {
 		currentMenu = currentMenu->subMenu[element];
@@ -113,7 +121,9 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 	}
 
 	// Rydder skjermen før vi utfører funksjonen eller printer en ny meny
-	oled_clear();
+	if (clear) {
+		oled_clear();
+	}
 
 	// Hvis vi har kommet til et menyelement med en funksjon, så utføres funksjonen
 	if (currentMenu->function != NULL) {
@@ -135,4 +145,8 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 
 	// Returnerer peker til menyen vi har kommet til
 	return currentMenu;
+}
+
+void go_to_main_menu() {
+	// Do nothing aka go back to main menu in the main while :)
 }

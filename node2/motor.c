@@ -109,3 +109,8 @@ void motor_set_position(int reference) {
 	motor_set_speed(speed);
 	//printf("Referanse: %d Encoder: %d Avvik: %d Padrag: %d Speed %d\r\n", reference, encoder_value, e, u, speed);
 }
+
+void motor_set_controller_parameters(int param_p, int param_i) {
+	Kp = param_p;
+	Ki = param_i;
+}

@@ -20,6 +20,7 @@ void can_init() {
 	mcp_set_mode(MODE_NORMAL);
 
 	// Interruptinit?
+	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
 
 }
 

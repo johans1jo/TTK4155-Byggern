@@ -20,6 +20,7 @@
 #include "mode.h"
 #include "game.h"
 #include "highscore.h"
+#include "interrupt.h"
 
 #define FOSC 4915200// Clock Speed
 #define BAUD 9600
@@ -31,25 +32,20 @@ int main(void){
   adc_init();
   joy_calibrate();
 	sram_init();
-	buttons_init();
-	game_init();
-	printf("Node1 starter :)\r\n");
-
 	oled_init();
 	oled_clear();
+	interrupt_init();
 	draw_init();
+	buttons_init();
+	game_init();
+	sei();
+	printf("Node1 starter :)\r\n");
 
-	// Interruptgreier
-	mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
-	GICR |= (1 << INT0); // Skrur på INT0-interrupt
-	MCUCR |= (1 << ISC01); // Setter interrupts til å funke på fallende kant
-	MCUCR &= ~(1 << ISC00); // ...
-	DDRD &=  ~(1 << PIND2);
-
-	//? GIFR = 0;
-	sei(); // Skrur på interrupts globalt
-
-	menu_start_main();
+	menu_ptr menu_main = menu_init(MAIN);
+	while(1) {
+		printf("main while\r\n");
+		menu_start(menu_main, CLEAR);
+	}
 
 	printf("farvel\r\n");
 	return 0;
