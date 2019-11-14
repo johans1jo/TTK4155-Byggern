@@ -7,8 +7,12 @@
 #include <stdio.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "oled.h"
+
+#define MAX_USERS 5;
 
 int game_on = 0;
+int user = 0;
 
 int game_is_on() {
 	return game_on;
@@ -106,6 +110,7 @@ void game_set_difficulty_easy() {
 	game_set_controller_parameters(1,1);
 }
 void game_set_controller_parameters(int param_p, int param_i) {
+	printf("vanskelighetsgrad\r\n");
 	message_t controller_msg = {
 		103,
 		2,
@@ -113,6 +118,24 @@ void game_set_controller_parameters(int param_p, int param_i) {
 		param_i
 	};
 	can_send(&controller_msg);
+
+}
+
+void game_set_user_0() { user = 0; }
+void game_set_user_1() { user = 1; }
+void game_set_user_2() { user = 2; }
+void game_set_user_3() { user = 3; }
+void game_set_user_4() { user = 4; }
+
+int game_get_user() {
+	return user;
+}
+
+void game_show_score(int score) {
+	oled_goto_pos(20,20);
+	char score_str[2];
+	sprintf(score_str, "%d", score);
+	oled_print(score_str);
 }
 
 ISR(TIMER3_COMPB_vect) {

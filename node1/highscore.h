@@ -1,2 +1,2 @@
 void highscore_show();
-void highscore_save(int score);
+void highscore_save(int score, int user);

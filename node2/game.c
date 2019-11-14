@@ -64,7 +64,7 @@ void game_stop() {
 
 	// Sender score til node1
 	message_t score_msg = {
-		200, //Score
+		202, //Score
 		1,
 		score
 	};
@@ -104,6 +104,14 @@ void game_set_everything() {
 			score++;
 			scoring_now = 1;
 			printf("score %d\r\n", score);
+
+			//Send score-melding til Node1
+			message_t score_msg = {
+				201,
+				1,
+				score
+			};
+			can_send(&score_msg);
 		}
 	} else if (ir > 300) {
 		scoring_now = 0;

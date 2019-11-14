@@ -54,8 +54,18 @@ int main(void){
 ISR(INT0_vect) {
 	message_t receive = can_receive(); // Mottar melding
 	if (receive.id == 200) {
+		// Modus
+		printf("modus %d\r\n", receive.data[0]);
+	} else if (receive.id == 201) {
+		// Tar imot score underveis i spillet når brukeren scorer
+		game_show_score(receive.data[0]);
+	} else if (receive.id == 202) {
 		// Tar imot score
-		highscore_save(receive.data[0]);
+		printf("highscore can\r\n");
+		highscore_save(receive.data[0], game_get_user());
+	} else if (receive.id == 203) {
+		// Parametre
+		printf("param p %d i %d\r\n", receive.data[0], receive.data[1]);
 	} else {
 		printf("CAN: ukjent id\r\n");
 	}

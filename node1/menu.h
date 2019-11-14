@@ -19,6 +19,7 @@ enum {
 typedef struct Menu {
 	char * text; // Teksten i menyelementet
 	void (*function)(); // Funksjonen som skal kalles hvis det ikke finnes noen undermeny
+	int submenu_count;
 	struct Menu * parent; // Pappameny :)
 	struct Menu * subMenu[MAX_SUBMENUS]; // Undermeny. Array av pekere til menyelementer
 } menu_t, *menu_ptr;

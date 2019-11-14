@@ -12,3 +12,5 @@ void motor_set_speed(int speed);
 void motor_set_position(int reference);
 
 void motor_set_controller_parameters(int param_p, int param_i);
+int motor_get_controller_parameter_p();
+int motor_get_controller_parameter_i();

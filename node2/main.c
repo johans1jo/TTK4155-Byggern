@@ -64,6 +64,15 @@ ISR(INT3_vect) {
 	if (receive.id == 100) {
 		// Setter riktig modus
 		mode_set(receive.data[0]); // 0 = IDLE, 1 = GAME
+/*
+		//Responderer med modus:
+		message_t mode_msg = {
+			200,
+			1,
+			mode_get()
+		};
+		can_send(&mode_msg);
+*/
 	} else if (receive.id == 101) {
 		// Tar imot multifunk-verdier
 		if (mode_get() == GAME && game_is_initialized()) {
@@ -75,7 +84,17 @@ ISR(INT3_vect) {
 		mode_set(IDLE);
 	} else if (receive.id == 103) {
 		// Sett vanskelighetsgrad
+		printf("vanskelighetsgrad\r\n");
 		motor_set_controller_parameters(receive.data[0], receive.data[1]);
+
+		//Responderer med nye parametre
+		message_t param_msg = {
+			203,
+			2,
+			motor_get_controller_parameter_p(),
+			motor_get_controller_parameter_i()
+		};
+		can_send(&param_msg);
 	} else {
 		printf("CAN: Ukjent id %d\r\n", receive.id);
 	}

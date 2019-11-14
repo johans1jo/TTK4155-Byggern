@@ -114,3 +114,6 @@ void motor_set_controller_parameters(int param_p, int param_i) {
 	Kp = param_p;
 	Ki = param_i;
 }
+
+int motor_get_controller_parameter_p() { return Kp; };
+int motor_get_controller_parameter_i() { return Ki; };
