@@ -31,6 +31,7 @@ int main(void){
   joy_calibrate();
 	sram_init();
 	buttons_init();
+	game_init();
 	printf("hei\r\n");
 
 	oled_init();
@@ -47,10 +48,10 @@ int main(void){
 	//? GIFR = 0;
 	sei(); // Skrur på interrupts globalt
 
-	//menu_ptr menu = menu_init();
-	//menu_start(menu);
-
-	game_play();
+	menu_ptr menu_main = menu_init(MAIN);
+	while(1) {
+		menu_start(menu_main);
+	}
 
 	printf("farvel\r\n");
 	return 0;

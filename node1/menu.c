@@ -5,15 +5,22 @@
 #include "can.h"
 #include "highscore.h"
 #include "game.h"
+#define F_CPU 4915200
+#include <util/delay.h>
 
 // Initierer og lager en meny
-menu_ptr menu_init() {
+menu_ptr menu_init(menu_type_t menu_type) {
 	// Initierer menyen
 	menu_ptr menu = malloc(sizeof(menu_t));
 
-	// Legger til menyelementer
-	menu_add(menu, "Spill :)", &game_play);
-	menu_add(menu, "Highscore", &highscore_show);
+	if (menu_type == MAIN) {
+		// Legger til menyelementer
+		menu_add(menu, "Spill :)", &game_play);
+		menu_add(menu, "Highscore", &highscore_show);
+	} else if (menu_type == IN_GAME) {
+		menu_add(menu, "Avslutt :o", &game_stop);
+		menu_add(menu, "Pause :/", &game_stop);
+	}
 
 	return menu;
 }
@@ -62,8 +69,10 @@ void menu_start(menu_ptr menu) {
 
 		// Henter input og går riktig vei i menyen
 		while (joy_read_dir() != 0) {
+			_delay_ms(10);
 		};
 		while (joy_read_dir() == 0) {
+			_delay_ms(10);
 		};
 		int input = joy_read_dir();
 		if (input == RIGHT) {
