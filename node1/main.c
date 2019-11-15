@@ -39,7 +39,9 @@ int main(void){
 	buttons_init();
 	game_init();
 	sei();
-	printf("Node1 starter :)\r\n");
+
+	DDRE |= (1 << PORTE0);
+	PORTE |= (1 << PORTE0);
 
 	menu_ptr menu_main = menu_init(MAIN);
 	while(1) {
@@ -48,6 +50,7 @@ int main(void){
 	}
 
 	printf("farvel\r\n");
+
 	return 0;
 }
 
