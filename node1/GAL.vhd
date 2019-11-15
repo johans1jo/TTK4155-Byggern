@@ -20,9 +20,9 @@ entity address_decoder is
 	attribute LOC of oled_cs : signal is "P17";
 	attribute LOC of oled_dc : signal is "P16";
 
-	attribute LOC of a11 : signal is "P1";
+	attribute LOC of a11 : signal is "P3";
 	attribute LOC of a10 : signal is "P2";
-	attribute LOC of a9  : signal is "P3";
+	attribute LOC of a9  : signal is "P1";
 end address_decoder;
 
 architecture behave of address_decoder is begin
