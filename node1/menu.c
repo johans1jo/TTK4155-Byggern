@@ -20,6 +20,10 @@ menu_ptr menu_init(menu_type_t menu_type) {
 	printf("malloc %d\r\n", menu);
 
 	if (menu_type == MAIN) {
+		// Fikser submenu-array
+		menu_ptr submenus = malloc(sizeof(menu_t)*3);
+		menu->submenus = submenus;
+		printf("addresses\r\n%d\r\n%d\r\n%d", &(menu->submenus[0]), &(menu->submenus[1]), &(menu->submenus[2]));
 		// Legger til menyelementer
 		menu_add(menu, "Spill :)", &game_play);
 		menu_ptr menu_settings = menu_add(menu, "Innstillinger", NULL);
@@ -36,11 +40,11 @@ menu_ptr menu_init(menu_type_t menu_type) {
 		menu_add(menu_users, "Bruker 1", &game_set_user_1);
 */
 	} else if (menu_type == IN_GAME) {
-		menu_add(menu, "Avslutt :o", &game_stop);
+		//menu_add(menu, "Avslutt :o", &game_stop);
 		//menu_add(menu, "Pause :/", &game_pause);
 
 	} else if (menu_type == HIGHSCORE) {
-		menu_add(menu, "Tilbake", &go_to_main_menu);
+		//menu_add(menu, "Tilbake", &go_to_main_menu);
 	}
 	return menu;
 }
@@ -50,16 +54,30 @@ menu_ptr menu_init(menu_type_t menu_type) {
 // Når man legger til et menyelement som skal ha en undermeny, så må "function" settes til NULL.
 menu_ptr menu_add(menu_ptr parent, char * text, void (*function)()) {
 
-	menu_ptr subMenu = malloc(sizeof(menu_t));
+	//menu_ptr subMenu = malloc(sizeof(menu_t));
+	/*menu_ptr subMenu;
 	subMenu->text = text;
 	subMenu->function = function;
 	subMenu->parent = parent;
-	subMenu->submenu_count = 0;
+	subMenu->submenu_count = 0;*/
+	menu_t subMenu;
+	subMenu.text = text;
+	subMenu.function = function;
+	subMenu.parent = parent;
+	subMenu.submenu_count = 0;
 
-	parent->subMenu[parent->submenu_count] = subMenu;
+	printf("\r\naddress nr %d: %d\r\n", subMenu.submenu_count, &(parent->submenus[parent->submenu_count]));
+
+	//parent->subMenu[parent->submenu_count] = subMenu;
+	//menu_ptr submenu_address = parent->submenus + sizeof(menu_t)*(parent->submenu_count);
+	//printf("address %d\r\n", submenu_address);
+	//submenu_address = subMenu; //jallamekk //parent->submenu_count
+	parent->submenus[parent->submenu_count] = subMenu;
+	printf("submenu \r\n\r\n%s\r\n\r\n\r\n", parent->submenus[parent->submenu_count]->text);
+	//submenu_address = subMenu;
 	parent->submenu_count += 1;
 
-	return subMenu;
+	return &subMenu;
 }
 
 // Drar igang menyen og får den opp på skjermen
@@ -118,7 +136,8 @@ void menu_start(menu_ptr menu, int clear) {
 menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int clear) {
 	// Fikser å gå til undermeny eller til overmeny
 	if (depthDirection > 0) {
-		currentMenu = currentMenu->subMenu[element];
+		//currentMenu = currentMenu->subMenu[element];
+		currentMenu = &currentMenu->submenus[element];
 		element = 0;
 	} else if (depthDirection < 0) {
 		currentMenu = currentMenu->parent;
@@ -144,7 +163,8 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 		if (i == element) {
 			oled_print("-> ");
 		}
-		oled_print(currentMenu->subMenu[i]->text);
+		//oled_print(currentMenu->subMenu[i]->text);
+		oled_print(currentMenu->submenus[i].text);
 		i++;
 	}
 
