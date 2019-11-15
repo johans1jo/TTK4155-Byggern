@@ -23,12 +23,13 @@ menu_ptr menu_init(menu_type_t menu_type) {
 		// Fikser submenu-array
 		menu_ptr submenus = malloc(sizeof(menu_t)*3);
 		menu->submenus = submenus;
+		menu_add_submenus(menu, )
 		printf("addresses\r\n%d\r\n%d\r\n%d", &(menu->submenus[0]), &(menu->submenus[1]), &(menu->submenus[2]));
 		// Legger til menyelementer
 		menu_add(menu, "Spill :)", &game_play);
 		menu_ptr menu_settings = menu_add(menu, "Innstillinger", NULL);
 		menu_add(menu, "Highscore", &highscore_show);
-/*
+
 		menu_ptr menu_difficulty = menu_add(menu_settings, "Vanskegrad", NULL);
 		menu_add(menu_difficulty, "Vanskelig", &game_set_difficulty_hard);
 		menu_add(menu_difficulty, "Middels", &game_set_difficulty_medium);
@@ -38,15 +39,19 @@ menu_ptr menu_init(menu_type_t menu_type) {
 		menu_add(menu_users, "Ny bruker", NULL);
 		menu_add(menu_users, "Bruker 0", &game_set_user_0);
 		menu_add(menu_users, "Bruker 1", &game_set_user_1);
-*/
+
 	} else if (menu_type == IN_GAME) {
-		//menu_add(menu, "Avslutt :o", &game_stop);
-		//menu_add(menu, "Pause :/", &game_pause);
+		menu_add(menu, "Avslutt :o", &game_stop);
+		menu_add(menu, "Pause :/", &game_pause);
 
 	} else if (menu_type == HIGHSCORE) {
-		//menu_add(menu, "Tilbake", &go_to_main_menu);
+		menu_add(menu, "Tilbake", &go_to_main_menu);
 	}
 	return menu;
+}
+
+menu_ptr menu_add_submenus(menu_ptr menu, int submenus) {
+	menu_ptr submenus = malloc(sizeof(menu_t)*3);
 }
 
 // Legger et undermenyelement til "parent"-menyen.
@@ -73,7 +78,7 @@ menu_ptr menu_add(menu_ptr parent, char * text, void (*function)()) {
 	//printf("address %d\r\n", submenu_address);
 	//submenu_address = subMenu; //jallamekk //parent->submenu_count
 	parent->submenus[parent->submenu_count] = subMenu;
-	printf("submenu \r\n\r\n%s\r\n\r\n\r\n", parent->submenus[parent->submenu_count]->text);
+	//printf("submenu \r\n\r\n%s\r\n\r\n\r\n", parent->submenus[parent->submenu_count].text);
 	//submenu_address = subMenu;
 	parent->submenu_count += 1;
 
@@ -138,6 +143,7 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 	if (depthDirection > 0) {
 		//currentMenu = currentMenu->subMenu[element];
 		currentMenu = &currentMenu->submenus[element];
+		//printf("currentMenu %s\r\n", currentMenu->text);
 		element = 0;
 	} else if (depthDirection < 0) {
 		currentMenu = currentMenu->parent;
@@ -165,6 +171,7 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 		}
 		//oled_print(currentMenu->subMenu[i]->text);
 		oled_print(currentMenu->submenus[i].text);
+		//printf("currentMenu->submenus %s\r\n", currentMenu->submenus[i].text);
 		i++;
 	}
 
