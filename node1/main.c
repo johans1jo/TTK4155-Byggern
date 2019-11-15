@@ -21,6 +21,7 @@
 #include "game.h"
 #include "highscore.h"
 #include "interrupt.h"
+#include "led.h"
 
 #define FOSC 4915200// Clock Speed
 #define BAUD 9600
@@ -38,10 +39,13 @@ int main(void){
 	draw_init();
 	buttons_init();
 	game_init();
+	led_init();
 	sei();
 
-	DDRE |= (1 << PORTE0);
-	PORTE |= (1 << PORTE0);
+	led_set();
+
+	//Sender resetmelding til node2
+	//game_stop();
 
 	menu_ptr menu_main = menu_init(MAIN);
 	while(1) {
