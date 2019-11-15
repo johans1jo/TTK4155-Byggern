@@ -9,6 +9,8 @@
 #include <util/delay.h>
 #include "buttons.h"
 #include "game.h"
+//#include <avr/pgmspace.h>
+//const unsigned char PROGMEM font8[95][8] = {
 
 // Initierer og lager en meny
 menu_ptr menu_init(menu_type_t menu_type) {

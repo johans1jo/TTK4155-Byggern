@@ -23,7 +23,7 @@ int inputs = {
 }
 */
 
-#define SCORE_TRESHOLD 200
+#define SCORE_TRESHOLD 90 //200
 
 int x = 0;
 int y = 0;
@@ -98,6 +98,7 @@ void game_set_everything() {
 
 	// IR
 	int ir = ir_read();
+	//printf("ir %d\r\n", ir);
 	if (!scoring_now) {
 		int increase_score = (ir < SCORE_TRESHOLD);
 		if (increase_score) {
@@ -113,7 +114,7 @@ void game_set_everything() {
 			};
 			can_send(&score_msg);
 		}
-	} else if (ir > 300) {
+	} else if (ir > SCORE_TRESHOLD) {
 		scoring_now = 0;
 	}
 

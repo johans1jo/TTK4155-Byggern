@@ -132,7 +132,7 @@ int game_get_user() {
 }
 
 void game_show_score(int score) {
-	oled_goto_pos(20,20);
+	oled_goto_pos(10,10);
 	char score_str[2];
 	sprintf(score_str, "%d", score);
 	oled_print(score_str);
