@@ -9,49 +9,67 @@
 #include <util/delay.h>
 #include "buttons.h"
 #include "game.h"
-//#include <avr/pgmspace.h>
+#include <avr/pgmspace.h>
 //const unsigned char PROGMEM font8[95][8] = {
+
+menu_ptr open_menu = NULL;
 
 // Initierer og lager en meny
 menu_ptr menu_init(menu_type_t menu_type) {
 	// Initierer menyen
 	menu_ptr menu = malloc(sizeof(menu_t));
+	open_menu = menu;
 	menu->submenu_count = 0;
-	printf("malloc %d\r\n", menu);
+	menu->function = NULL;
+	printf("malloc init %d\r\n", menu);
 
 	if (menu_type == MAIN) {
 		// Fikser submenu-array
-		menu_ptr submenus = malloc(sizeof(menu_t)*3);
-		menu->submenus = submenus;
-		menu_add_submenus(menu, )
-		printf("addresses\r\n%d\r\n%d\r\n%d", &(menu->submenus[0]), &(menu->submenus[1]), &(menu->submenus[2]));
-		// Legger til menyelementer
+		//menu_ptr submenus = malloc(sizeof(menu_t)*3);
+		//menu->submenus = submenus;
+		////printf("addresses\r\n%d\r\n%d\r\n%d", &(menu->submenus[0]), &(menu->submenus[1]), &(menu->submenus[2]));
+
+		menu_add_submenus(menu, 3);
 		menu_add(menu, "Spill :)", &game_play);
 		menu_ptr menu_settings = menu_add(menu, "Innstillinger", NULL);
 		menu_add(menu, "Highscore", &highscore_show);
 
-		menu_ptr menu_difficulty = menu_add(menu_settings, "Vanskegrad", NULL);
-		menu_add(menu_difficulty, "Vanskelig", &game_set_difficulty_hard);
-		menu_add(menu_difficulty, "Middels", &game_set_difficulty_medium);
-		menu_add(menu_difficulty, "Lett", &game_set_difficulty_easy);
 
+		menu_add_submenus(menu_settings, 2);
 		menu_ptr menu_users = menu_add(menu_settings, "Velg bruker", NULL);
+		menu_ptr menu_difficulty = menu_add(menu_settings, "Vanskegrad", NULL);
+
+		//printf("menu address %d\r\n", menu);
+		//printf("menu_settings address %d\r\n", menu_settings);
+		//printf("menu_users address %d\r\n", menu_users);
+		//printf("menu_difficulty address %d\r\n", menu_difficulty);
+
+		menu_add_submenus(menu_users, 3);
 		menu_add(menu_users, "Ny bruker", NULL);
 		menu_add(menu_users, "Bruker 0", &game_set_user_0);
 		menu_add(menu_users, "Bruker 1", &game_set_user_1);
 
+		menu_add_submenus(menu_difficulty, 3);
+		menu_add(menu_difficulty, "Vanskelig", &game_set_difficulty_hard);
+		menu_add(menu_difficulty, "Middels", &game_set_difficulty_medium);
+		menu_add(menu_difficulty, "Lett", &game_set_difficulty_easy);
+
 	} else if (menu_type == IN_GAME) {
+		menu_add_submenus(menu, 2);
 		menu_add(menu, "Avslutt :o", &game_stop);
 		menu_add(menu, "Pause :/", &game_pause);
 
 	} else if (menu_type == HIGHSCORE) {
+		menu_add_submenus(menu, 1);
 		menu_add(menu, "Tilbake", &go_to_main_menu);
 	}
 	return menu;
 }
 
-menu_ptr menu_add_submenus(menu_ptr menu, int submenus) {
-	menu_ptr submenus = malloc(sizeof(menu_t)*3);
+void menu_add_submenus(menu_ptr menu, int submenu_count) {
+	menu_ptr submenus = malloc(sizeof(menu_t)*submenu_count);
+	printf("malloc add_subs (%d) %d\r\n", submenu_count, submenus);
+	menu->submenus = submenus;
 }
 
 // Legger et undermenyelement til "parent"-menyen.
@@ -71,18 +89,20 @@ menu_ptr menu_add(menu_ptr parent, char * text, void (*function)()) {
 	subMenu.parent = parent;
 	subMenu.submenu_count = 0;
 
-	printf("\r\naddress nr %d: %d\r\n", subMenu.submenu_count, &(parent->submenus[parent->submenu_count]));
+	////printf("\r\naddress nr %d: %d\r\n", subMenu.submenu_count, &(parent->submenus[parent->submenu_count]));
 
 	//parent->subMenu[parent->submenu_count] = subMenu;
 	//menu_ptr submenu_address = parent->submenus + sizeof(menu_t)*(parent->submenu_count);
-	//printf("address %d\r\n", submenu_address);
+	////printf("address %d\r\n", submenu_address);
 	//submenu_address = subMenu; //jallamekk //parent->submenu_count
 	parent->submenus[parent->submenu_count] = subMenu;
-	//printf("submenu \r\n\r\n%s\r\n\r\n\r\n", parent->submenus[parent->submenu_count].text);
+	////printf("submenu \r\n\r\n%s\r\n\r\n\r\n", parent->submenus[parent->submenu_count].text);
 	//submenu_address = subMenu;
+	////printf("menu_add %s count %d\r\n", subMenu.text, parent->submenu_count);
 	parent->submenu_count += 1;
 
-	return &subMenu;
+	////printf("address %d\r\n", &(parent->submenus[parent->submenu_count]));
+	return &(parent->submenus[parent->submenu_count - 1]);
 }
 
 // Drar igang menyen og får den opp på skjermen
@@ -133,6 +153,11 @@ void menu_start(menu_ptr menu, int clear) {
 			}
 		}
 	}
+	if (open_menu != NULL) {
+		printf("free1\r\n");
+		menu_free(open_menu);
+		open_menu = NULL;
+	}
 }
 
 // Gå til et menyelement, undermeny eller tilbake til "overmenyen"
@@ -143,7 +168,7 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 	if (depthDirection > 0) {
 		//currentMenu = currentMenu->subMenu[element];
 		currentMenu = &currentMenu->submenus[element];
-		//printf("currentMenu %s\r\n", currentMenu->text);
+		////printf("currentMenu %s\r\n", currentMenu->text);
 		element = 0;
 	} else if (depthDirection < 0) {
 		currentMenu = currentMenu->parent;
@@ -156,13 +181,21 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 
 	// Hvis vi har kommet til et menyelement med en funksjon, så utføres funksjonen
 	if (currentMenu->function != NULL) {
+		if (open_menu != NULL) {
+			printf("free2\r\n");
+			printf("%d\r\n", currentMenu);
+			printf(":free2\r\n");
+			menu_free(open_menu);
+			open_menu = NULL;
+		}
 		currentMenu->function();
 		return NULL;
 	}
 
 	// List opp alle elementene i menyen vi har kommet til
 	int i = 0;
-	printf("submenu_count %d\r\n", currentMenu->submenu_count);
+	//printf("submenu_count %d\r\n", currentMenu->submenu_count);
+	//printf("submenu addr %d\r\n", currentMenu);
 	while (i <= currentMenu->submenu_count) {
 		oled_goto_line(i);
 		oled_goto_column(0);
@@ -171,7 +204,7 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 		}
 		//oled_print(currentMenu->subMenu[i]->text);
 		oled_print(currentMenu->submenus[i].text);
-		//printf("currentMenu->submenus %s\r\n", currentMenu->submenus[i].text);
+		////printf("currentMenu->submenus %s\r\n", currentMenu->submenus[i].text);
 		i++;
 	}
 
@@ -181,4 +214,12 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 
 void go_to_main_menu() {
 	// Do nothing aka go back to main menu in the main while :)
+}
+
+void menu_free(menu_ptr menu) {
+	for (int i = 0; i < menu->submenu_count; i++) {
+		menu_free(&(menu->submenus[i]));
+	}
+	printf("free %d\r\n", menu);
+	free(menu);
 }

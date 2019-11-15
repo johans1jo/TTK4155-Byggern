@@ -43,6 +43,6 @@ void highscore_show() {
 }
 
 void highscore_save(int score, int user) {
-	printf("highscore user %d score %d\r\n", user, score);
+	//printf("highscore user %d score %d\r\n", user, score);
 	highscore[user] = score;
 }

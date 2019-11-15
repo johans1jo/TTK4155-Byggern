@@ -37,7 +37,7 @@ void game_init() {
 
   //OCR3B sammenlignes kontinuerlig med counter (TCNT1)
 	OCR3B = (F_CPU/1024)*0.1;
-	//////printf("OCR3B: %x\r\n", OCR3B);
+	////////printf("OCR3B: %x\r\n", OCR3B);
 
   // Normal port operation
   TCCR3A &= ~(1 << COM3B1);
@@ -61,7 +61,7 @@ void game_timer_disable() {
 void game_play() {
 	oled_clear();
 
-	printf("Sender CAN-mode-melding\r\n");
+	//printf("Sender CAN-mode-melding\r\n");
 
 	message_t mode_msg = {
 		100, //Mode-id
@@ -82,7 +82,7 @@ void game_play() {
 }
 
 void game_stop() {
-	printf("Sender game-stop-melding\r\n");
+	//printf("Sender game-stop-melding\r\n");
 
 	game_timer_disable();
 
@@ -110,7 +110,7 @@ void game_set_difficulty_easy() {
 	game_set_controller_parameters(1,1);
 }
 void game_set_controller_parameters(int param_p, int param_i) {
-	printf("vanskelighetsgrad\r\n");
+	//printf("vanskelighetsgrad\r\n");
 	message_t controller_msg = {
 		103,
 		2,
@@ -139,7 +139,7 @@ void game_show_score(int score) {
 }
 
 ISR(TIMER3_COMPB_vect) {
-	//printf("Sender multifunkverdier\r\n");
+	////printf("Sender multifunkverdier\r\n");
 	can_send_everything();
 
 	TCNT3 = 0; // Resetter telleren

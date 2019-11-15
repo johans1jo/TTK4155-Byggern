@@ -71,7 +71,7 @@ void can_send_everything() {
 		int button_right = buttons_right();
 		int slider_left = adc_read(SLIDER_LEFT);
 		int slider_right = adc_read(SLIDER_RIGHT);
-    //printf("x %d y %d bj %d bl %d br %d sl %d sr %d\r\n", x, y, button_joystick, button_left, button_right, slider_left, slider_right);
+    ////printf("x %d y %d bj %d bl %d br %d sl %d sr %d\r\n", x, y, button_joystick, button_left, button_right, slider_left, slider_right);
 
 		message_t everything = {
 			101, //Multifunk-verdier-id

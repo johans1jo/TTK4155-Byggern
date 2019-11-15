@@ -26,7 +26,10 @@ typedef struct Menu {
 } menu_t, *menu_ptr;
 
 menu_ptr menu_init(menu_type_t menu_type);
+void menu_add_submenus(menu_ptr menu, int submenu_count);
 void menu_start(menu_ptr menu, int clear);
 menu_ptr menu_goto(menu_ptr currentMenu, int depth, int element, int clear);
 menu_ptr menu_add(menu_ptr parent, char * text, void (*function)());
 void go_to_main_menu();
+
+void menu_free(menu_ptr menu);

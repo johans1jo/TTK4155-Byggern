@@ -45,11 +45,11 @@ int main(void){
 
 	menu_ptr menu_main = menu_init(MAIN);
 	while(1) {
-		printf("main while\r\n");
+		//printf("main while\r\n");
 		menu_start(menu_main, CLEAR);
 	}
 
-	printf("farvel\r\n");
+	//printf("farvel\r\n");
 
 	return 0;
 }
@@ -58,28 +58,28 @@ ISR(INT0_vect) {
 	message_t receive = can_receive(); // Mottar melding
 	if (receive.id == 200) {
 		// Modus
-		printf("modus %d\r\n", receive.data[0]);
+		//printf("modus %d\r\n", receive.data[0]);
 	} else if (receive.id == 201) {
 		// Tar imot score underveis i spillet når brukeren scorer
 		game_show_score(receive.data[0]);
 	} else if (receive.id == 202) {
 		// Tar imot score
-		printf("highscore can\r\n");
+		//printf("highscore can\r\n");
 		highscore_save(receive.data[0], game_get_user());
 	} else if (receive.id == 203) {
 		// Parametre
-		printf("param p %d i %d\r\n", receive.data[0], receive.data[1]);
+		//printf("param p %d i %d\r\n", receive.data[0], receive.data[1]);
 	} else {
-		printf("CAN: ukjent id\r\n");
+		//printf("CAN: ukjent id\r\n");
 	}
 	// Resetter interrupt for motta-buffer0
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
 }
 
 ISR(SPI_STC_vect) {
-	//printf("\r\nSPI_STC_vect\r\n");
+	////printf("\r\nSPI_STC_vect\r\n");
 }
 
 ISR(BADISR_vect) {
-	printf("\r\nBADISR_vect\r\n");
+	//printf("\r\nBADISR_vect\r\n");
 }
