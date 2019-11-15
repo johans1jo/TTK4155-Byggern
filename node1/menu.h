@@ -21,7 +21,8 @@ typedef struct Menu {
 	void (*function)(); // Funksjonen som skal kalles hvis det ikke finnes noen undermeny
 	int submenu_count;
 	struct Menu * parent; // Pappameny :)
-	struct Menu * subMenu[MAX_SUBMENUS]; // Undermeny. Array av pekere til menyelementer
+	//struct Menu * subMenu[MAX_SUBMENUS]; // Undermeny. Array av pekere til menyelementer
+	struct Menu * submenus; // Submeny array, address starting at submenus[0]
 } menu_t, *menu_ptr;
 
 menu_ptr menu_init(menu_type_t menu_type);
