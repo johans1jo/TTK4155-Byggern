@@ -7,7 +7,6 @@
 
 #define HIGHSCORE_SIZE 5
 
-//int highscore[10] = {0};
 int highscore[HIGHSCORE_SIZE] = {0};
 
 void highscore_show() {
@@ -37,9 +36,8 @@ void highscore_show() {
 	draw_print();
 
 	// Drar fram "til hovedmeny"-menyen
-	menu_ptr menu_highscore = menu_init(HIGHSCORE);
-	menu_start(menu_highscore, DONT_CLEAR);
-
+	//menu_ptr menu_highscore = menu_init(HIGHSCORE);
+	//menu_start(menu_highscore, DONT_CLEAR);
 }
 
 void highscore_save(int score, int user) {

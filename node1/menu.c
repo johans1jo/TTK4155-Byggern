@@ -9,8 +9,6 @@
 #include <util/delay.h>
 #include "buttons.h"
 #include "game.h"
-#include <avr/pgmspace.h>
-//const unsigned char PROGMEM font8[95][8] = {
 
 menu_ptr open_menu = NULL;
 
@@ -20,7 +18,8 @@ menu_ptr menu_init(menu_type_t menu_type) {
 	menu_ptr menu = malloc(sizeof(menu_t));
 	open_menu = menu;
 	menu->submenu_count = 0;
-	menu->function = NULL;
+	//menu->function = NULL;
+	menu->mode = NO_MODE;
 	printf("malloc init %d\r\n", menu);
 
 	if (menu_type == MAIN) {
@@ -30,38 +29,47 @@ menu_ptr menu_init(menu_type_t menu_type) {
 		////printf("addresses\r\n%d\r\n%d\r\n%d", &(menu->submenus[0]), &(menu->submenus[1]), &(menu->submenus[2]));
 
 		menu_add_submenus(menu, 3);
-		menu_add(menu, "Spill :)", &game_play);
-		menu_ptr menu_settings = menu_add(menu, "Innstillinger", NULL);
-		menu_add(menu, "Highscore", &highscore_show);
-
+		menu_add(menu, "Spill :)", PLAY_GAME, 0);
+		menu_ptr menu_settings = menu_add(menu, "Innstillinger", 0, 0);
+		menu_add(menu, "Highscore", SHOW_HIGHSCORE, 0);
 
 		menu_add_submenus(menu_settings, 2);
-		menu_ptr menu_users = menu_add(menu_settings, "Velg bruker", NULL);
-		menu_ptr menu_difficulty = menu_add(menu_settings, "Vanskegrad", NULL);
+		menu_ptr menu_edit_users = menu_add(menu_settings, "Velg bruker", 0, 0);
+		menu_ptr menu_choose_users = menu_add(menu_settings, "Endre brukere", 0, 0);
+		menu_ptr menu_difficulty = menu_add(menu_settings, "Vanskegrad", 0, 0);
 
 		//printf("menu address %d\r\n", menu);
 		//printf("menu_settings address %d\r\n", menu_settings);
 		//printf("menu_users address %d\r\n", menu_users);
 		//printf("menu_difficulty address %d\r\n", menu_difficulty);
 
-		menu_add_submenus(menu_users, 3);
-		menu_add(menu_users, "Ny bruker", NULL);
-		menu_add(menu_users, "Bruker 0", &game_set_user_0);
-		menu_add(menu_users, "Bruker 1", &game_set_user_1);
+		menu_add_submenus(menu_edit_users, 5);
+		menu_add(menu_edit_users, "Bruker 0", EDIT_USER, 0);
+		menu_add(menu_edit_users, "Bruker 1", EDIT_USER, 1);
+		menu_add(menu_edit_users, "Bruker 2", EDIT_USER, 2);
+		menu_add(menu_edit_users, "Bruker 3", EDIT_USER, 3);
+		menu_add(menu_edit_users, "Bruker 4", EDIT_USER, 4);
+
+		menu_add_submenus(menu_choose_users, 5);
+		menu_add(menu_choose_users, "Bruker 0", CHOOSE_USER, 0);
+		menu_add(menu_choose_users, "Bruker 1", CHOOSE_USER, 1);
+		menu_add(menu_choose_users, "Bruker 2", CHOOSE_USER, 2);
+		menu_add(menu_choose_users, "Bruker 3", CHOOSE_USER, 3);
+		menu_add(menu_choose_users, "Bruker 4", CHOOSE_USER, 4);
 
 		menu_add_submenus(menu_difficulty, 3);
-		menu_add(menu_difficulty, "Vanskelig", &game_set_difficulty_hard);
-		menu_add(menu_difficulty, "Middels", &game_set_difficulty_medium);
-		menu_add(menu_difficulty, "Lett", &game_set_difficulty_easy);
+		menu_add(menu_difficulty, "Vanskelig", CHOOSE_DIFFICULTY, 3);
+		menu_add(menu_difficulty, "Middels", CHOOSE_DIFFICULTY, 2);
+		menu_add(menu_difficulty, "Lett", CHOOSE_DIFFICULTY, 1);
 
 	} else if (menu_type == IN_GAME) {
 		menu_add_submenus(menu, 2);
-		menu_add(menu, "Avslutt :o", &game_stop);
-		menu_add(menu, "Pause :/", &game_pause);
+		menu_add(menu, "Avslutt :o", PLAY_GAME, 1);
+		menu_add(menu, "Pause :/", PLAY_GAME, 2);
 
 	} else if (menu_type == HIGHSCORE) {
 		menu_add_submenus(menu, 1);
-		menu_add(menu, "Tilbake", &go_to_main_menu);
+		menu_add(menu, "Tilbake", MAIN_MENU, 0);
 	}
 	return menu;
 }
@@ -75,7 +83,7 @@ void menu_add_submenus(menu_ptr menu, int submenu_count) {
 // Legger et undermenyelement til "parent"-menyen.
 // Hvis et menyelement har en "function", så blir funksjonen utført uansett om menyen har en undermeny
 // Når man legger til et menyelement som skal ha en undermeny, så må "function" settes til NULL.
-menu_ptr menu_add(menu_ptr parent, char * text, void (*function)()) {
+menu_ptr menu_add(menu_ptr parent, char * text, mode_t mode, int parameter) {
 
 	//menu_ptr subMenu = malloc(sizeof(menu_t));
 	/*menu_ptr subMenu;
@@ -85,7 +93,9 @@ menu_ptr menu_add(menu_ptr parent, char * text, void (*function)()) {
 	subMenu->submenu_count = 0;*/
 	menu_t subMenu;
 	subMenu.text = text;
-	subMenu.function = function;
+	//subMenu.function = function;
+	subMenu.mode = mode;
+	subMenu.parameter = parameter;
 	subMenu.parent = parent;
 	subMenu.submenu_count = 0;
 
@@ -121,6 +131,7 @@ void menu_start(menu_ptr menu, int clear) {
 
 		// Går ut av menysystemet hvis vi har kommet til et menyelement med en funksjon
 		if (currentMenu == NULL) {
+			printf("return null\r\n");
 			return;
 		}
 
@@ -154,7 +165,6 @@ void menu_start(menu_ptr menu, int clear) {
 		}
 	}
 	if (open_menu != NULL) {
-		printf("free1\r\n");
 		menu_free(open_menu);
 		open_menu = NULL;
 	}
@@ -180,7 +190,7 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 	}
 
 	// Hvis vi har kommet til et menyelement med en funksjon, så utføres funksjonen
-	if (currentMenu->function != NULL) {
+	if (currentMenu->mode != NO_MODE) {
 		if (open_menu != NULL) {
 			printf("free2\r\n");
 			printf("%d\r\n", currentMenu);
@@ -188,7 +198,9 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 			menu_free(open_menu);
 			open_menu = NULL;
 		}
-		currentMenu->function();
+		//currentMenu->function();
+		mode_set(currentMenu->mode, currentMenu->parameter);
+		printf("etter modeset\r\n");
 		return NULL;
 	}
 
@@ -212,14 +224,13 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 	return currentMenu;
 }
 
-void go_to_main_menu() {
-	// Do nothing aka go back to main menu in the main while :)
-}
-
 void menu_free(menu_ptr menu) {
+	/*
 	for (int i = 0; i < menu->submenu_count; i++) {
 		menu_free(&(menu->submenus[i]));
 	}
 	printf("free %d\r\n", menu);
 	free(menu);
+	*/
+	printf("ikke free\r\n");
 }

@@ -113,6 +113,7 @@ void game_set_everything() {
 				score
 			};
 			can_send(&score_msg);
+			_delay_ms(100);
 		}
 	} else if (ir > SCORE_TRESHOLD) {
 		scoring_now = 0;
