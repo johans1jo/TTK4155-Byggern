@@ -50,7 +50,6 @@ int main(void){
 		printf("Main while\r\n");
 
 		mode_t mode = mode_get();
-		int parameter = mode_parameter_get();
 
 		if (mode == MAIN_MENU) {
 			printf("Mode: MAIN_MENU\r\n");
@@ -59,6 +58,7 @@ int main(void){
 
 		} else if (mode == PLAY_GAME) {
 			//printf("Mode: PLAY_GAME\r\n");
+			int parameter = mode_parameter_get();
 
 			if (parameter == 0) {
 				game_play();
@@ -80,19 +80,22 @@ int main(void){
 			menu_start(menu_highscore, DONT_CLEAR);
 
 		} else if (mode == EDIT_USER) {
-			//printf("Mode: EDIT_USER\r\n");
-
-			game_edit_user(parameter);
+			printf("Mode: EDIT_USER\r\n");
+			int user = mode_parameter_get();
+			game_edit_user(user);
+			game_choose_user(user);
 
 		} else if (mode == CHOOSE_USER) {
 			//printf("Mode: CHOOSE_USER\r\n");
-
-			game_choose_user(parameter);
+			int user = mode_parameter_get();
+			game_choose_user(user);
+			mode_set(MAIN_MENU, 0);
 
 		} else if (mode == CHOOSE_DIFFICULTY) {
 			//printf("Mode: CHOOSE_DIFFICULTY\r\n");
+			int difficulty = mode_parameter_get();
 
-			game_set_difficulty(parameter);
+			game_set_difficulty(difficulty);
 
 		} else {
 			//printf("Unknown mode\r\n");
@@ -107,6 +110,8 @@ int main(void){
 ISR(INT0_vect) {
 	printf("hei\r\n");
 	message_t receive = can_receive(); // Mottar melding
+	printf("id: %d\r\n", receive.id);
+	printf("id: %s\r\n", receive.data);
 	if (receive.id == 200) {
 		// Modus
 		//printf("modus %d\r\n", receive.data[0]);
@@ -129,9 +134,9 @@ ISR(INT0_vect) {
 }
 
 ISR(SPI_STC_vect) {
-	////printf("\r\nSPI_STC_vect\r\n");
+	//printf("\r\nSPI_STC_vect\r\n");
 }
 
 ISR(BADISR_vect) {
-	//printf("\r\nBADISR_vect\r\n");
+	printf("\r\nBADISR_vect\r\n");
 }

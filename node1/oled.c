@@ -1,5 +1,9 @@
 #include "oled.h"
+#include <string.h>
+#include "uart.h"
+#include <avr/pgmspace.h>
 #include "fonts.h"
+#include "draw.h"
 
 //int oled_write = 0;
 

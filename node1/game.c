@@ -8,9 +8,30 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "oled.h"
+#include "string.h"
+#include "draw.h"
+#include "joystick.h"
+#include <string.h>
+#include "buttons.h"
 
 int game_on = 0;
 int user = 0;
+
+char users[5][20] = {
+	"User 0",
+	"User 1",
+	"User 2",
+	"User 3",
+	"User 4"
+};
+
+char * game_get_user_name(int user_id) {
+	return users[user_id];
+}
+
+void game_set_user_name(int user_id, char * user_name) {
+	strcpy(users[user_id], user_name);
+}
 
 int game_is_on() {
 	return game_on;
@@ -98,7 +119,86 @@ void game_choose_user(int user_set) {
 	user = user_set;
 }
 void game_edit_user(int user_edit) {
-	// endre på user
+	oled_clear();
+	char * user_name = game_get_user_name(user_edit);
+	int user_name_length = strlen(user_name);
+	int keyboard_position = 0;
+
+	while(1) {
+		draw_clear();
+		draw_print(0, 0, user_name);
+		draw_keyboard(keyboard_position);
+		if (keyboard_position > 26 && keyboard_position <= 30) {
+			draw_print(7, 0, "SAVE");
+		} else {
+			draw_print(7, 0, "Save");
+		}
+		if (keyboard_position > 30) {
+			draw_print(7, 80, "ERASE");
+		} else {
+			draw_print(7, 80, "Erase");
+		}
+
+		draw_push();
+
+		// Venter på at joysticken er tilbake
+		while (joy_read_dir() != 0 || buttons_right()) {
+			_delay_ms(10);
+		};
+		// Venter på joystick-bevegelse
+		while (joy_read_dir() == 0 && !buttons_right()) {
+			_delay_ms(10);
+		};
+
+		if (buttons_right()) {
+			if (keyboard_position > 26 && keyboard_position <= 30) {
+				// Save
+				mode_set(MAIN_MENU, 0);
+				return;
+
+			} else if (keyboard_position > 30) {
+				// Erase
+				user_name[user_name_length - 1] = '\0';
+				user_name_length--;
+			} else {
+				// Ny bokstav i brukernavn
+				char new_char;
+				if (keyboard_position == 26) {
+					new_char = ' ';
+				} else {
+					new_char = 'a' + keyboard_position;
+				}
+				user_name[user_name_length] = new_char;
+				user_name_length++;
+			}
+		} else {
+			// Oppdaterer keyboard-position
+			int direction = joy_read_dir();
+			if (direction == RIGHT) {
+				if (keyboard_position > 26) {
+					keyboard_position = 31;
+				} else {
+					keyboard_position++;
+				}
+			} else if (direction == LEFT) {
+				if (keyboard_position > 26 && keyboard_position <= 30) {
+					keyboard_position = 26;
+				} else if (keyboard_position > 30) {
+					keyboard_position = 27;
+				} else {
+					keyboard_position--;
+				}
+			} else if (direction == DOWN) {
+				keyboard_position += 9;
+			} else if (direction == UP) {
+				keyboard_position -= 9;
+			}
+
+			if (keyboard_position < 0) {
+				keyboard_position = 0;
+			}
+		}
+	}
 }
 
 int game_get_user() {

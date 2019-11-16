@@ -1,9 +1,12 @@
 #include "draw.h"
 #include "sram.h"
-#include "oled.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "oled.h"
+#include <avr/pgmspace.h>
+#include "fonts.h"
+#include "string.h"
 
 void draw_init() {
 	draw_clear();
@@ -121,7 +124,26 @@ void draw_clear() {
 	}
 }
 
-void draw_print() {
+void draw_print_char(int line, int x, char c) {
+	int address;
+  c = c-32;
+  for (int i = 0; i < 7; i++) {
+		address = (x + i)*8 + line;
+    int hei = pgm_read_byte(&font8[c][i]);
+		sram_write(address, hei);
+  }
+}
+
+void draw_print(int line, int x, char c[]) {
+  for (int i = 0; i < strlen(c); i++) {
+		if (line >= 0 && line <= 7 && x >= 0 && x <= 127) {
+    	draw_print_char(line, x, c[i]);
+		}
+		x = x + 8;
+  }
+}
+
+void draw_push() {
 	for (int x = 0; x < 128; x++) {
 		for (int line = 0; line < 8; line++) {
 			int address = x*8 + line;
@@ -129,5 +151,23 @@ void draw_print() {
 			oled_goto_pos(line, x);
 			oled_write_data(byte);
 		}
+	}
+}
+
+void draw_keyboard(int marked_char) {
+	int line = 1;
+	int x = 0;
+	for (int i = 0; i < 26; i++) {
+		if (i % 9 == 0 && i > 0) {
+			line = line + 2;
+			x = 0;
+		}
+		draw_print_char(line, x, 'a' + i);
+		x = x + 7*2;
+	}
+	if (marked_char >=0 && marked_char <= 26) {
+		int marked_x = 3 + ((marked_char % 9) * 14);
+		int marked_y = (8 + 4) + 16 * (marked_char / 9);
+		draw_circle(marked_x, marked_y, 14, 1);
 	}
 }
