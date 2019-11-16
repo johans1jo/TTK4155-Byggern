@@ -2,46 +2,121 @@
 #include "joystick.h"
 #include <stdlib.h>
 #include "draw.h"
+#include "can.h"
+#include "highscore.h"
+#include "game.h"
+#define F_CPU 4915200
+#include <util/delay.h>
+#include "buttons.h"
+#include "game.h"
+
+menu_ptr open_menu = NULL;
 
 // Initierer og lager en meny
-menu_ptr menu_init() {
+menu_ptr menu_init(menu_type_t menu_type) {
 	// Initierer menyen
 	menu_ptr menu = malloc(sizeof(menu_t));
+	open_menu = menu;
+	menu->submenu_count = 0;
+	//menu->function = NULL;
+	menu->mode = NO_MODE;
+	printf("malloc init %d\r\n", menu);
 
-	// Legger til menyelementer
-	menu_ptr menu_send_joy = menu_add(menu, "Joystickverdier", &joy_send_coordinates);
-	menu_ptr menu_highscore = menu_add(menu, "Highscore", &highscore);
-	menu_ptr menu_play = menu_add(menu, "Play", NULL);
-	menu_ptr menu_game1 = menu_add(menu_play, "Game1", &game1);
-	menu_ptr menu_game2 = menu_add(menu_play, "Game2", &game2);
-	menu_ptr menu_game3 = menu_add(menu_play, "Game3", &game3);
-	menu_ptr menu_something = menu_add(menu, "Something", NULL);
-	menu_ptr menu_something1 = menu_add(menu_something, "Something1", &something1);
-	menu_ptr menu_something2 = menu_add(menu_something, "Something2", &something2);
+	if (menu_type == MAIN) {
+		// Fikser submenu-array
+		//menu_ptr submenus = malloc(sizeof(menu_t)*3);
+		//menu->submenus = submenus;
+		////printf("addresses\r\n%d\r\n%d\r\n%d", &(menu->submenus[0]), &(menu->submenus[1]), &(menu->submenus[2]));
 
+		menu_add_submenus(menu, 3);
+		menu_add(menu, "Spill :)", PLAY_GAME, 0);
+		menu_ptr menu_settings = menu_add(menu, "Innstillinger", 0, 0);
+		menu_add(menu, "Highscore", SHOW_HIGHSCORE, 0);
+
+		menu_add_submenus(menu_settings, 2);
+		menu_ptr menu_edit_users = menu_add(menu_settings, "Velg bruker", 0, 0);
+		menu_ptr menu_choose_users = menu_add(menu_settings, "Endre brukere", 0, 0);
+		menu_ptr menu_difficulty = menu_add(menu_settings, "Vanskegrad", 0, 0);
+
+		//printf("menu address %d\r\n", menu);
+		//printf("menu_settings address %d\r\n", menu_settings);
+		//printf("menu_users address %d\r\n", menu_users);
+		//printf("menu_difficulty address %d\r\n", menu_difficulty);
+
+		menu_add_submenus(menu_edit_users, 5);
+		menu_add(menu_edit_users, "Bruker 0", EDIT_USER, 0);
+		menu_add(menu_edit_users, "Bruker 1", EDIT_USER, 1);
+		menu_add(menu_edit_users, "Bruker 2", EDIT_USER, 2);
+		menu_add(menu_edit_users, "Bruker 3", EDIT_USER, 3);
+		menu_add(menu_edit_users, "Bruker 4", EDIT_USER, 4);
+
+		menu_add_submenus(menu_choose_users, 5);
+		menu_add(menu_choose_users, "Bruker 0", CHOOSE_USER, 0);
+		menu_add(menu_choose_users, "Bruker 1", CHOOSE_USER, 1);
+		menu_add(menu_choose_users, "Bruker 2", CHOOSE_USER, 2);
+		menu_add(menu_choose_users, "Bruker 3", CHOOSE_USER, 3);
+		menu_add(menu_choose_users, "Bruker 4", CHOOSE_USER, 4);
+
+		menu_add_submenus(menu_difficulty, 3);
+		menu_add(menu_difficulty, "Vanskelig", CHOOSE_DIFFICULTY, 3);
+		menu_add(menu_difficulty, "Middels", CHOOSE_DIFFICULTY, 2);
+		menu_add(menu_difficulty, "Lett", CHOOSE_DIFFICULTY, 1);
+
+	} else if (menu_type == IN_GAME) {
+		menu_add_submenus(menu, 2);
+		menu_add(menu, "Avslutt :o", PLAY_GAME, 1);
+		menu_add(menu, "Pause :/", PLAY_GAME, 2);
+
+	} else if (menu_type == HIGHSCORE) {
+		menu_add_submenus(menu, 1);
+		menu_add(menu, "Tilbake", MAIN_MENU, 0);
+	}
 	return menu;
+}
+
+void menu_add_submenus(menu_ptr menu, int submenu_count) {
+	menu_ptr submenus = malloc(sizeof(menu_t)*submenu_count);
+	printf("malloc add_subs (%d) %d\r\n", submenu_count, submenus);
+	menu->submenus = submenus;
 }
 
 // Legger et undermenyelement til "parent"-menyen.
 // Hvis et menyelement har en "function", så blir funksjonen utført uansett om menyen har en undermeny
 // Når man legger til et menyelement som skal ha en undermeny, så må "function" settes til NULL.
-menu_ptr menu_add(menu_ptr parent, char * text, void (*function)()) {
-	menu_ptr subMenu = malloc(sizeof(menu_t));
+menu_ptr menu_add(menu_ptr parent, char * text, mode_t mode, int parameter) {
+
+	//menu_ptr subMenu = malloc(sizeof(menu_t));
+	/*menu_ptr subMenu;
 	subMenu->text = text;
 	subMenu->function = function;
 	subMenu->parent = parent;
+	subMenu->submenu_count = 0;*/
+	menu_t subMenu;
+	subMenu.text = text;
+	//subMenu.function = function;
+	subMenu.mode = mode;
+	subMenu.parameter = parameter;
+	subMenu.parent = parent;
+	subMenu.submenu_count = 0;
 
-	int i = 0;
-	while (parent->subMenu[i] != NULL) {
-		i++;
-	}
-	parent->subMenu[i] = subMenu;
+	////printf("\r\naddress nr %d: %d\r\n", subMenu.submenu_count, &(parent->submenus[parent->submenu_count]));
 
-	return subMenu;
+	//parent->subMenu[parent->submenu_count] = subMenu;
+	//menu_ptr submenu_address = parent->submenus + sizeof(menu_t)*(parent->submenu_count);
+	////printf("address %d\r\n", submenu_address);
+	//submenu_address = subMenu; //jallamekk //parent->submenu_count
+	parent->submenus[parent->submenu_count] = subMenu;
+	////printf("submenu \r\n\r\n%s\r\n\r\n\r\n", parent->submenus[parent->submenu_count].text);
+	//submenu_address = subMenu;
+	////printf("menu_add %s count %d\r\n", subMenu.text, parent->submenu_count);
+	parent->submenu_count += 1;
+
+	////printf("address %d\r\n", &(parent->submenus[parent->submenu_count]));
+	return &(parent->submenus[parent->submenu_count - 1]);
 }
 
 // Drar igang menyen og får den opp på skjermen
-void menu_start(menu_ptr menu) {
+void menu_start(menu_ptr menu, int clear) {
 	int depthDirection = 0;
 	int element = 0;
 	menu_ptr currentMenu = menu;
@@ -51,11 +126,12 @@ void menu_start(menu_ptr menu) {
 		menu_ptr oldMenu = currentMenu;
 
 		// Går til riktig meny basert på input eller standardverdier
-		currentMenu = menu_goto(currentMenu, depthDirection, element);
+		currentMenu = menu_goto(currentMenu, depthDirection, element, clear);
 		depthDirection = 0;
 
 		// Går ut av menysystemet hvis vi har kommet til et menyelement med en funksjon
 		if (currentMenu == NULL) {
+			printf("return null\r\n");
 			return;
 		}
 
@@ -65,9 +141,11 @@ void menu_start(menu_ptr menu) {
 		}
 
 		// Henter input og går riktig vei i menyen
-		while (joy_read_dir() != 0) {
+		while (joy_read_dir() != 0 || !(game_is_on() == (buttons_right() > 0))) {
+			_delay_ms(10);
 		};
-		while (joy_read_dir() == 0) {
+		while (joy_read_dir() == 0 || !(game_is_on() == (buttons_right() > 0))) {
+			_delay_ms(10);
 		};
 		int input = joy_read_dir();
 		if (input == RIGHT) {
@@ -81,43 +159,64 @@ void menu_start(menu_ptr menu) {
 			}
 		} else if (input == DOWN) {
 			// Passer på at vi ikke går under nederste menyelement
-			if (currentMenu->subMenu[element+1] != NULL) {
+			if (element + 1 < currentMenu->submenu_count) {
 				element++;
 			}
 		}
+	}
+	if (open_menu != NULL) {
+		menu_free(open_menu);
+		open_menu = NULL;
 	}
 }
 
 // Gå til et menyelement, undermeny eller tilbake til "overmenyen"
 // Returnerer peker til menyen man havner på etter å ha gått dit
 // Returnerer NULL hvis menysystemet skal avsluttes
-menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
+menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int clear) {
 	// Fikser å gå til undermeny eller til overmeny
 	if (depthDirection > 0) {
-		currentMenu = currentMenu->subMenu[element];
+		//currentMenu = currentMenu->subMenu[element];
+		currentMenu = &currentMenu->submenus[element];
+		////printf("currentMenu %s\r\n", currentMenu->text);
 		element = 0;
 	} else if (depthDirection < 0) {
 		currentMenu = currentMenu->parent;
 	}
 
 	// Rydder skjermen før vi utfører funksjonen eller printer en ny meny
-	oled_clear();
+	if (clear) {
+		oled_clear();
+	}
 
 	// Hvis vi har kommet til et menyelement med en funksjon, så utføres funksjonen
-	if (currentMenu->function != NULL) {
-		currentMenu->function();
+	if (currentMenu->mode != NO_MODE) {
+		if (open_menu != NULL) {
+			printf("free2\r\n");
+			printf("%d\r\n", currentMenu);
+			printf(":free2\r\n");
+			menu_free(open_menu);
+			open_menu = NULL;
+		}
+		//currentMenu->function();
+		mode_set(currentMenu->mode, currentMenu->parameter);
+		printf("etter modeset\r\n");
 		return NULL;
 	}
 
 	// List opp alle elementene i menyen vi har kommet til
 	int i = 0;
-	while (currentMenu->subMenu[i] != NULL) {
+	//printf("submenu_count %d\r\n", currentMenu->submenu_count);
+	//printf("submenu addr %d\r\n", currentMenu);
+	while (i <= currentMenu->submenu_count) {
 		oled_goto_line(i);
 		oled_goto_column(0);
 		if (i == element) {
 			oled_print("-> ");
 		}
-		oled_print(currentMenu->subMenu[i]->text);
+		//oled_print(currentMenu->subMenu[i]->text);
+		oled_print(currentMenu->submenus[i].text);
+		////printf("currentMenu->submenus %s\r\n", currentMenu->submenus[i].text);
 		i++;
 	}
 
@@ -125,38 +224,13 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element) {
 	return currentMenu;
 }
 
-// Eksempelfunksjoner for testing
-void send_joy() {
-	printf("send joystickkoordinater...\r\n");
-}
-void highscore() {
-	printf("Highscore\r\n");
-
-	// Tegnegreier
-	point points[] = {
-		{0, 0},
-		{10, 10},
-		{50, 32}
-	};
-	draw_lines(points, sizeof(points)/sizeof(points[0]), 4);
-	draw_print();
-
-}
-void game1() {
-	printf("Game1\r\n");
-	draw_point(20,20,7);
-	draw_point(1,1,10);
-	draw_print();
-}
-void game2() {
-	printf("Game2\r\n");
-}
-void game3() {
-	printf("Game3\r\n");
-}
-void something1() {
-	printf("Something1\r\n");
-}
-void something2() {
-	printf("Something2\r\n");
+void menu_free(menu_ptr menu) {
+	/*
+	for (int i = 0; i < menu->submenu_count; i++) {
+		menu_free(&(menu->submenus[i]));
+	}
+	printf("free %d\r\n", menu);
+	free(menu);
+	*/
+	printf("ikke free\r\n");
 }

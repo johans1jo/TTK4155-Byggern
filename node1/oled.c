@@ -1,8 +1,9 @@
 #include "oled.h"
 #include "fonts.h"
 
-void oled_init()
- {
+//int oled_write = 0;
+
+void oled_init() {
  oled_write_command(0xae); // display off
  oled_write_command(0xa1); //segment remap
  oled_write_command(0xda); //common pads hardware: alternative
@@ -37,6 +38,8 @@ void oled_write_command(uint8_t command) {
 }
 
 void oled_write_data(uint8_t data) {
+	////printf("ow %d\r\n", oled_write);
+	//oled_write++;
   volatile char *ext_oled_data = (char *) 0x1200;
   ext_oled_data[0] = data;
 }
@@ -50,8 +53,6 @@ void oled_goto_line(int line) { //Line between 0-7
 void oled_goto_column(int column) {
 	  oled_write_command(0x00 + (column % 16)); // Lower nibble
 	  oled_write_command(0x10 + (column / 16)); // Higher nibble
-
-
 }
 
 void oled_goto_pos(int line, int column) {

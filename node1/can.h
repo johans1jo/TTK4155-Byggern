@@ -3,6 +3,7 @@
  *@brief A driver for the CAN which implements communication between nodes over CAN
  */
 
+ #include <avr/io.h>
 
 /**
  * @struct A struct with the id, length of the data, and the data of the message.
@@ -39,8 +40,8 @@ void can_send(message_ptr message);
  */
 message_t can_receive();
 
-
 /**
  * @brief Bare tull!
  */
 void can_interrupt();
+void can_send_everything();

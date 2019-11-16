@@ -1,0 +1,50 @@
+#include "solenoid.h"
+#include <avr/io.h>
+#include <stdio.h>
+#define F_CPU 16000000UL
+#include <util/delay.h>
+
+#define SOLENOID_PIN PF1
+
+int solenoid_on = 0;
+
+// Interruptdrevet solenoid!
+
+void solenoid_init() {
+	DDRF |= (1 << SOLENOID_PIN); //output ADC1
+	PORTF |= (1 << SOLENOID_PIN); //high
+
+	// Sett opp solenoid-timer-interrupt
+}
+
+void solenoid_set() {
+	PORTF &= ~(1 << SOLENOID_PIN); //low
+	solenoid_on = 1;
+}
+
+void solenoid_clear() {
+	PORTF |= (1 << SOLENOID_PIN); //high
+	solenoid_on = 0;
+}
+
+int solenoid_is_set() {
+	return solenoid_on;
+}
+
+void solenoid_fire() {
+	//printf("solenoid_fire\r\n");
+	if (!solenoid_is_set()) {
+		solenoid_set();
+		// Start timer for å stoppe solenoiden
+		_delay_ms(100);
+		solenoid_clear();
+	}
+}
+
+/*
+ISR {
+	solenoid_clear();
+
+	// Stopp clear-timer
+}
+*/

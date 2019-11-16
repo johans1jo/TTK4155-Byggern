@@ -9,7 +9,15 @@ void can_init() {
 	mcp_init();
   mcp_set_mode(MODE_NORMAL);
 
-  //interruptinit?
+  // Interruptgreier
+  mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Skrur på receive0-interrupt. Skrur av alt annet.
+
+	//interrupt_init()
+  EIMSK |= (1 << INT3);
+  DDRB &= ~(1 << INT3);
+  //EICRA bør settes til å svare på fallende kant
+  EICRA |= (1 << ISC31);
+  EICRA &= ~(1 << ISC30);
 }
 
 void can_send(message_ptr message) {
@@ -30,7 +38,7 @@ void can_send(message_ptr message) {
 
 	// Request to send
 	mcp_request_to_send(0);
-	sei();
+	sei(); //dobbelt opp!
 }
 
 message_t can_receive() {
@@ -38,8 +46,6 @@ message_t can_receive() {
 	message_t message = {};
 
 	// Id. RXBnSIDH og RXBnSIDL
-	//uint8_t id_low = (mcp_read(MCP_RXB0SIDL) & 0b11100000)/0b100000;
-	//uint8_t id_high = mcp_read(MCP_RXB0SIDH);
 	uint8_t id_low = mcp_read(MCP_RXB0SIDL)/0b100000;
 	uint8_t id_high = mcp_read(MCP_RXB0SIDH);
 	message.id = id_high * 0b1000 + id_low;
@@ -55,8 +61,4 @@ message_t can_receive() {
 	}
 
 	return message;
-}
-
-void can_interrupt() {
-	printf("2\r\n");
 }

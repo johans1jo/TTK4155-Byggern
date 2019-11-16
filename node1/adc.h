@@ -3,6 +3,9 @@
  * @brief A driver for the adc containing functions to initialize the adc and read the data from the joystick
  */
 
+ #ifndef ADC
+ #define ADC
+
 #include <avr/io.h>
 
 /**
@@ -29,3 +32,7 @@ void adc_init();
  * @return The value read from the joystick
  */
 int adc_read(int channel);
+
+uint8_t flip_bits(uint8_t value);
+
+#endif

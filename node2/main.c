@@ -1,26 +1,27 @@
-#include <avr/io.h>
-#include "uart.h"
 #include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <stdlib.h>
 
-//#define F_CPU 4915200
 #define F_CPU 16000000UL
 #include <util/delay.h>
-
-#include <string.h>
-#include "spi.h"
-#include "MCP2515.h"
+#include <avr/io.h>
 #include <avr/interrupt.h>
+
+#include "uart.h"
+#include "spi.h"
 #include "MCP2515.h"
 #include "mcp.h"
 #include "can.h"
 #include "pwm.h"
-#include <time.h>
-#include <stdlib.h>
 #include "adc.h"
-#include "score.h"
+#include "ir.h"
 #include "twi.h"
 #include "motor.h"
-#include "interrupt.h"
+#include "encoder.h"
+#include "solenoid.h"
+#include "game.h"
+#include "mode.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -33,67 +34,72 @@
 int main(void){
   uart_init(UBRR);
   adc_init();
-  TWI_Master_Initialise();
+  can_init();
   pwm_init();
   motor_init();
-  encoder_init();
-  can_init(); // Denne initierer mcp, som initierer spi.
+	encoder_init();
+	solenoid_init();
+	sei();
+	printf("Node2 starter :)\r\n");
 
-  interrupt_init(); //inneholder litt CAN-interruptgreier
+	while(1) {
+		if (mode_get() == GAME && !game_is_on()) {
+			////printf("Setter mode :)\r\n");
+			printf("starter spillet\r\n");
+			game_play();
+		}
+	}
 
-  _delay_ms(1000);
-  motor_enable();
-
-/*
-  _delay_ms(1000);
-  motor_set_direction(LEFT);
-  motor_set_speed(255);
-  _delay_ms(1000);
-  motor_set_direction(RIGHT);
-  motor_set_speed(70);
-
-  _delay_ms(1000);
-  */
-  while(1) {
-  }
-
+	////printf("return 0:\r\n");
 	return 0;
 }
 
+// Tar imot CAN-melding
+// 100: modus
+// 101: multifunk-data
+// 102: stopp spill
 ISR(INT3_vect) {
-  //printf("hhheiiiii\r\n");
-
-	message_t receive = can_receive(); // Mottar melding
-	if (receive.id == 10) { //x
-		//x
-		printf("x: %d\r\n", receive.data[0]);
-    //servo_set_angle(receive.data[0]);
-    servo_set_angle(receive.data[0]);
-	} else if (receive.id == 11) { //y
-		//y
-		printf("y: %d\r\n\r\n", receive.data[0]);
-    if (receive.data[0] > 0) {
-      //høyre
-      //motor_set_direction(RIGHT);
-      //motor_set_speed(receive.data[0]);
-    } else {
-      //venstre
-      //motor_set_direction(LEFT);
-      //motor_set_speed(receive.data[0]);
-    }
-	} else {
-		if (receive.length > 8) {
-			printf("Kaos. Meldingslengde: %d\r\n", receive.length);
-		} else {
-			printf("Heisann sveisann, vi har fått ei melding.\r\n");
-			printf("Id: %d \r\n", receive.id);
-			printf("Lengde: %d \r\n", receive.length);
-			printf("Melding: %s \r\n\r\n", receive.data);
+	message_t receive = can_receive();
+	//game_update_from_node1(receive.data);
+	if (receive.id == 100) {
+		// Setter riktig modus
+		mode_set(receive.data[0]); // 0 = IDLE, 1 = GAME
+/*
+		//Responderer med modus:
+		message_t mode_msg = {
+			200,
+			1,
+			mode_get()
+		};
+		can_send(&mode_msg);
+*/
+	} else if (receive.id == 101) {
+		// Tar imot multifunk-verdier
+		if (mode_get() == GAME && game_is_initialized()) {
+			game_update_from_node1(receive.data);
 		}
+	} else if (receive.id == 102) {
+		//Avslutter spillet
+		game_stop();
+		mode_set(IDLE);
+	} else if (receive.id == 103) {
+		// Sett vanskelighetsgrad
+		printf("vanskelighetsgrad\r\n");
+		motor_set_controller_parameters(receive.data[0], receive.data[1]);
+
+		//Responderer med nye parametre
+		message_t param_msg = {
+			203,
+			2,
+			motor_get_controller_parameter_p(),
+			motor_get_controller_parameter_i()
+		};
+		can_send(&param_msg);
+	} else {
+		printf("CAN: Ukjent id %d\r\n", receive.id);
 	}
 	// Resetter interrupt for motta-buffer0
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
-
 }
 
 ISR(SPI_STC_vect) {
@@ -102,4 +108,8 @@ ISR(SPI_STC_vect) {
 
 ISR(BADISR_vect) {
 	printf("\r\nBADISR_vect\r\n");
+}
+
+ISR(TIMER3_OVF_vect) {
+	printf("\r\nTIMER3_OVF_vect\r\n");
 }

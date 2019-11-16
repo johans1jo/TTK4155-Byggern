@@ -2,6 +2,8 @@
 #include "sram.h"
 #include "oled.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 
 void draw_init() {
 	draw_clear();
@@ -9,32 +11,51 @@ void draw_init() {
 
 // Tegner linje fra punktet (x1, y1) til punktet (x2, y2) med størrelse size
 void draw_line(int x1, int y1, int x2, int y2, int size) {
+
 	if (x1 > x2) {
 		int tmp = x1;
 		x1 = x2;
 		x2 = tmp;
 	}
+	/*
 	if (y1 > y2) {
 		int tmp = y1;
 		y1 = y2;
 		y2 = tmp;
 	}
+	*/
+	////printf("1 (%d, %d) 2 (%d, %d)\r\n", x1, y1, x2, y2);
 		for (int x = x1; x < x2; x++) {
-			int s = (y2 - y1)*1000 / (x2 - x1);
-			int y = y1 + (s*(x - x1)) / 1000;
+			unsigned int y2y1 = abs(y2 - y1)*1000;
+			int s = y2y1 / (x2 - x1);
+			////printf("s %d\r\n", s);
+			////printf("y2 - y1: %d\r\n", (y2 - y1));
+			////printf("x2 - x1: %d\r\n", (x2 - x1));
+			int y;
+			if (y2 > y1) {
+				y = y1 + (s*(x - x1)) / 1000;
+			} else {
+				y = y1 - (s*(x - x1)) / 1000;
+			}
+			////printf("draw_point x %d y %d\r\n", x, y);
 			draw_point(x, y, size);
 		}
 }
 
 void draw_lines(point * points, int length, int size) {
 	for (int i = 0; i < length - 1; i++) {
-		printf("x %d y %d\r\n", points[i+1].x, points[i+1].y);
+		////printf("x %d y %d\r\n", points[i+1].x, points[i+1].y);
 		draw_line(points[i].x, points[i].y, points[i+1].x, points[i+1].y, size);
 	}
 }
 
 void draw_circle(int x1, int y1, int width, int size) {
-	//(x−h)2+(y−k)2=r2
+	int r = width/2;
+	for (double theta = 0; theta < 2*M_PI; theta += 0.1) {
+		int x = r * cos(theta) + x1;
+		int y = r * sin(theta) + y1;
+		draw_set_bit(x, y);
+	}
 }
 
 // Tegner et punkt på posisjon (x1, y1) med størrelse size
@@ -62,6 +83,12 @@ void draw_point(int x1, int y1, int size) {
 }
 
 void draw_set_bit(int x, int y) {
+	if (y > 63) {
+		return;
+	}
+	if (x > 127) {
+		return;
+	}
 	int line = y/8;
 	int bit = y%8;
 	//pixels[x][line] |= (1 << bit);
