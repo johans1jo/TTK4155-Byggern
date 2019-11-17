@@ -16,7 +16,7 @@ void mcp_init() {
 	// Sjøltesting
 	uint8_t value = mcp_read(MCP_CANSTAT);
 	if ((value & MODE_MASK) != MODE_CONFIG) {
-		////printf("MCP2515 er ikke i konfigurasjonsmodus etter reset. CANSTAT: %x \r\n", value);
+		printf("MCP!config %x\r\n", value);
 	}
 }
 
@@ -78,5 +78,5 @@ void mcp_reset() {
 }
 
 void mcp_set_mode(uint8_t mode) {
-	mcp_bit_modify(MCP_CANCTRL, 0b11100000, mode); // Eller bare skrive rett til adressen?
+	mcp_bit_modify(MCP_CANCTRL, 0b11100000, mode);
 }

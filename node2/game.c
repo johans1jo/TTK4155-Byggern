@@ -43,17 +43,14 @@ void game_init() {
 	encoder_calibrate();
 	motor_controller_init();
 	_delay_ms(100);
-	motor_set_speed(0);
+	//motor_set_speed(0); //hæ
 	motor_set_position(0);
 	_delay_ms(1000);
 }
 
 void game_play() {
-	//printf("\r\n\r\n");
 	game_on = 1;
-	////printf("game_play 1\r\n");
 	game_init();
-	////printf("game_play 2\r\n");
 	game_initialized = 1;
 	//aktiver sett verdier-interrupt?
 }
@@ -89,7 +86,6 @@ void game_set_everything() {
 
 	// Solenoid
 	if (bl) {
-		printf("bl %d\r\n", bl);
 		solenoid_fire();
 	}
 
@@ -98,7 +94,6 @@ void game_set_everything() {
 
 	// IR
 	int ir = ir_read();
-	//printf("ir %d\r\n", ir);
 	if (!scoring_now) {
 		int increase_score = (ir < SCORE_TRESHOLD);
 		if (increase_score) {
@@ -137,25 +132,11 @@ void game_update_from_node1(char* data) {
 	if (sr < 0) {
 		sr = (255 + sr);
 	}
-	//printf("sl %d\r\n", sl);
 	//printf("game_update_from_node1 x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
 
-/*
-int game_is_goal() {
-	int ir = ir_get();
-	if (ir < 300) {
-		return 1;
-	}
-	return 0;
-}
-*/
-
 ISR(TIMER3_COMPB_vect) {
-	////printf("TIMER3_COMPB_vect\r\n");
-	////printf("init %d\r\n", game_initialized);
 	if (game_initialized) {
-		////printf("set things\r\n");
 		game_set_everything();
 	}
 	TCNT3 = 0; // Resetter telleren

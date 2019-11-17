@@ -4,19 +4,19 @@
 #include <util/delay.h>
 
 void adc_init() {
-  MCUCR = (1 << SRE); //enable XMEM
-  SFIOR = (1 << XMM2); //mask unused bits
+  MCUCR = (1 << SRE); // Enable XMEM
+  SFIOR = (1 << XMM2); // Mask unused bits
 }
 
 int adc_read(int channel) {
   volatile char *adc = (char *) 0x1400;
-	uint8_t command = flip_bits(3 + channel);
+	uint8_t command = flip_bits(3 + channel); // Due to reverse wiring on PCB
   adc[0] = command;
 
   _delay_us(200);
 
   uint8_t value = adc[0];
-	value = flip_bits(value);
+	value = flip_bits(value); // Due to reverse wiring on PCB
 
   return value;
 }

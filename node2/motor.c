@@ -51,7 +51,6 @@ void motor_controller_init() {
 
   //OCR3B sammenlignes kontinuerlig med counter (TCNT1)
 	OCR3B = (F_CPU/1024)*0.02;
-	//////printf("OCR3B: %x\r\n", OCR3B);
 
 	// Enable timer 3 interrupt, compare match
 	TIMSK3 |= (1 << OCIE3B); //(1 << TOIE3) overflow
@@ -100,10 +99,8 @@ void motor_set_position(int reference) {
 	//printf("total_error: %lu K-ledd: %d I-ledd: %d ", total_error, k_ledd, i_ledd);
 	int speed = abs(u)/40;
 	if (e < 0) {
-		//printf("right\r\n");
 		motor_set_direction(RIGHT);
 	} else {
-		//printf("left\r\n");
 		motor_set_direction(LEFT);
 	}
 	motor_set_speed(speed);

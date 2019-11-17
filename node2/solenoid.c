@@ -32,7 +32,6 @@ int solenoid_is_set() {
 }
 
 void solenoid_fire() {
-	//printf("solenoid_fire\r\n");
 	if (!solenoid_is_set()) {
 		solenoid_set();
 		// Start timer for å stoppe solenoiden

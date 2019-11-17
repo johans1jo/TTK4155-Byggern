@@ -153,7 +153,6 @@ application.
 ****************************************************************************/
 ISR(TWI_vect)
 {
-  //////printf("twi_vect\r\n");
   static unsigned char TWI_bufPtr;
 
   switch (TWSR)
@@ -223,6 +222,4 @@ ISR(TWI_vect)
              (0<<TWEA)|(0<<TWSTA)|(0<<TWSTO)|           // No Signal requests
              (0<<TWWC);                                 //
   }
-
-    //////printf("twi_vect slutt\r\n");
 }

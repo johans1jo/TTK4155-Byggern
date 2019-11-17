@@ -10,9 +10,9 @@
 int highscore[HIGHSCORE_SIZE] = {0};
 
 void highscore_show() {
-	// Bredden på grafen per bruker
+	// Graph width per user.
 	int width = 128/(HIGHSCORE_SIZE-1);
-	// Finner høyeste poengsum
+	// Find highest highscore (heh).
 	int highest_score = 0;
 	for (int i = 0; i < HIGHSCORE_SIZE; i++) {
 		if (highscore[i] > highest_score) {
@@ -20,7 +20,7 @@ void highscore_show() {
 		}
 	}
 
-	// Tegner grafen :)
+	// Draw the graph!
 	point points[HIGHSCORE_SIZE] = {0};
 	for (int i = 0; i < HIGHSCORE_SIZE; i++) {
 		points[i].x = width*i;
@@ -33,13 +33,8 @@ void highscore_show() {
 	draw_lines(points, sizeof(points)/sizeof(points[0]), 2);
 
 	draw_push();
-
-	// Drar fram "til hovedmeny"-menyen
-	//menu_ptr menu_highscore = menu_init(HIGHSCORE);
-	//menu_start(menu_highscore, DONT_CLEAR);
 }
 
 void highscore_save(int score, int user) {
-	//printf("highscore user %d score %d\r\n", user, score);
 	highscore[user] = score;
 }

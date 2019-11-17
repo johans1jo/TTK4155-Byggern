@@ -40,17 +40,15 @@ int main(void){
 	encoder_init();
 	solenoid_init();
 	sei();
-	printf("Node2 starter :)\r\n");
+	printf("Start\r\n");
 
 	while(1) {
 		if (mode_get() == GAME && !game_is_on()) {
-			////printf("Setter mode :)\r\n");
-			printf("starter spillet\r\n");
 			game_play();
 		}
 	}
 
-	////printf("return 0:\r\n");
+	printf("Quit\r\n");
 	return 0;
 }
 
@@ -64,7 +62,6 @@ ISR(INT3_vect) {
 	if (receive.id == 100) {
 		// Setter riktig modus
 		mode_set(receive.data[0]); // 0 = IDLE, 1 = GAME
-/*
 		//Responderer med modus:
 		message_t mode_msg = {
 			200,
@@ -72,7 +69,7 @@ ISR(INT3_vect) {
 			mode_get()
 		};
 		can_send(&mode_msg);
-*/
+
 	} else if (receive.id == 101) {
 		// Tar imot multifunk-verdier
 		if (mode_get() == GAME && game_is_initialized()) {
@@ -84,7 +81,6 @@ ISR(INT3_vect) {
 		mode_set(IDLE);
 	} else if (receive.id == 103) {
 		// Sett vanskelighetsgrad
-		printf("vanskelighetsgrad\r\n");
 		motor_set_controller_parameters(receive.data[0], receive.data[1]);
 
 		//Responderer med nye parametre
@@ -96,20 +92,18 @@ ISR(INT3_vect) {
 		};
 		can_send(&param_msg);
 	} else {
-		printf("CAN: Ukjent id %d\r\n", receive.id);
+		printf("CANid %d\r\n", receive.id);
 	}
 	// Resetter interrupt for motta-buffer0
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
 }
 
 ISR(SPI_STC_vect) {
-	//printf("\r\nSPI_STC_vect\r\n");
 }
 
 ISR(BADISR_vect) {
-	printf("\r\nBADISR_vect\r\n");
+	printf("badisr\r\n");
 }
 
 ISR(TIMER3_OVF_vect) {
-	printf("\r\nTIMER3_OVF_vect\r\n");
 }

@@ -6,7 +6,6 @@
 #define F_CPU 4915200
 #include <util/delay.h>
 
-
 int joy_x_min = 0;
 int joy_x_max = 255;
 int joy_y_min = 0;
@@ -27,16 +26,16 @@ int getyoffset() {
   return y_offset;
 }
 
-//Compensates for natrual offset
+//Compensate for natrual offset
 int joy_calibrate(){
   x_offset = adc_read(JOYSTICK_X);
   y_offset = adc_read(JOYSTICK_Y);
 }
 
-//Returns joystick X value between -100 and 100
+//Return joystick X value between -100 and 100
 int joy_read_x() {
   int pos = (adc_read(JOYSTICK_X) - x_offset) * 100 / 127;
-  int offset = 127 - x_offset; //2
+  int offset = 127 - x_offset;
   if (pos > 0) {
     pos = pos * 100 / (100 + offset);
   } else if (pos < 0) {
@@ -45,14 +44,14 @@ int joy_read_x() {
   return pos;
 }
 
-//Returns joystick Y value between -100 and 100
+//Return joystick Y value between -100 and 100
 int joy_read_y() {
   int pos = (adc_read(JOYSTICK_Y) - y_offset) * 100 / 127;
-  int offset = 127 - y_offset; //-11
+  int offset = 127 - y_offset;
   if (pos > 0) {
-    pos = pos * 100 / (92); //jalla
+    pos = pos * 100 / (92);
   } else if (pos < 0) {
-    pos = pos * 100 / (106); //jalla
+    pos = pos * 100 / (106);
   }
   return pos;
 }
@@ -60,7 +59,6 @@ int joy_read_y() {
 int joy_read_dir() {
   int x = joy_read_x();
   int y = joy_read_y();
-	////printf("x %d y %d\r\n", x, y);
   if (x > 70 && y < 70 && y > -70) {
     return UP;
   } else if (x < -70 && y < 70 && y > -70) {

@@ -12,6 +12,7 @@
 #include <avr/pgmspace.h>
 #include "fonts.h"
 
+// Initialize menu text strings in progmem
 const char text_main_menu[] PROGMEM = "Main menu";
 const char text_play[] PROGMEM = "Play :)";
 const char text_settings[] PROGMEM = "Settings";
@@ -25,13 +26,15 @@ const char text_easy[] PROGMEM = "Easy";
 const char text_in_game[] PROGMEM = "In-game";
 const char text_quit[] PROGMEM = "Quit";
 
+// String array in progmem maybe?
+
 // Initierer og lager en meny
 menu_ptr menu_init(menu_type_t menu_type) {
 	// Initierer menyen
 	menu_ptr menu = malloc(sizeof(menu_t));
 	menu->submenu_count = 0;
 	menu->mode = NO_MODE;
-	printf("malloc init %d\r\n", menu);
+	printf("malloc %d\r\n", menu);
 
 	if (menu_type == MAIN) {
 		menu->text = text_main_menu;
@@ -79,7 +82,7 @@ menu_ptr menu_init(menu_type_t menu_type) {
 
 void menu_add_submenus(menu_ptr menu, int submenu_count) {
 	menu_ptr submenus = malloc(sizeof(menu_t)*submenu_count);
-	printf("malloc add_subs (%d) %d\r\n", submenu_count, submenus);
+	printf("malloc (%d) %d\r\n", submenu_count, submenus);
 	menu->submenus = submenus;
 }
 
@@ -87,34 +90,16 @@ void menu_add_submenus(menu_ptr menu, int submenu_count) {
 // Hvis et menyelement har en "function", så blir funksjonen utført uansett om menyen har en undermeny
 // Når man legger til et menyelement som skal ha en undermeny, så må "function" settes til NULL.
 menu_ptr menu_add(menu_ptr parent, const char * text, mode_t mode, int parameter) {
-
-	//menu_ptr subMenu = malloc(sizeof(menu_t));
-	/*menu_ptr subMenu;
-	subMenu->text = text;
-	subMenu->function = function;
-	subMenu->parent = parent;
-	subMenu->submenu_count = 0;*/
 	menu_t subMenu;
 	subMenu.text = text;
-	//subMenu.function = function;
 	subMenu.mode = mode;
 	subMenu.parameter = parameter;
 	subMenu.parent = parent;
 	subMenu.submenu_count = 0;
 
-	////printf("\r\naddress nr %d: %d\r\n", subMenu.submenu_count, &(parent->submenus[parent->submenu_count]));
-
-	//parent->subMenu[parent->submenu_count] = subMenu;
-	//menu_ptr submenu_address = parent->submenus + sizeof(menu_t)*(parent->submenu_count);
-	////printf("address %d\r\n", submenu_address);
-	//submenu_address = subMenu; //jallamekk //parent->submenu_count
 	parent->submenus[parent->submenu_count] = subMenu;
-	////printf("submenu \r\n\r\n%s\r\n\r\n\r\n", parent->submenus[parent->submenu_count].text);
-	//submenu_address = subMenu;
-	////printf("menu_add %s count %d\r\n", subMenu.text, parent->submenu_count);
 	parent->submenu_count += 1;
 
-	////printf("address %d\r\n", &(parent->submenus[parent->submenu_count]));
 	return &(parent->submenus[parent->submenu_count - 1]);
 }
 
@@ -175,9 +160,7 @@ void menu_start(menu_ptr menu, int clear) {
 menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int clear) {
 	// Fikser å gå til undermeny eller til overmeny
 	if (depthDirection > 0) {
-		//currentMenu = currentMenu->subMenu[element];
 		currentMenu = &currentMenu->submenus[element];
-		////printf("currentMenu %s\r\n", currentMenu->text);
 		element = 0;
 	} else if (depthDirection < 0) {
 		currentMenu = currentMenu->parent;
@@ -191,14 +174,11 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 	// Hvis vi har kommet til et menyelement med en funksjon, så utføres funksjonen
 	if (currentMenu->mode != NO_MODE) {
 		mode_set(currentMenu->mode, currentMenu->parameter);
-		printf("etter modeset\r\n");
 		return NULL;
 	}
 
 	// List opp alle elementene i menyen vi har kommet til
 	int i = 0;
-	//printf("submenu_count %d\r\n", currentMenu->submenu_count);
-	//printf("submenu addr %d\r\n", currentMenu);
 	oled_goto_line(0);
 	oled_goto_column(0);
 	oled_print_pgm(currentMenu->text);
@@ -216,7 +196,6 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 		} else {
 			oled_print_pgm(currentMenu->submenus[i].text);
 		}
-		////printf("currentMenu->submenus %s\r\n", currentMenu->submenus[i].text);
 		i++;
 	}
 

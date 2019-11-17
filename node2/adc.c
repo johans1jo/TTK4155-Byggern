@@ -32,6 +32,5 @@ int adc_read() {
 	int adcl = ADCL;
 	int adch = ADCH;
 	int adc = adch*0b100000000 + adcl;
-  //printf("adc %d - %x - %x \r\n", adc, ADCH, ADCL);
   return adc;
 }

@@ -45,7 +45,6 @@ void encoder_calibrate() {
 		_delay_ms(1000);
 	}
 	max_left = enc;
-	//motor_set_speed(100);
 	motor_set_direction(RIGHT);
 	_delay_ms(1000);
 	while (abs(enc - encoder_read()) > 100) {
