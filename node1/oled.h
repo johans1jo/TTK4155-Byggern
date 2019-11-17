@@ -14,6 +14,7 @@ void oled_clear();
 void oled_reset();
 void oled_fill();
 void oled_print_char(char c);
-void oled_print(char c[]);
+void oled_print(const char c[]);
+void oled_print_pgm(const char word_pointer[]);
 
 #endif

@@ -117,8 +117,7 @@ ISR(INT0_vect) {
 		//printf("modus %d\r\n", receive.data[0]);
 	} else if (receive.id == 201) {
 		// Tar imot score underveis i spillet når brukeren scorer
-		printf("tar imot score :)\r\n");
-		game_show_score(receive.data[0]);
+		game_update_score(receive.data[0]);
 	} else if (receive.id == 202) {
 		// Tar imot score
 		//printf("highscore can\r\n");

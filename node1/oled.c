@@ -4,6 +4,7 @@
 #include <avr/pgmspace.h>
 #include "fonts.h"
 #include "draw.h"
+#include <avr/pgmspace.h>
 
 //int oled_write = 0;
 
@@ -106,8 +107,14 @@ void oled_print_char(char c) {
   }
 }
 
-void oled_print(char c[]) {
+void oled_print(const char c[]) {
   for (int i = 0; i < strlen(c); i++) {
     oled_print_char(c[i]);
   }
+}
+
+void oled_print_pgm(const char word_pointer[]) {
+	  char word[30];
+	  strcpy_P(word,word_pointer);
+		oled_print(word);
 }

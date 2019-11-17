@@ -171,3 +171,7 @@ void draw_keyboard(int marked_char) {
 		draw_circle(marked_x, marked_y, 14, 1);
 	}
 }
+
+void draw_fireworks(int count) {
+	draw_circle(64, 32, count*8, count);
+}

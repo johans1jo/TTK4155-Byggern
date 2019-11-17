@@ -21,5 +21,6 @@ void draw_lines(point * points, int length, int size);
 void draw_print_char(int line, int x, char c);
 void draw_print(int line, int x, char c[]);
 void draw_keyboard(int marked_char);
+void draw_fireworks(int count);
 
 #endif

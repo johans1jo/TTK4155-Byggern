@@ -205,12 +205,18 @@ int game_get_user() {
 	return user;
 }
 
-void game_show_score(int score) {
-	printf("mottar score\r\n");
-	oled_goto_pos(10,10);
+void game_update_score(int score) {
+	oled_goto_pos(7,0);
 	char score_str[2];
 	sprintf(score_str, "%d", score);
 	oled_print(score_str);
+
+	draw_clear();
+	for (int i = 0; i < 10; i++) {
+		draw_fireworks(i);
+		draw_push();
+		_delay_ms(10);
+	}
 }
 
 ISR(TIMER3_COMPB_vect) {

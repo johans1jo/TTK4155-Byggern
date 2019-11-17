@@ -25,7 +25,6 @@ void highscore_show() {
 	for (int i = 0; i < HIGHSCORE_SIZE; i++) {
 		points[i].x = width*i;
 		int score_mapped = (highscore[i]*50/highest_score);
-		//int score_mapped = highscore[i]*(50/64)*(highscore[i]/highest_score);
 		points[i].y = 63 - score_mapped;
 		if (highscore[i] == highest_score && highest_score != 0) {
 			draw_circle(points[i].x, points[i].y, 20, 2);
