@@ -33,6 +33,13 @@ void adc_init();
  */
 int adc_read(int channel);
 
+/**
+ * @brief Inputs a binary value sequence, and returns the bitwise complement of value
+ *
+ * @param[in] value A value
+ *
+ * @return The bitweise complement of the input
+ */
 uint8_t flip_bits(uint8_t value);
 
 #endif

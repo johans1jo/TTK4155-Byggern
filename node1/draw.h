@@ -12,15 +12,12 @@ typedef struct Point {
 	int y;
 } point;
 
-<<<<<<< HEAD
 /**
  @brief Draws a pixel at position (x1, y1)
 
  @param[in] x1 The x-value of the position of the pixel
  @param[in] x1 The y-value of the position of the pixel
  */
-=======
->>>>>>> master
 void draw_set_bit(int x, int y);
 
 
