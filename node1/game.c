@@ -21,7 +21,7 @@ void game_init() {
   TCCR3B &= ~(1 << WGM33);
 	TCCR3B |= (1 << WGM32);
   TCCR3A &= ~(1 << WGM31); //obs
-  TCCR3A &= ~(0 << WGM30);
+  TCCR3A &= ~(1 << WGM30);
   // Normal port operation
   TCCR3A &= ~(1 << COM3B1);
   TCCR3A &= ~(1 << COM3B0);
