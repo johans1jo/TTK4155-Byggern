@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief A driver for the game
+ * @brief A driver for the game.
  */
 
  /**
@@ -30,7 +30,7 @@ void game_play();
 void game_stop();
 
 /**
- * @brief Disables timer-interrupt, sends a stop-message to node 2 and sets game_on = 0.
+ * @brief  [DOES SOMETHING FANCY].
  */
 void game_pause();
 
