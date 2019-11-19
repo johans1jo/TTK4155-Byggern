@@ -10,7 +10,7 @@
 #include <util/delay.h>
 #include "can.h"
 
-#define SCORE_TRESHOLD 90
+#define SCORE_TRESHOLD 300
 
 int x = 0;
 int y = 0;
@@ -80,6 +80,7 @@ void game_set_everything() {
 
 	// IR
 	int ir = ir_read();
+	printf("ir %d\r\n", ir);
 	if (!scoring_now) {
 		int increase_score = (ir < SCORE_TRESHOLD);
 		if (increase_score) {

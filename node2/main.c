@@ -60,8 +60,8 @@ int main(void){
 // 102: stopp spill
 ISR(INT3_vect) {
 	message_t receive = can_receive();
-	printf("canid: %d\r\n", receive.id);
-	printf("candata: %s\r\n", receive.data);
+	//printf("canid: %d\r\n", receive.id);
+	//printf("candata: %s\r\n", receive.data);
 	//game_update_from_node1(receive.data);
 	if (receive.id == 100) {
 		mode_set(receive.data[0]); // 0 = IDLE, 1 = GAME
@@ -86,8 +86,7 @@ ISR(INT3_vect) {
 		mode_set(IDLE);
 
 	} else if (receive.id == 103) {
-		// Sett vanskelighetsgrad
-		printf("vanskelighetsgrad\r\n");
+		// Set difficulty
 		motor_set_controller_parameters(receive.data[0], receive.data[1]);
 
 		// Respond with the new parameters
