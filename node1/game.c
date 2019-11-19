@@ -120,6 +120,7 @@ void game_choose_user(int user_set) {
 }
 void game_edit_user(int user_edit) {
 	oled_clear();
+	draw_clear();
 	char * user_name = game_get_user_name(user_edit);
 	int user_name_length = strlen(user_name);
 	int keyboard_position = 0;
@@ -211,12 +212,15 @@ void game_update_score(int score) {
 	sprintf(score_str, "%d", score);
 	oled_print(score_str);
 
+	/*
+	// Fireworks :)
 	draw_clear();
 	for (int i = 0; i < 10; i++) {
 		draw_fireworks(i);
 		draw_push();
 		_delay_ms(10);
 	}
+	*/
 }
 
 ISR(TIMER3_COMPB_vect) {

@@ -41,7 +41,6 @@ int main(void){
 	game_init();
 	led_init();
 	sei();
-	led_set();
 
 	menu_ptr menu_main = menu_init(MAIN);
 	menu_ptr menu_in_game = menu_init(IN_GAME);
@@ -96,11 +95,13 @@ int main(void){
 			int difficulty = mode_parameter_get();
 
 			game_set_difficulty(difficulty);
+			mode_set(MAIN_MENU, 0);
 
 		} else {
 			//printf("Unknown mode\r\n");
 			mode_set(MAIN_MENU, 0);
 		}
+		led_fire();
 	}
 
 	//printf("Exit main\r\n");
