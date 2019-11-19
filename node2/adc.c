@@ -21,6 +21,7 @@ void adc_init() {
   ADCSRB &= ~(1 << MUX5);
 
   // ADC Enable
+  // These bits determine the division factor between the XTAL frequency and the input clock to the ADC.
   ADCSRA |= (1 << ADEN)| (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2); //med prescaling
 }
 

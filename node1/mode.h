@@ -19,7 +19,8 @@ typedef enum {
 /**
  * @brief Sets the mode and the parameter.
  *
- * @param[in]
+ * @param[in] The mode
+ * @param[in] The parameter
  */
 void mode_set(mode_t new_mode, int new_parameter);
 
