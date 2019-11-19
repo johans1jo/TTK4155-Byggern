@@ -1,3 +1,11 @@
+#ifndef GAME_H
+#define GAME_H
+
+enum {
+	JOYSTICKS = 1,
+	MICROBIT
+};
+
 void game_init();
 int game_is_on();
 
@@ -17,3 +25,7 @@ void game_update_score(int score);
 
 char * game_get_user_name(int user_id);
 void game_set_user_name(int user_id, char * user_name);
+
+void game_set_input_source(int new_input_source);
+
+#endif

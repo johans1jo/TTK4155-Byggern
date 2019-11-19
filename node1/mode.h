@@ -8,7 +8,8 @@ typedef enum {
 	SHOW_HIGHSCORE,
 	EDIT_USER,
 	CHOOSE_USER,
-	CHOOSE_DIFFICULTY
+	CHOOSE_DIFFICULTY,
+	SET_INPUT_SOURCE
 } mode_t;
 
 void mode_set(mode_t new_mode, int new_parameter);

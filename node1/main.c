@@ -90,6 +90,11 @@ int main(void){
 			game_set_difficulty(difficulty);
 			mode_set(MAIN_MENU, 0);
 
+		} else if (mode == SET_INPUT_SOURCE) {
+			int new_input_source = mode_parameter_get();
+			game_set_input_source(new_input_source);
+			mode_set(MAIN_MENU, 0);
+
 		} else {
 			mode_set(MAIN_MENU, 0);
 		}

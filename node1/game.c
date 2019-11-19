@@ -14,8 +14,10 @@
 #include <string.h>
 #include "buttons.h"
 
+
 int game_on = 0;
 int user = 0;
+int input_source = JOYSTICKS;
 
 char users[5][20] = {
 	"User 0",
@@ -24,6 +26,17 @@ char users[5][20] = {
 	"User 3",
 	"User 4"
 };
+
+void game_set_input_source(int new_input_source) {
+	input_source = new_input_source;
+
+	message_t input_msg = {
+		104,
+		1,
+		new_input_source //1: joysticks, 2: microbit
+	};
+	can_send(&input_msg);
+}
 
 char * game_get_user_name(int user_id) {
 	return users[user_id];

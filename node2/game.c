@@ -24,6 +24,7 @@ int game_on = 0;
 int game_initialized = 0;
 int score = 0;
 int scoring_now = 0;
+int input_source = JOYSTICKS;
 
 void game_init() {
 	motor_enable();
@@ -120,6 +121,12 @@ void game_update_from_node1(char* data) {
 	}
 	//printf("game_update_from_node1 x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
+
+void game_set_input_source(int new_input_source) {
+	input_source = new_input_source;
+	printf("new source %d\r\n", input_source);
+}
+
 
 ISR(TIMER3_COMPB_vect) {
 	if (game_initialized) {

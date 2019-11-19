@@ -19,11 +19,14 @@ const char text_highscores[] PROGMEM = "Highscores";
 const char text_choose_user[] PROGMEM = "Choose user";
 const char text_edit_users[] PROGMEM = "Edit users";
 const char text_difficulty[] PROGMEM = "Difficulty";
+const char text_input_sources[] PROGMEM = "Input sources";
 const char text_hard[] PROGMEM = "Hard";
 const char text_medium[] PROGMEM = "Medium";
 const char text_easy[] PROGMEM = "Easy";
 const char text_in_game[] PROGMEM = "In-game";
 const char text_quit[] PROGMEM = "Quit";
+const char text_joysticks[] PROGMEM = "Joysticks";
+const char text_microbit[] PROGMEM = "Microbit";
 
 // Initialize a menu and return pointer
 menu_ptr menu_init(menu_type_t menu_type) {
@@ -39,10 +42,11 @@ menu_ptr menu_init(menu_type_t menu_type) {
 		menu_ptr menu_settings = menu_add(menu, text_settings, 0, 0);
 		menu_add(menu, text_highscores, SHOW_HIGHSCORE, 0);
 
-		menu_add_submenus(menu_settings, 3);
+		menu_add_submenus(menu_settings, 4);
 		menu_ptr menu_choose_users = menu_add(menu_settings, text_choose_user, 0, 0);
 		menu_ptr menu_edit_users = menu_add(menu_settings, text_edit_users, 0, 0);
 		menu_ptr menu_difficulty = menu_add(menu_settings, text_difficulty, 0, 0);
+		menu_ptr menu_input_sources = menu_add(menu_settings, text_input_sources, 0, 0);
 
 		menu_add_submenus(menu_edit_users, 5);
 		menu_add(menu_edit_users, game_get_user_name(0), EDIT_USER, 0);
@@ -62,6 +66,10 @@ menu_ptr menu_init(menu_type_t menu_type) {
 		menu_add(menu_difficulty, text_hard, CHOOSE_DIFFICULTY, 3);
 		menu_add(menu_difficulty, text_medium, CHOOSE_DIFFICULTY, 2);
 		menu_add(menu_difficulty, text_easy, CHOOSE_DIFFICULTY, 1);
+
+		menu_add_submenus(menu_input_sources, 2);
+		menu_add(menu_input_sources, text_joysticks, SET_INPUT_SOURCE, JOYSTICKS);
+		menu_add(menu_input_sources, text_microbit, SET_INPUT_SOURCE, MICROBIT);
 
 	} else if (menu_type == IN_GAME) {
 		menu->text = text_in_game;

@@ -98,10 +98,12 @@ ISR(INT3_vect) {
 		};
 		can_send(&param_msg);
 
+	} else if (receive.id == 104) {
+		game_set_input_source(receive.data[0]);
 	} else {
 		printf("CAN!id %d\r\n", receive.id);
 	}
-	// Reset timer for receive0 buffer
+	// Reset interrupt for receive0 buffer
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
 }
 
