@@ -80,7 +80,7 @@ void game_set_everything() {
 
 	// IR
 	int ir = ir_read();
-	printf("ir %d\r\n", ir);
+	//printf("ir %d\r\n", ir);
 	if (!scoring_now) {
 		int increase_score = (ir < SCORE_TRESHOLD);
 		if (increase_score) {
