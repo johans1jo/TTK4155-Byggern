@@ -30,5 +30,6 @@ int encoder_read();
 /**
  * @brief Returns an encoder-value relative to the given reference.
  *
+ * @param[in] The reference.
  */
 int encoder_map(int reference);
