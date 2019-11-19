@@ -15,7 +15,7 @@ typedef struct Message {
 } message_t, *message_ptr;
 
 /**
- * @brief Initializes the CAN by calling the function mcp_init
+ * @brief Initializes the CAN by calling the function mcp_init.
  */
 void can_init();
 

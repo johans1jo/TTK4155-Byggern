@@ -74,11 +74,6 @@ int game_get_user();
  */
 void game_choose_user(int new_user);
 
-/**
- * @brief Edits the user.
- *
- * @param[in] The edit of the user.
- */
 void game_edit_user(int user_edit);
 
 /**
