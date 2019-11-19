@@ -64,9 +64,6 @@ int main(void){
 			} else if (parameter == 1) {
 				game_stop();
 				mode_set(MAIN_MENU, 0);
-
-			} else if (parameter == 2) {
-				game_pause();
 			}
 
 		} else if (mode == SHOW_HIGHSCORE) {
