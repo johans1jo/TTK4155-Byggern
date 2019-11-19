@@ -1,6 +1,7 @@
 /**
  * @file
- * @brief A driver for the adc containing functions to initialize the adc and read the data from the joystick
+ * @brief A driver for the adc containing functions
+ * to initialize the adc and read the data from the joystick.
  */
 
  #ifndef ADC

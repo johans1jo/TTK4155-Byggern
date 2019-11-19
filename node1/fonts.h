@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Initializes the sizes of the fonts
+ * @brief Implementation of the charcters which can be written to the display. 
  */
 
 /*

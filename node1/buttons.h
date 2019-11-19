@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Initializes the buttons on the USB multifunction board
+ * @brief Initializes the buttons on the USB multifunction board.
  */
 
 #define JOYSTICK_BUTTON_PIN DDB0
@@ -10,7 +10,7 @@
 
 /**
  * @brief Initializes the joystick button and the left and right buttons by
- * assigning them to respictively Port B Pin 0, 1 and 2
+ * assigning them to respictively Port B Pin 0, 1 and 2.
  */
 void buttons_init();
 

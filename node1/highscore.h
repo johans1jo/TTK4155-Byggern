@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief A driver for the highscore-function.
+ * @brief Implementation of the highscore-function.
  */
 
  /**
@@ -10,5 +10,9 @@ void highscore_show();
 
 /**
  * @brief Saves the highscore of the current user.
+ *
+ * @param[in] The score.
+ *
+ * @param[in] The user.
  */
 void highscore_save(int score, int user);

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief A driver for the LED.
+ * @brief Functions to initialize, set and clear the LED.
  */
 
 

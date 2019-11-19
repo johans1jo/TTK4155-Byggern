@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Implements the necessary functions for the CAN driver
+ * @brief Implements the necessary functions for the CAN driver.
  */
 
 /**
@@ -11,6 +11,8 @@ void mcp_init();
 /**
  * @brief Reads a message.
  *
+ * @param[in] The address.
+ *
  * @return The message.
  */
 uint8_t mcp_read(uint8_t address);
@@ -18,16 +20,16 @@ uint8_t mcp_read(uint8_t address);
 /**
  * @brief Writes a message with an address and data.
  *
- * @param The address.
+ * @param[in] The address.
  *
- * @param The data.
+ * @param[in] The data.
  */
 void mcp_write(uint8_t address, uint8_t data);
 
 /**
  * @brief Requests to send to buffer number 0, 1 or 2.
  *
- * @param The buffer number.
+ * @param[in] The buffer number.
  */
 void mcp_request_to_send(int buffer_number);
 
@@ -41,11 +43,11 @@ char mcp_read_status();
 /**
  * @brief Bit modifies the data at the given address.
  *
- * @param The address.
+ * @param[in] The address.
  *
- * @param The bits to be masked.
+ * @param[in] The bits to be masked.
  *
- * @param The data.
+ * @param[in] The data.
  */
 void mcp_bit_modify(uint8_t address, uint8_t mask, uint8_t data);
 
@@ -56,6 +58,17 @@ void mcp_reset();
 
 /**
  * @brief Sets the mode by writing to the CANCTRL register.
+ *
+ * @param[in] The mode.
  */
 void mcp_set_mode(uint8_t mode);
-char mcp_get_mode();
+
+
+
+
+/**
+ * @brief Gets the current mode.
+ *
+ * @return The mode.
+ */
+ char mcp_get_mode();

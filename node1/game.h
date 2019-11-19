@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief A driver for the game.
+ * @brief Implementation of the game.
  */
 
  /**
@@ -46,11 +46,17 @@ void game_timer_disable();
 
 /**
  * @brief Sets the game difficulty by setting the parameters of the PI-controller.
+ *
+ * @param[in] The difficulty level.
  */
 void game_set_difficulty(int difficulty);
 
 /**
  * @brief Sends the parameters of the PI-controller to node 2.
+ *
+ * @param[in] The K_p parameter.
+ *
+ * @param[in] The K_i parameter.
  */
 void game_set_controller_parameters(int param_p, int param_i);
 
@@ -63,15 +69,21 @@ int game_get_user();
 
 /**
  * @brief Sets user to the input user_edit.
+ *
+ * @param[in] The new user.
  */
 void game_choose_user(int new_user);
 
 /**
- * @brief Changes user.
+ * @brief Edits the user.
+ *
+ * @param[in] The edit of the user.
  */
 void game_edit_user(int user_edit);
 
 /**
  * @brief Prints the score to the OLED.
+ *
+ * @param[in] The score.
  */
 void game_show_score(int score);

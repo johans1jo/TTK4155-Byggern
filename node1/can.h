@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief A driver for the CAN which implements communication between nodes over CAN
+ * @brief A driver for the CAN which implements communication between nodes over CAN.
  */
 
  #include <avr/io.h>

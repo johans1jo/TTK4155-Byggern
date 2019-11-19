@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Implements the interrupts.
+ * @brief A driver for the interrupts.
  */
 
  /**
