@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Implementation of the charcters which can be written to the display. 
+ */
+
 /*
  * fonts.h
  *
