@@ -58,10 +58,12 @@ int main(void){
 			int parameter = mode_parameter_get();
 
 			if (parameter == 0) {
+				// Start game
 				game_play();
 				menu_start(menu_in_game, CLEAR);
 
 			} else if (parameter == 1) {
+				// Quit game
 				game_stop();
 				mode_set(MAIN_MENU, 0);
 			}

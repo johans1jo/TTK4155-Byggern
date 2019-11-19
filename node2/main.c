@@ -79,10 +79,12 @@ ISR(INT3_vect) {
 		if (mode_get() == GAME && game_is_initialized()) {
 			game_update_from_node1(receive.data);
 		}
+
 	} else if (receive.id == 102) {
 		// Quit game
 		game_stop();
 		mode_set(IDLE);
+
 	} else if (receive.id == 103) {
 		// Sett vanskelighetsgrad
 		printf("vanskelighetsgrad\r\n");
@@ -96,6 +98,7 @@ ISR(INT3_vect) {
 			motor_get_controller_parameter_i()
 		};
 		can_send(&param_msg);
+
 	} else {
 		printf("CAN!id %d\r\n", receive.id);
 	}
