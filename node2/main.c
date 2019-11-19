@@ -23,6 +23,7 @@
 #include "game.h"
 #include "mode.h"
 #include "led.h"
+#include "microbit.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -41,7 +42,7 @@ int main(void){
 	encoder_init();
 	solenoid_init();
 	led_init();
-	sei();
+	//sei();
 	printf("Start\r\n");
 
 	while(1) {
@@ -50,7 +51,7 @@ int main(void){
 			game_play();
 		}
 	}
-
+	
 	return 0;
 }
 
