@@ -22,7 +22,19 @@ typedef enum {
  * @param[in]
  */
 void mode_set(mode_t new_mode, int new_parameter);
+
+/**
+ * @brief Gets the current mode.
+ *
+ * @return The mode.
+ */
 mode_t mode_get();
+
+/**
+ * @brief Gets the current parameter.
+ *
+ * @return The parameter.
+ */
 int mode_parameter_get();
 
 #endif
