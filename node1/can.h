@@ -1,6 +1,6 @@
 /**
- *@file
- *@brief A driver for the CAN which implements communication between nodes over CAN
+ * @file
+ * @brief A driver for the CAN which implements communication between nodes over CAN
  */
 
  #include <avr/io.h>
@@ -16,8 +16,6 @@ typedef struct Message {
 
 /**
  * @brief Initializes the CAN by calling the function mcp_init
-
-
  */
 void can_init();
 
