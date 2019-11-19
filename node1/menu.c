@@ -25,9 +25,8 @@ const char text_easy[] PROGMEM = "Easy";
 const char text_in_game[] PROGMEM = "In-game";
 const char text_quit[] PROGMEM = "Quit";
 
-// Initierer og lager en meny
+// Initialize a menu and return pointer
 menu_ptr menu_init(menu_type_t menu_type) {
-	// Initierer menyen
 	menu_ptr menu = malloc(sizeof(menu_t));
 	menu->submenu_count = 0;
 	menu->mode = NO_MODE;
@@ -79,7 +78,7 @@ menu_ptr menu_init(menu_type_t menu_type) {
 
 void menu_add_submenus(menu_ptr menu, int submenu_count) {
 	menu_ptr submenus = malloc(sizeof(menu_t)*submenu_count);
-	printf("malloc add_subs (%d) %d\r\n", submenu_count, submenus);
+	printf("malloc subs (%d) %d\r\n", submenu_count, submenus);
 	menu->submenus = submenus;
 }
 
@@ -87,13 +86,6 @@ void menu_add_submenus(menu_ptr menu, int submenu_count) {
 // Hvis et menyelement har en "function", så blir funksjonen utført uansett om menyen har en undermeny
 // Når man legger til et menyelement som skal ha en undermeny, så må "function" settes til NULL.
 menu_ptr menu_add(menu_ptr parent, const char * text, mode_t mode, int parameter) {
-
-	//menu_ptr subMenu = malloc(sizeof(menu_t));
-	/*menu_ptr subMenu;
-	subMenu->text = text;
-	subMenu->function = function;
-	subMenu->parent = parent;
-	subMenu->submenu_count = 0;*/
 	menu_t subMenu;
 	subMenu.text = text;
 	//subMenu.function = function;
@@ -102,48 +94,37 @@ menu_ptr menu_add(menu_ptr parent, const char * text, mode_t mode, int parameter
 	subMenu.parent = parent;
 	subMenu.submenu_count = 0;
 
-	////printf("\r\naddress nr %d: %d\r\n", subMenu.submenu_count, &(parent->submenus[parent->submenu_count]));
-
-	//parent->subMenu[parent->submenu_count] = subMenu;
-	//menu_ptr submenu_address = parent->submenus + sizeof(menu_t)*(parent->submenu_count);
-	////printf("address %d\r\n", submenu_address);
-	//submenu_address = subMenu; //jallamekk //parent->submenu_count
 	parent->submenus[parent->submenu_count] = subMenu;
-	////printf("submenu \r\n\r\n%s\r\n\r\n\r\n", parent->submenus[parent->submenu_count].text);
-	//submenu_address = subMenu;
-	////printf("menu_add %s count %d\r\n", subMenu.text, parent->submenu_count);
 	parent->submenu_count += 1;
 
-	////printf("address %d\r\n", &(parent->submenus[parent->submenu_count]));
 	return &(parent->submenus[parent->submenu_count - 1]);
 }
 
-// Drar igang menyen og får den opp på skjermen
 void menu_start(menu_ptr menu, int clear) {
 	int depthDirection = 0;
 	int element = 0;
 	menu_ptr currentMenu = menu;
 
-	// Kjører inntil vi navigerer ut av menysystemet eller velger en funksjon
+	// Runs until we navigate out of the menu or hit a function element
 	while (!(depthDirection == -1 && currentMenu->parent == NULL)) {
 		menu_ptr oldMenu = currentMenu;
 
-		// Går til riktig meny basert på input eller standardverdier
+		// Go to the correct menu based on inputs
 		currentMenu = menu_goto(currentMenu, depthDirection, element, clear);
 		depthDirection = 0;
 
-		// Går ut av menysystemet hvis vi har kommet til et menyelement med en funksjon
+		// Quit the meny system if we encounter a menu element with a function
 		if (currentMenu == NULL) {
 			printf("return null\r\n");
 			return;
 		}
 
-		// Sender brukeren til toppen av menyen hvis vi har kommet til en ny undermeny
+		// Send the user to the top of the menu if we enter a submenu
 		if (currentMenu != oldMenu) {
 			element = 0;
 		}
 
-		// Henter input og går riktig vei i menyen
+		// Retrieve inputs and go the right direction in the menu system
 		while (joy_read_dir() != 0 || !(game_is_on() == (buttons_right() > 0))) {
 			_delay_ms(10);
 		};
@@ -156,12 +137,12 @@ void menu_start(menu_ptr menu, int clear) {
 		} else if (input == LEFT) {
 			depthDirection = -1;
 		} else if (input == UP) {
-			// Passer på at vi ikke går over øverste menyelement
+			// Make sure we can't navigate above the top menu element
 			if (element > 0) {
 				element--;
 			}
 		} else if (input == DOWN) {
-			// Passer på at vi ikke går under nederste menyelement
+			// Make sure we can't navigate below the last menu element
 			if (element + 1 < currentMenu->submenu_count) {
 				element++;
 			}
@@ -169,36 +150,29 @@ void menu_start(menu_ptr menu, int clear) {
 	}
 }
 
-// Gå til et menyelement, undermeny eller tilbake til "overmenyen"
-// Returnerer peker til menyen man havner på etter å ha gått dit
-// Returnerer NULL hvis menysystemet skal avsluttes
 menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int clear) {
-	// Fikser å gå til undermeny eller til overmeny
+	// Go to a submenu or a parent menu
 	if (depthDirection > 0) {
-		//currentMenu = currentMenu->subMenu[element];
 		currentMenu = &currentMenu->submenus[element];
-		////printf("currentMenu %s\r\n", currentMenu->text);
 		element = 0;
 	} else if (depthDirection < 0) {
 		currentMenu = currentMenu->parent;
 	}
 
-	// Rydder skjermen før vi utfører funksjonen eller printer en ny meny
+	// Clear the oled if the clear parameter is set
 	if (clear) {
 		oled_clear();
 	}
 
-	// Hvis vi har kommet til et menyelement med en funksjon, så utføres funksjonen
+	// Change mode if we encounter a mode-settings menu element
 	if (currentMenu->mode != NO_MODE) {
 		mode_set(currentMenu->mode, currentMenu->parameter);
 		printf("etter modeset\r\n");
 		return NULL;
 	}
 
-	// List opp alle elementene i menyen vi har kommet til
+	// List all elements in the menu we are at
 	int i = 0;
-	//printf("submenu_count %d\r\n", currentMenu->submenu_count);
-	//printf("submenu addr %d\r\n", currentMenu);
 	oled_goto_line(0);
 	oled_goto_column(0);
 	oled_print_pgm(currentMenu->text);
@@ -210,16 +184,14 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 		} else {
 			oled_print("   ");
 		}
-		//oled_print(currentMenu->subMenu[i]->text);
 		if (currentMenu->text == text_edit_users || currentMenu->text == text_choose_user) {
 			oled_print(currentMenu->submenus[i].text);
 		} else {
 			oled_print_pgm(currentMenu->submenus[i].text);
 		}
-		////printf("currentMenu->submenus %s\r\n", currentMenu->submenus[i].text);
 		i++;
 	}
 
-	// Returnerer peker til menyen vi har kommet til
+	// Return a pointer to the menu we have come to
 	return currentMenu;
 }

@@ -3,7 +3,6 @@ int game_is_on();
 
 void game_play();
 void game_stop();
-void game_pause();
 void game_timer_enable();
 void game_timer_disable();
 

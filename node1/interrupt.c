@@ -2,9 +2,8 @@
 #include <avr/io.h>
 
 void interrupt_init() {
-	// Interruptgreier
-	GICR |= (1 << INT0); // Skrur på INT0-interrupt
-	MCUCR |= (1 << ISC01); // Setter interrupts til å funke på fallende kant
+	GICR |= (1 << INT0); // Turn on INT0 interrupt
+	MCUCR |= (1 << ISC01); // Falling edge
 	MCUCR &= ~(1 << ISC00); // ...
 	DDRD &=  ~(1 << PIND2);
 }

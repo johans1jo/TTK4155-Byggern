@@ -38,10 +38,10 @@ int game_is_on() {
 }
 
 void game_init() {
-  // Setter mode CTC (4)
+  // Set mode CTC (4)
   TCCR3B &= ~(1 << WGM33);
 	TCCR3B |= (1 << WGM32);
-  TCCR3A &= ~(1 << WGM31); //obs
+  TCCR3A &= ~(1 << WGM31); // Be aware of A- and B-registers
   TCCR3A &= ~(0 << WGM30);
   // Normal port operation
   TCCR3A &= ~(1 << COM3B1);
@@ -50,7 +50,7 @@ void game_init() {
   TCCR3B |= (1 << CS32);
   TCCR3B &= ~(1 << CS31);
   TCCR3B |= (1 << CS30);
-  //OCR3B sammenlignes kontinuerlig med counter (TCNT1)
+
 	OCR3B = (F_CPU/1024)*0.1;
 }
 
@@ -59,7 +59,7 @@ void game_timer_enable() {
 	ETIMSK |= (1 << OCIE3B);
 }
 void game_timer_disable() {
-	// Enable timer 3 interrupt, compare match
+	// Disable timer 3 interrupt, compare match
 	ETIMSK &= ~(1 << OCIE3B);
 }
 
@@ -74,7 +74,7 @@ void game_play() {
 	can_send(&mode_msg);
 	_delay_ms(100);
 
-	// Setter igang timer-interrupt for å sende multifunkverdier
+	// Turn on timer interrupt for sending values to node2
 	game_timer_enable();
 	game_on = 1;
 }
@@ -89,10 +89,6 @@ void game_stop() {
 	can_send(&stop_msg);
 
 	game_on = 0;
-}
-
-void game_pause() {
-	//pause?
 }
 
 void game_set_difficulty(int difficulty) {
@@ -142,11 +138,11 @@ void game_edit_user(int user_edit) {
 
 		draw_push();
 
-		// Venter på at joysticken er tilbake
+		// Waiting for joystick to be placed in normal position
 		while (joy_read_dir() != 0 || buttons_right()) {
 			_delay_ms(10);
 		};
-		// Venter på joystick-bevegelse
+		// Wait for joystick movement
 		while (joy_read_dir() == 0 && !buttons_right()) {
 			_delay_ms(10);
 		};
@@ -162,7 +158,7 @@ void game_edit_user(int user_edit) {
 				user_name[user_name_length - 1] = '\0';
 				user_name_length--;
 			} else {
-				// Ny bokstav i brukernavn
+				// New character in username
 				char new_char;
 				if (keyboard_position == 26) {
 					new_char = ' ';
@@ -173,7 +169,7 @@ void game_edit_user(int user_edit) {
 				user_name_length++;
 			}
 		} else {
-			// Oppdaterer keyboard-position
+			// Update keyboard position
 			int direction = joy_read_dir();
 			if (direction == RIGHT) {
 				if (keyboard_position > 26) {
@@ -225,5 +221,5 @@ void game_update_score(int score) {
 
 ISR(TIMER3_COMPB_vect) {
 	can_send_everything();
-	TCNT3 = 0; // Resetter telleren
+	TCNT3 = 0; // Reset counter
 }

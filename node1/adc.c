@@ -4,8 +4,8 @@
 #include <util/delay.h>
 
 void adc_init() {
-  MCUCR = (1 << SRE); //enable XMEM
-  SFIOR = (1 << XMM2); //mask unused bits
+  MCUCR = (1 << SRE); // Enable XMEM
+  SFIOR = (1 << XMM2); // Mask unused bits
 }
 
 int adc_read(int channel) {

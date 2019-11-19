@@ -1,10 +1,10 @@
 #include "adc.h"
 
 typedef enum {
-    RIGHT = 1,
-    LEFT,
-    UP,
-    DOWN
+	RIGHT = 1,
+	LEFT,
+	UP,
+	DOWN
 } joystick_dir_t;
 
 volatile int x_pos;

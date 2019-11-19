@@ -6,7 +6,6 @@
 #define F_CPU 4915200
 #include <util/delay.h>
 
-
 int joy_x_min = 0;
 int joy_x_max = 255;
 int joy_y_min = 0;
@@ -48,11 +47,11 @@ int joy_read_x() {
 //Returns joystick Y value between -100 and 100
 int joy_read_y() {
   int pos = (adc_read(JOYSTICK_Y) - y_offset) * 100 / 127;
-  int offset = 127 - y_offset; //-11
+  int offset = 127 - y_offset;
   if (pos > 0) {
-    pos = pos * 100 / (92); //jalla
+    pos = pos * 100 / (92);
   } else if (pos < 0) {
-    pos = pos * 100 / (106); //jalla
+    pos = pos * 100 / (106);
   }
   return pos;
 }
@@ -60,7 +59,6 @@ int joy_read_y() {
 int joy_read_dir() {
   int x = joy_read_x();
   int y = joy_read_y();
-	////printf("x %d y %d\r\n", x, y);
   if (x > 70 && y < 70 && y > -70) {
     return UP;
   } else if (x < -70 && y < 70 && y > -70) {

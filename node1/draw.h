@@ -1,7 +1,6 @@
 #ifndef DRAW_H
 #define DRAW_H
 
-// Linje
 typedef struct Point {
 	int x;
 	int y;
