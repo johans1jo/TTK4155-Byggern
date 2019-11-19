@@ -44,11 +44,6 @@ int main(void){
 	sei();
 	printf("Start\r\n");
 
-	encoder_calibrate();
-	while(1) {
-
-	}
-
 	while(1) {
 		if (mode_get() == GAME && !game_is_on()) {
 			printf("Game on:\r\n");
@@ -102,7 +97,7 @@ ISR(INT3_vect) {
 		};
 		can_send(&param_msg);
 	} else {
-		printf("CAN: Ukjent id %d\r\n", receive.id);
+		printf("CAN!id %d\r\n", receive.id);
 	}
 	// Reset timer for receive0 buffer
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
