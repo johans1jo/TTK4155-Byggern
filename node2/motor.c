@@ -18,13 +18,13 @@
 
 int Kp = 1;
 int Ki = 0;
-int Tt = 20/1000; // float!
+int Tt = 20/1000; // Change to float or double
 
 void motor_init() {
 	twi_init();
 
   DDRH |= (1 << DIR);
-  //DDRH |= (1 << EN);
+  //DDRH |= (1 << EN); // Enable
 	motor_disable();
 
 	motor_set_speed(0);
@@ -37,7 +37,7 @@ void motor_controller_init() {
   // Setter mode CTC (4)
   TCCR3B &= ~(1 << WGM33);
 	TCCR3B |= (1 << WGM32);
-  TCCR3A &= ~(1 << WGM31); //obs
+  TCCR3A &= ~(1 << WGM31); // Be aware of A- and B-registers
   TCCR3A &= ~(0 << WGM30);
 
   // Normal port operation
@@ -49,9 +49,7 @@ void motor_controller_init() {
   TCCR3B &= ~(1 << CS31);
   TCCR3B |= (1 << CS30);
 
-  //OCR3B sammenlignes kontinuerlig med counter (TCNT1)
 	OCR3B = (F_CPU/1024)*0.02;
-	//////printf("OCR3B: %x\r\n", OCR3B);
 
 	// Enable timer 3 interrupt, compare match
 	TIMSK3 |= (1 << OCIE3B); //(1 << TOIE3) overflow
@@ -81,8 +79,8 @@ void motor_set_speed(int speedInt) {
   }
   char speed = speedInt;
 
-  // Addresse: 80
-  // Kommando: 0
+  // Adderss: 80
+  // Command: 0
   unsigned char msg[] = {80, 0, speed};
   int msgSize = 3;
   twi_send(msg, msgSize); //TWI_Start_Transceiver_With_Data()
@@ -90,20 +88,18 @@ void motor_set_speed(int speedInt) {
 
 void motor_set_position(int reference) {
 	reference = encoder_map(reference);
-	unsigned int encoder_value = encoder_read(); //ok
+	unsigned int encoder_value = encoder_read();
 	int e = reference - encoder_value;
 	unsigned long total_error = 0;
-	total_error = total_error + e; //feilfeilfeil
+	total_error = total_error + e; // Wrong
 	unsigned int u = Kp*e + Tt*Ki*total_error;
 	int k_ledd = Kp*e;
 	int i_ledd = Tt*Ki*total_error;
 	//printf("total_error: %lu K-ledd: %d I-ledd: %d ", total_error, k_ledd, i_ledd);
 	int speed = abs(u)/40;
 	if (e < 0) {
-		//printf("right\r\n");
 		motor_set_direction(RIGHT);
 	} else {
-		//printf("left\r\n");
 		motor_set_direction(LEFT);
 	}
 	motor_set_speed(speed);

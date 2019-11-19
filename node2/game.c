@@ -10,20 +10,7 @@
 #include <util/delay.h>
 #include "can.h"
 
-// Verdier fra multifunk
-/*
-int inputs = {
-	0, //x	Joystick X
-	0, //y	Joystick Y
-	0, //bj	Button joystick
-	0, //bl	Button left
-	0, //br	Button right
-	0, //sl	Slider left
-	0  //sr	Slider right
-}
-*/
-
-#define SCORE_TRESHOLD 90 //200
+#define SCORE_TRESHOLD 90
 
 int x = 0;
 int y = 0;
@@ -49,29 +36,24 @@ void game_init() {
 }
 
 void game_play() {
-	//printf("\r\n\r\n");
 	game_on = 1;
-	////printf("game_play 1\r\n");
 	game_init();
-	////printf("game_play 2\r\n");
 	game_initialized = 1;
-	//aktiver sett verdier-interrupt?
 }
 
 void game_stop() {
 	game_on = 0;
 	motor_disable();
 
-	// Sender score til node1
+	// Send score to node1
 	message_t score_msg = {
-		202, //Score
+		202,
 		1,
 		score
 	};
 	can_send(&score_msg);
 
 	score = 0;
-
 }
 
 int game_is_on() {
@@ -98,7 +80,6 @@ void game_set_everything() {
 
 	// IR
 	int ir = ir_read();
-	//printf("ir %d\r\n", ir);
 	if (!scoring_now) {
 		int increase_score = (ir < SCORE_TRESHOLD);
 		if (increase_score) {
@@ -106,7 +87,7 @@ void game_set_everything() {
 			scoring_now = 1;
 			printf("score %d\r\n", score);
 
-			//Send score-melding til Node1
+			// Send score message to node1
 			message_t score_msg = {
 				201,
 				1,
@@ -118,7 +99,6 @@ void game_set_everything() {
 	} else if (ir > SCORE_TRESHOLD) {
 		scoring_now = 0;
 	}
-
 	//printf("game_set_everything x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
 
@@ -137,26 +117,12 @@ void game_update_from_node1(char* data) {
 	if (sr < 0) {
 		sr = (255 + sr);
 	}
-	//printf("sl %d\r\n", sl);
 	//printf("game_update_from_node1 x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
 
-/*
-int game_is_goal() {
-	int ir = ir_get();
-	if (ir < 300) {
-		return 1;
-	}
-	return 0;
-}
-*/
-
 ISR(TIMER3_COMPB_vect) {
-	////printf("TIMER3_COMPB_vect\r\n");
-	////printf("init %d\r\n", game_initialized);
 	if (game_initialized) {
-		////printf("set things\r\n");
 		game_set_everything();
 	}
-	TCNT3 = 0; // Resetter telleren
+	TCNT3 = 0; // Reset counter
 }

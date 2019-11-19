@@ -21,7 +21,7 @@ void adc_init() {
   ADCSRB &= ~(1 << MUX5);
 
   // ADC Enable
-  ADCSRA |= (1 << ADEN)| (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2); //med prescaling
+  ADCSRA |= (1 << ADEN)| (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2); // With prescaling
 }
 
 int adc_read() {
@@ -32,6 +32,5 @@ int adc_read() {
 	int adcl = ADCL;
 	int adch = ADCH;
 	int adc = adch*0b100000000 + adcl;
-  //printf("adc %d - %x - %x \r\n", adc, ADCH, ADCL);
   return adc;
 }

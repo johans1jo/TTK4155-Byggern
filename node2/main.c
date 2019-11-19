@@ -22,6 +22,7 @@
 #include "solenoid.h"
 #include "game.h"
 #include "mode.h"
+#include "led.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600
@@ -39,18 +40,22 @@ int main(void){
   motor_init();
 	encoder_init();
 	solenoid_init();
+	led_init();
 	sei();
-	printf("Node2 starter :)\r\n");
+	printf("Start\r\n");
+
+	encoder_calibrate();
+	while(1) {
+
+	}
 
 	while(1) {
 		if (mode_get() == GAME && !game_is_on()) {
-			////printf("Setter mode :)\r\n");
-			printf("starter spillet\r\n");
+			printf("Game on:\r\n");
 			game_play();
 		}
 	}
 
-	////printf("return 0:\r\n");
 	return 0;
 }
 
@@ -60,9 +65,10 @@ int main(void){
 // 102: stopp spill
 ISR(INT3_vect) {
 	message_t receive = can_receive();
+	printf("canid: %d\r\n", receive.id);
+	printf("candata: %s\r\n", receive.data);
 	//game_update_from_node1(receive.data);
 	if (receive.id == 100) {
-		// Setter riktig modus
 		mode_set(receive.data[0]); // 0 = IDLE, 1 = GAME
 /*
 		//Responderer med modus:
@@ -74,12 +80,12 @@ ISR(INT3_vect) {
 		can_send(&mode_msg);
 */
 	} else if (receive.id == 101) {
-		// Tar imot multifunk-verdier
+		// Receive values from node1
 		if (mode_get() == GAME && game_is_initialized()) {
 			game_update_from_node1(receive.data);
 		}
 	} else if (receive.id == 102) {
-		//Avslutter spillet
+		// Quit game
 		game_stop();
 		mode_set(IDLE);
 	} else if (receive.id == 103) {
@@ -87,7 +93,7 @@ ISR(INT3_vect) {
 		printf("vanskelighetsgrad\r\n");
 		motor_set_controller_parameters(receive.data[0], receive.data[1]);
 
-		//Responderer med nye parametre
+		// Respond with the new parameters
 		message_t param_msg = {
 			203,
 			2,
@@ -98,18 +104,16 @@ ISR(INT3_vect) {
 	} else {
 		printf("CAN: Ukjent id %d\r\n", receive.id);
 	}
-	// Resetter interrupt for motta-buffer0
+	// Reset timer for receive0 buffer
 	mcp_bit_modify(MCP_CANINTF, 0b1, 0);
 }
 
 ISR(SPI_STC_vect) {
-	//printf("\r\nSPI_STC_vect\r\n");
 }
 
 ISR(BADISR_vect) {
-	printf("\r\nBADISR_vect\r\n");
+	printf("\r\nbadisr\r\n");
 }
 
 ISR(TIMER3_OVF_vect) {
-	printf("\r\nTIMER3_OVF_vect\r\n");
 }

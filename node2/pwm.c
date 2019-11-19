@@ -19,13 +19,11 @@ void pwm_init() {
   TCCR1B |= (1 << CS11);
   TCCR1B &= ~(1 << CS10);
 
-  // Counter økes helt til den treffer ICR1 ?
   ICR1 = pwm_period; //40.000
 
-  //OCR1A sammenlignes kontinuerlig med counter (TCNT1)
-  pwm_set_ms(1);
+  pwm_set_ms(1); // Change
 
-  // Setter OC1A som output
+  // Set OC1A as output
   DDRB |= (1 << PB6);
 
 }
