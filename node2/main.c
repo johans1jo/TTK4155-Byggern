@@ -59,8 +59,6 @@ int main(void){
 // Tar imot CAN-melding
 ISR(INT3_vect) {
 	message_t receive = can_receive();
-	printf("canid: %d\r\n", receive.id);
-	printf("candata: %s\r\n", receive.data);
 	if (receive.id == MSG1_SET_MODE) {
 		mode_set(receive.data[0]); // 0 = IDLE, 1 = GAME
 		/*

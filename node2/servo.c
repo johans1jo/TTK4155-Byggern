@@ -2,7 +2,7 @@
 #include "pwm.h"
 
 void servo_set_angle(double angle) {
-	angle = (angle + 30) * 1.8;
+	angle = (angle + 0) * 1.8;
 	double ms = 1.5 + (0.5 / 90.0) * angle;
 	pwm_set_ms(ms);
 }

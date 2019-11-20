@@ -75,8 +75,7 @@ void draw_lines(point * points, int length, int size) {
 
 void draw_circle(int x1, int y1, int width, int size) {
 	int r = width/2;
-	int spacing = 0.1; // Function of width
-	for (double theta = 0; theta < 2*M_PI; theta += spacing) {
+	for (double theta = 0; theta < 2*M_PI; theta += 0.1) {
 		int x = r * cos(theta) + x1;
 		int y = r * sin(theta) + y1;
 		draw_set_bit(x, y);

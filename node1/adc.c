@@ -2,7 +2,7 @@
 #define F_CPU 4915200
 #include <util/delay.h>
 
-#define PCB 0
+#define PCB 1
 
 void adc_init() {
 	MCUCR = (1 << SRE); // Enable XMEM

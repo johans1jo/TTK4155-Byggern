@@ -20,6 +20,8 @@ int br = 0;
 int sl = 0;
 int sr = 0;
 
+int bl_previous = 0;
+
 int game_on = 0;
 int game_initialized = 0;
 int score = 0;
@@ -70,9 +72,10 @@ void game_set_everything() {
 	motor_set_position(reference);
 
 	// Solenoid
-	if (bl) {
+	if (bl && !bl_previous) {
 		solenoid_fire();
 	}
+	bl_previous = bl;
 
 	// Servo
 	servo_set_from_joystick(y);
