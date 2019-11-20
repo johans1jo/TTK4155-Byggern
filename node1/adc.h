@@ -4,8 +4,8 @@
  * to initialize the adc and read the data from the joystick.
  */
 
- #ifndef ADC
- #define ADC
+#ifndef ADC
+#define ADC
 
 #include <avr/io.h>
 
@@ -13,10 +13,10 @@
  * @enum An enumeration with the x- and y values of the joystick, in addition to the left and right slider
  */
 enum {
-    JOYSTICK_Y = 1,
-    JOYSTICK_X,
-    SLIDER_LEFT,
-    SLIDER_RIGHT
+	JOYSTICK_Y = 1,
+	JOYSTICK_X,
+	SLIDER_LEFT,
+	SLIDER_RIGHT
 };
 
 /**

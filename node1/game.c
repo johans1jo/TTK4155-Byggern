@@ -14,7 +14,6 @@
 #include <string.h>
 #include "buttons.h"
 
-
 int game_on = 0;
 int user = 0;
 int input_source = JOYSTICKS;

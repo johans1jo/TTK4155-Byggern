@@ -2,7 +2,7 @@ from microbit import *
 import radio
 
 radio.on()
-display.scroll("SEND")
+display.scroll("Send")
 
 while True:
 	x = accelerometer.get_x()

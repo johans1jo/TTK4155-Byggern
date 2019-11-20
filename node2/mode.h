@@ -5,7 +5,7 @@
 
 enum {
 	IDLE = 0,
-  GAME = 1
+  GAME
 };
 
 /**

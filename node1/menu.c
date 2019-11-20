@@ -33,7 +33,7 @@ menu_ptr menu_init(menu_type_t menu_type) {
 	menu_ptr menu = malloc(sizeof(menu_t));
 	menu->submenu_count = 0;
 	menu->mode = NO_MODE;
-	printf("malloc init %d\r\n", menu);
+	printf("malloc %d\r\n", menu);
 
 	if (menu_type == MAIN) {
 		menu->text = text_main_menu;
@@ -86,7 +86,7 @@ menu_ptr menu_init(menu_type_t menu_type) {
 
 void menu_add_submenus(menu_ptr menu, int submenu_count) {
 	menu_ptr submenus = malloc(sizeof(menu_t)*submenu_count);
-	printf("malloc subs (%d) %d\r\n", submenu_count, submenus);
+	printf("malloc (%d) %d\r\n", submenu_count, submenus);
 	menu->submenus = submenus;
 }
 
@@ -123,7 +123,6 @@ void menu_start(menu_ptr menu, int clear) {
 
 		// Quit the meny system if we encounter a menu element with a function
 		if (currentMenu == NULL) {
-			printf("return null\r\n");
 			return;
 		}
 
@@ -175,7 +174,6 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 	// Change mode if we encounter a mode-settings menu element
 	if (currentMenu->mode != NO_MODE) {
 		mode_set(currentMenu->mode, currentMenu->parameter);
-		printf("etter modeset\r\n");
 		return NULL;
 	}
 

@@ -9,7 +9,6 @@ typedef struct Message {
 	char data[8];
 } message_t, *message_ptr;
 
-
 /**
  * @brief Initializes the CAN.
  */

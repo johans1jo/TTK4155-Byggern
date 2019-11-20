@@ -37,9 +37,4 @@ void can_send(message_ptr message);
  * @return The data byte(s) of the received message from the RXBnDm register(s).
  */
 message_t can_receive();
-
-/**
- * @brief Bare tull!
- */
-void can_interrupt();
 void can_send_everything();

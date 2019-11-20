@@ -79,11 +79,11 @@ void motor_set_speed(int speedInt) {
   }
   char speed = speedInt;
 
-  // Adderss: 80
+  // Address: 80
   // Command: 0
   unsigned char msg[] = {80, 0, speed};
   int msgSize = 3;
-  twi_send(msg, msgSize); //TWI_Start_Transceiver_With_Data()
+  twi_send(msg, msgSize);
 }
 
 void motor_set_position(int reference) {

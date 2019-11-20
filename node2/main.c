@@ -34,16 +34,16 @@
 #define SCL 21
 
 int main(void){
-  uart_init(UBRR);
-  adc_init();
-  can_init();
-  pwm_init();
-  motor_init();
+	uart_init(UBRR);
+	adc_init();
+	can_init();
+	pwm_init();
+	motor_init();
 	encoder_init();
 	solenoid_init();
 	led_init();
-	//sei();
-	printf("Start\r\n");
+	sei();
+	printf("\r\nStart\r\n");
 
 	while(1) {
 		if (mode_get() == GAME && !game_is_on()) {
@@ -63,10 +63,9 @@ ISR(INT3_vect) {
 	message_t receive = can_receive();
 	printf("canid: %d\r\n", receive.id);
 	printf("candata: %s\r\n", receive.data);
-	//game_update_from_node1(receive.data);
 	if (receive.id == 100) {
 		mode_set(receive.data[0]); // 0 = IDLE, 1 = GAME
-/*
+		/*
 		//Responderer med modus:
 		message_t mode_msg = {
 			200,
@@ -74,7 +73,7 @@ ISR(INT3_vect) {
 			mode_get()
 		};
 		can_send(&mode_msg);
-*/
+		*/
 	} else if (receive.id == 101) {
 		// Receive values from node1
 		if (mode_get() == GAME && game_is_initialized()) {
@@ -113,7 +112,4 @@ ISR(SPI_STC_vect) {
 
 ISR(BADISR_vect) {
 	printf("\r\nbadisr\r\n");
-}
-
-ISR(TIMER3_OVF_vect) {
 }

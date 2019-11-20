@@ -45,18 +45,16 @@ int main(void){
 	menu_ptr menu_main = menu_init(MAIN);
 	menu_ptr menu_in_game = menu_init(IN_GAME);
 	menu_ptr menu_highscore = menu_init(HIGHSCORE);
+
 	while(1) {
 		printf("Main while\r\n");
-
 		mode_t mode = mode_get();
 
 		if (mode == MAIN_MENU) {
-
 			menu_start(menu_main, CLEAR);
 
 		} else if (mode == PLAY_GAME) {
 			int parameter = mode_parameter_get();
-
 			if (parameter == 0) {
 				// Start game
 				game_play();
@@ -69,15 +67,14 @@ int main(void){
 			}
 
 		} else if (mode == SHOW_HIGHSCORE) {
-
 			highscore_show();
 			menu_start(menu_highscore, DONT_CLEAR);
+			// Set mode?
 
 		} else if (mode == EDIT_USER) {
-			printf("Mode: EDIT_USER\r\n");
 			int user = mode_parameter_get();
 			game_edit_user(user);
-			game_choose_user(user);
+			// Set mode?
 
 		} else if (mode == CHOOSE_USER) {
 			int user = mode_parameter_get();

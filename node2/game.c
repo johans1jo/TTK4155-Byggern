@@ -46,7 +46,6 @@ void game_stop() {
 	game_on = 0;
 	motor_disable();
 
-	// Send score to node1
 	message_t score_msg = {
 		202,
 		1,
@@ -72,7 +71,6 @@ void game_set_everything() {
 
 	// Solenoid
 	if (bl) {
-		printf("bl %d\r\n", bl);
 		solenoid_fire();
 	}
 
@@ -81,7 +79,6 @@ void game_set_everything() {
 
 	// IR
 	int ir = ir_read();
-	//printf("ir %d\r\n", ir);
 	if (!scoring_now) {
 		int increase_score = (ir < SCORE_TRESHOLD);
 		if (increase_score) {
@@ -89,7 +86,6 @@ void game_set_everything() {
 			scoring_now = 1;
 			printf("score %d\r\n", score);
 
-			// Send score message to node1
 			message_t score_msg = {
 				201,
 				1,
@@ -124,7 +120,6 @@ void game_update_from_node1(char* data) {
 
 void game_set_input_source(int new_input_source) {
 	input_source = new_input_source;
-	printf("new source %d\r\n", input_source);
 }
 
 

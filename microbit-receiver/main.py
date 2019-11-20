@@ -4,7 +4,7 @@ import radio
 radio.on()
 radio.config(queue=1)
 
-display.scroll("MOTTA")
+display.scroll("Receive")
 
 while True:
 	radio.receive()
