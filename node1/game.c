@@ -105,23 +105,12 @@ void game_stop() {
 }
 
 void game_set_difficulty(int difficulty) {
-	if (difficulty == 1) {
-		game_set_controller_parameters(1,1); //Easy
-	} else if (difficulty == 2) {
-		game_set_controller_parameters(1,1); //Medium
-	} else if (difficulty == 3) {
-		game_set_controller_parameters(1,1); //Hard
-	}
-}
-
-void game_set_controller_parameters(int param_p, int param_i) {
-	message_t controller_msg = {
-		MSG1_CONTROLLER_PARAMETERS,
-		2,
-		param_p,
-		param_i
+	message_t difficulty_msg = {
+		MSG1_DIFFICULTY,
+		1,
+		difficulty
 	};
-	can_send(&controller_msg);
+	can_send(&difficulty_msg);
 }
 
 void game_choose_user(int user_set) {

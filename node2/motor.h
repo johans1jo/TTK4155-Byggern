@@ -75,3 +75,7 @@ int motor_get_controller_parameter_p();
  * @param[in] The K_i parameter.
  */
 int motor_get_controller_parameter_i();
+
+void motor_clear_controller_parameters();
+
+void motor_set_user_defined_controller_parameters();

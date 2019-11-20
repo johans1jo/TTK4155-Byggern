@@ -16,9 +16,13 @@
 #define OE PH5
 #define RST PH6
 
-int Kp = 1;
-int Ki = 0;
-int Tt = 20/1000; // Change to float or double
+int Kp = 1; // Controller parameters in use at the moment
+int Ki = 0; // ...
+int Kp_user = 1; // User defined controller parameters
+int Ki_user = 0; // ...
+int Kp_init = 1; // Initial parameters. Used in encoder_calibrate()
+int Ki_init = 0; // ...
+int Tt = 20/1000;
 
 void motor_init() {
 	twi_init();
@@ -107,9 +111,22 @@ void motor_set_position(int reference) {
 }
 
 void motor_set_controller_parameters(int param_p, int param_i) {
+	Kp_user = param_p;
 	Kp = param_p;
+	Ki_user = param_i;
 	Ki = param_i;
 }
 
 int motor_get_controller_parameter_p() { return Kp; };
+
 int motor_get_controller_parameter_i() { return Ki; };
+
+void motor_clear_controller_parameters() {
+	Kp = Kp_init;
+	Ki = Ki_init;
+}
+
+void motor_set_user_defined_controller_parameters() {
+	Kp = Kp_user;
+	Ki = Ki_user;
+}

@@ -76,9 +76,9 @@ ISR(INT3_vect) {
 		// Quit game
 		mode_set(MODE_STOP_GAME);
 
-	} else if (receive.id == MSG1_CONTROLLER_PARAMETERS) {
-		// Set difficulty
-		motor_set_controller_parameters(receive.data[0], receive.data[1]);
+	} else if (receive.id == MSG1_DIFFICULTY) {
+		// Set controller paramet
+		game_set_difficulty(receive.data[0]);
 
 	} else if (receive.id == MSG1_INPUT_SOURCE) {
 		game_set_input_source(receive.data[0]);

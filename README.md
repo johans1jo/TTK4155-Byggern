@@ -14,7 +14,6 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 * node2: tuning, i-ledd
 * node12: vanskelighetsgrader
 *
-* node2: reset når spillet avsluttes
 * node1: menu: prikk ved valgt bruker mm
 * microbit
 * node1: highscore: liste+graf, navigering

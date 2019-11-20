@@ -17,6 +17,12 @@ enum {
 	MICROBIT
 };
 
+enum {
+	EASY,
+	MEDIUM,
+	HARD
+};
+
 void game_init();
 
 /**
@@ -53,15 +59,6 @@ void game_timer_disable();
  * @param[in] The difficulty level.
  */
 void game_set_difficulty(int difficulty);
-
-/**
- * @brief Sends the parameters of the PI-controller to node 2.
- *
- * @param[in] The K_p parameter.
- *
- * @param[in] The K_i parameter.
- */
-void game_set_controller_parameters(int param_p, int param_i);
 
 /**
  * @brief Returns the user.

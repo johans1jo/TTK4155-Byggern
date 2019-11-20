@@ -29,8 +29,11 @@ int score = 0;
 int scoring_now = 0;
 int input_source = JOYSTICKS;
 
+int difficulty = EASY;
+
 void game_init() {
 	motor_enable();
+	motor_clear_controller_parameters();
 	if (!game_is_initialized()) {
 		encoder_calibrate();
 	}
@@ -38,6 +41,7 @@ void game_init() {
 	_delay_ms(100);
 	motor_set_position(0);
 	_delay_ms(1000);
+	motor_set_user_defined_controller_parameters();
 }
 
 void game_play() {
@@ -135,6 +139,23 @@ void game_set_input_source(int new_input_source) {
 	input_source = new_input_source;
 }
 
+void game_set_difficulty(int new_difficulty) {
+	difficulty = new_difficulty;
+	printf("diff %d\r\n", difficulty);
+	int Kp;
+	int Ki;
+	if (difficulty == EASY) {
+		Kp = 1;
+		Ki = 0;
+	} else if (difficulty == MEDIUM) {
+		Kp = 2;
+		Ki = 3;
+	} else if (difficulty == HARD) {
+		Kp = 4;
+		Ki = 5;
+	}
+	motor_set_controller_parameters(Kp, Ki);
+}
 
 ISR(TIMER3_COMPB_vect) {
 	if (game_initialized) {

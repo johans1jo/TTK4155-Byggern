@@ -65,9 +65,9 @@ menu_ptr menu_init(menu_type_t menu_type) {
 		menu_add(menu_choose_users, game_get_user_name(4), MODE_CHOOSE_USER, 4);
 
 		menu_add_submenus(menu_difficulty, 3);
-		menu_add(menu_difficulty, text_hard, MODE_CHOOSE_DIFFICULTY, 3);
-		menu_add(menu_difficulty, text_medium, MODE_CHOOSE_DIFFICULTY, 2);
-		menu_add(menu_difficulty, text_easy, MODE_CHOOSE_DIFFICULTY, 1);
+		menu_add(menu_difficulty, text_hard, MODE_CHOOSE_DIFFICULTY, HARD);
+		menu_add(menu_difficulty, text_medium, MODE_CHOOSE_DIFFICULTY, MEDIUM);
+		menu_add(menu_difficulty, text_easy, MODE_CHOOSE_DIFFICULTY, EASY);
 
 		menu_add_submenus(menu_input_sources, 2);
 		menu_add(menu_input_sources, text_joysticks, MODE_SET_INPUT_SOURCE, JOYSTICKS);
