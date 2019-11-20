@@ -20,15 +20,15 @@ void adc_init() {
   ADMUX &= ~(1 << MUX4);
   ADCSRB &= ~(1 << MUX5);
 
-  // ADC Enable
-  ADCSRA |= (1 << ADEN)| (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2); // With prescaling
+	// ADC Enable // These bits determine the division factor between the XTAL frequency and the input clock to the ADC.
+	ADCSRA |= (1 << ADEN)| (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2); // With prescaling
 }
 
 int adc_read() {
   ADCSRA |= (1 << ADSC);
 
 	while(!(ADCSRA & (1<<ADIF))) {
-  }
+	}
 	int adcl = ADCL;
 	int adch = ADCH;
 	int adc = adch*0b100000000 + adcl;

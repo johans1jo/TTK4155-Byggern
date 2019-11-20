@@ -7,7 +7,7 @@
   * @brief Sets mode to Clear Timer on Compare (CTC) mode. The counter is cleared to zero when the counter value
   * (TCNTn) matches either the OCRnA (WGMn3:0 = 4) or the ICRn (WGMn3:0 = 12).
   * Sets the Output Compare Pin OC3B to normal port operatoin
-  * clkIO/1024 (From prescaler).
+  * Sets the division factor for the prescaler to 1024.
   */
 #ifndef GAME_H
 #define GAME_H

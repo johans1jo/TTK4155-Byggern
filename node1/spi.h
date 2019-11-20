@@ -18,6 +18,8 @@ void spi_slave_init();
  * @brief Writes data by writing cDato to the SPI Data Register (SPDR),
  * and transmits the data until the SPI interrupt Flag in the SPI Status Register
  * is set upon completion of the transmission.
+ *
+ * @param[in] The data
  */
 void spi_write(char cData);
 

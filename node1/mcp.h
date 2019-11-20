@@ -21,7 +21,6 @@ uint8_t mcp_read(uint8_t address);
  * @brief Writes a message with an address and data.
  *
  * @param[in] The address.
- *
  * @param[in] The data.
  */
 void mcp_write(uint8_t address, uint8_t data);
@@ -44,9 +43,7 @@ char mcp_read_status();
  * @brief Bit modifies the data at the given address.
  *
  * @param[in] The address.
- *
  * @param[in] The bits to be masked.
- *
  * @param[in] The data.
  */
 void mcp_bit_modify(uint8_t address, uint8_t mask, uint8_t data);
