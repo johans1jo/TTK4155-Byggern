@@ -10,7 +10,7 @@ radio.config(queue=1)
 display.scroll("MOTTA")
 pin0.write_analog(200)
 sleep(10000)
-'''
+
 while True:
 	radio.receive()
 	msg = radio.receive()
@@ -46,4 +46,3 @@ while True:
 	pin2.write_analog(x_out)
 
 	sleep(1000)
-'''

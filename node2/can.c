@@ -9,7 +9,7 @@ void can_init() {
 	mcp_init();
   mcp_set_mode(MODE_NORMAL);
 
-  mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b1); // Turn on receive0 interrupt. Turn off everything else.
+  mcp_bit_modify(MCP_CANINTE, 0b11111111, 0b11); // Turn on receive0 interrupt. Turn off everything else.
 
   EIMSK |= (1 << INT3);
   DDRB &= ~(1 << INT3);
