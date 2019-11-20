@@ -1,49 +1,24 @@
-#include "solenoid.h"
+#include "microbit.h"
 #include <avr/io.h>
-#include <stdio.h>
-#define F_CPU 16000000UL
-#include <util/delay.h>
 
-#define SOLENOID_PIN PF1
+#define X_PIN PF0
+#define A_PIN PF1
+#define B_PIN PF2
 
-int solenoid_on = 0;
-
-void solenoid_init() {
-	DDRF |= (1 << SOLENOID_PIN); //output ADC1
-	PORTF |= (1 << SOLENOID_PIN); //high
-
-	// Solenoid timer interrupt init
+void microbit_init() {
+	DDRF &= ~(1 << X_PIN)
+	DDRF &= ~(1 << A_PIN)
+	DDRF &= ~(1 << B_PIN);
 }
 
-void solenoid_set() {
-	PORTF &= ~(1 << SOLENOID_PIN); //low
-	solenoid_on = 1;
+int microbit_read_x() {
+	return (PINF & (1 << X_PIN));
 }
 
-void solenoid_clear() {
-	PORTF |= (1 << SOLENOID_PIN); //high
-	solenoid_on = 0;
+int microbit_read_a() {
+	return (PINF & (1 << A_PIN));
 }
 
-int solenoid_is_set() {
-	return solenoid_on;
+int microbit_read_b() {
+	return (PINF & (1 << B_PIN));
 }
-
-void solenoid_fire() {
-	if (!solenoid_is_set()) {
-		solenoid_set();
-
-		// Turn on solenoid timer
-
-		_delay_ms(100); // Remove
-		solenoid_clear(); // Remove
-	}
-}
-
-/*
-ISR {
-	solenoid_clear();
-
-	// Turn off solenoid timer
-}
-*/

@@ -3,13 +3,8 @@ import radio
 
 radio.on()
 radio.config(queue=1)
-#uart.init(baudrate=115200)
-#uart.init(baudrate=9600, bits=8, parity=None, stop=1, tx=pin0, rx=pin1)
-#sleep(1000)
 
 display.scroll("MOTTA")
-pin0.write_analog(200)
-sleep(10000)
 
 while True:
 	radio.receive()
@@ -23,26 +18,33 @@ while True:
 	# split[2] # b button
 	# split[3] # shake
 	x = int(split[0])
-	a = int(split[2])
-	b = int(split[3])
+	a = int(split[1])
+	b = int(split[2])
 	shake = int(split[3])
 
-	servo_out = 0
-	if a and b:
-		servo_out = 0
-	elif a:
-		servo_out = 511
-	elif b:
-		servo_out = 1023
-
-	shake_out = 0
-	if shake:
-		shake_out = 1023
+	# x_out: x
+	# left_out: servo left/button left		1: servo venstre	begge: solenoide
+	# right_out: servo right/button right	1: servo høyre		begge:
 
 	x_out = (x + 2000)*1023/4000
+	if x_out < 0:
+		x_out = 0
+	elif x_out > 1023:
+		x_out = 1023
 
-	pin0.write_analog(servo_out)
-	pin1.write_analog(shake_out)
-	pin2.write_analog(x_out)
+	left_out = 0
+	right_out = 0
+	if a and b:
+		pass
+	elif a:
+		left_out = 1
+	elif b:
+		right_out = 1
 
-	sleep(1000)
+	if shake:
+		left_out = 1
+		right_out = 1
+
+	pin0.write_analog(x_out)
+	pin1.write_digital(left_out)
+	pin2.write_digital(right_out)
