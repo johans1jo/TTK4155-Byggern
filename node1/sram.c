@@ -1,8 +1,8 @@
 #include "sram.h"
 
 void sram_init() {
-  MCUCR = (1 << SRE); //enable XMEM
-  SFIOR = (1 << XMM2); //mask unused bits
+  MCUCR = (1 << SRE); // Enable XMEM
+  SFIOR = (1 << XMM2); // Mask unused bits
 }
 
 void sram_write(uint16_t address, uint8_t data) {

@@ -6,8 +6,6 @@
 #include "draw.h"
 #include <avr/pgmspace.h>
 
-//int oled_write = 0;
-
 void oled_init() {
  oled_write_command(0xae); // display off
  oled_write_command(0xa1); //segment remap
@@ -62,7 +60,6 @@ void oled_goto_pos(int line, int column) {
   oled_goto_line(line);
   oled_goto_column(column);
 }
-
 
 void oled_goto_home() {
   oled_goto_pos(0,0);

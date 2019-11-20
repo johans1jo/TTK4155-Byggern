@@ -16,6 +16,7 @@
 
 int game_on = 0;
 int user = 0;
+int input_source = JOYSTICKS;
 
 char users[5][20] = {
 	"User 0",
@@ -24,6 +25,17 @@ char users[5][20] = {
 	"User 3",
 	"User 4"
 };
+
+void game_set_input_source(int new_input_source) {
+	input_source = new_input_source;
+
+	message_t input_msg = {
+		MSG1_INPUT_SOURCE,
+		1,
+		new_input_source //1: joysticks, 2: microbit
+	};
+	can_send(&input_msg);
+}
 
 char * game_get_user_name(int user_id) {
 	return users[user_id];
@@ -41,7 +53,7 @@ void game_init() {
   // Set mode CTC (4)
   TCCR3B &= ~(1 << WGM33);
 	TCCR3B |= (1 << WGM32);
-  TCCR3A &= ~(1 << WGM31); //obs
+  TCCR3A &= ~(1 << WGM31); // Be aware of A- and B-registers
   TCCR3A &= ~(0 << WGM30);
   // Normal port operation
   TCCR3A &= ~(1 << COM3B1);
@@ -67,9 +79,9 @@ void game_play() {
 	oled_clear();
 
 	message_t mode_msg = {
-		100, //Mode-id
+		MSG1_SET_MODE,
 		1,
-		1 //game. fiks!
+		MODE_PLAY_GAME
 	};
 	can_send(&mode_msg);
 	_delay_ms(100);
@@ -83,16 +95,12 @@ void game_stop() {
 	game_timer_disable();
 
 	message_t stop_msg = {
-		102, //Stop-id
+		MSG1_GAME_STOP, //Stop-id
 		0,
 	};
 	can_send(&stop_msg);
 
 	game_on = 0;
-}
-
-void game_pause() {
-	//pause?
 }
 
 void game_set_difficulty(int difficulty) {
@@ -107,7 +115,7 @@ void game_set_difficulty(int difficulty) {
 
 void game_set_controller_parameters(int param_p, int param_i) {
 	message_t controller_msg = {
-		103,
+		MSG1_CONTROLLER_PARAMETERS,
 		2,
 		param_p,
 		param_i
@@ -120,6 +128,7 @@ void game_choose_user(int user_set) {
 }
 void game_edit_user(int user_edit) {
 	oled_clear();
+	draw_clear();
 	char * user_name = game_get_user_name(user_edit);
 	int user_name_length = strlen(user_name);
 	int keyboard_position = 0;
@@ -153,7 +162,7 @@ void game_edit_user(int user_edit) {
 		if (buttons_right()) {
 			if (keyboard_position > 26 && keyboard_position <= 30) {
 				// Save
-				mode_set(MAIN_MENU, 0);
+				mode_set(MODE_MAIN_MENU, 0);
 				return;
 
 			} else if (keyboard_position > 30) {
@@ -211,15 +220,42 @@ void game_update_score(int score) {
 	sprintf(score_str, "%d", score);
 	oled_print(score_str);
 
+	/*
+	// Fireworks :)
 	draw_clear();
 	for (int i = 0; i < 10; i++) {
 		draw_fireworks(i);
 		draw_push();
 		_delay_ms(10);
 	}
+	*/
+}
+
+void game_send_everything() {
+	int x = joy_read_x();
+	int y = joy_read_y();
+	int button_joystick = buttons_joystick();
+	int button_left = buttons_left();
+	int button_right = buttons_right();
+	int slider_left = adc_read(SLIDER_LEFT);
+	int slider_right = adc_read(SLIDER_RIGHT);
+	//printf("x %d y %d bj %d bl %d br %d sl %d sr %d\r\n", x, y, button_joystick, button_left, button_right, slider_left, slider_right);
+
+	message_t everything_msg = {
+		MSG1_GAME_VALUES,
+		7,
+		x,
+		y,
+		button_joystick,
+		button_left,
+		button_right,
+		slider_left,
+		slider_right
+	};
+	can_send(&everything_msg);
 }
 
 ISR(TIMER3_COMPB_vect) {
-	can_send_everything();
+	game_send_everything();
 	TCNT3 = 0; // Reset counter
 }

@@ -1,6 +1,6 @@
 #include "mode.h"
 
-mode_t mode = MAIN_MENU;
+mode_t mode = MODE_MAIN_MENU;
 int parameter = 0;
 
 void mode_set(mode_t new_mode, int new_parameter) {

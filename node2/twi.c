@@ -40,11 +40,11 @@ Remember to enable interrupts from the main application after initializing the T
 ****************************************************************************/
 
 void twi_init() {
-  TWI_Master_Initialise();
+	TWI_Master_Initialise();
 }
 
 void twi_send(unsigned char *msg, unsigned char msgSize) {
-  TWI_Start_Transceiver_With_Data(msg, msgSize);
+	TWI_Start_Transceiver_With_Data(msg, msgSize);
 }
 
 void TWI_Master_Initialise(void)

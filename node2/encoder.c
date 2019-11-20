@@ -20,24 +20,24 @@ int max_left = 0;
 int max_right = 0;
 
 void encoder_init() {
-  DDRH |= (1 << SEL)|(1 << OE)|(1 << RST);
-  DDRK = 0;
+	DDRH |= (1 << SEL)|(1 << OE)|(1 << RST);
+	DDRK = 0;
 
-  PORTH &= ~(1 << RST);
-  PORTH |= (1 << RST);
-  PORTH |= (1 << OE);
+	PORTH &= ~(1 << RST);
+	PORTH |= (1 << RST);
+	PORTH |= (1 << OE);
 
 	encoder_reset();
 }
 
 void encoder_reset() {
-  PORTH &= ~(1 << RST);
-  PORTH |= (1 << RST);
+	PORTH &= ~(1 << RST);
+	PORTH |= (1 << RST);
 }
 
 void encoder_calibrate() {
 	int enc = encoder_read();
-	motor_set_speed(90);
+	motor_set_speed(100);
 	motor_set_direction(LEFT);
 	_delay_ms(1000);
 	while (abs(enc - encoder_read()) > 100) {
@@ -55,17 +55,17 @@ void encoder_calibrate() {
 }
 
 int encoder_read() {
-  PORTH &= ~(1 << OE);
-  PORTH &= ~(1 << SEL);
-  _delay_us(20);
-  //Les MSB A8-A15
-  int msb = PINK;
-  PORTH |= (1<< SEL);
-  _delay_us(20);
-  int lsb = PINK;
-  PORTH |= (1 << OE);
+	PORTH &= ~(1 << OE);
+	PORTH &= ~(1 << SEL);
+	_delay_us(20);
+	//Les MSB A8-A15
+	int msb = PINK;
+	PORTH |= (1<< SEL);
+	_delay_us(20);
+	int lsb = PINK;
+	PORTH |= (1 << OE);
 
-  return msb*0b100000000 + lsb - initial_value;
+	return msb*0b100000000 + lsb - initial_value;
 }
 
 int encoder_map(int reference) {

@@ -10,20 +10,7 @@
 #include <util/delay.h>
 #include "can.h"
 
-// Verdier fra multifunk
-/*
-int inputs = {
-	0, //x	Joystick X
-	0, //y	Joystick Y
-	0, //bj	Button joystick
-	0, //bl	Button left
-	0, //br	Button right
-	0, //sl	Slider left
-	0  //sr	Slider right
-}
-*/
-
-#define SCORE_TRESHOLD 90 //200
+#define SCORE_TRESHOLD 300
 
 int x = 0;
 int y = 0;
@@ -37,6 +24,7 @@ int game_on = 0;
 int game_initialized = 0;
 int score = 0;
 int scoring_now = 0;
+int input_source = JOYSTICKS;
 
 void game_init() {
 	motor_enable();
@@ -52,23 +40,20 @@ void game_play() {
 	game_on = 1;
 	game_init();
 	game_initialized = 1;
-	//aktiver sett verdier-interrupt?
 }
 
 void game_stop() {
 	game_on = 0;
 	motor_disable();
 
-	// Sender score til node1
 	message_t score_msg = {
-		202, //Score
+		MSG2_SCORE_TOTAL,
 		1,
 		score
 	};
 	can_send(&score_msg);
 
 	score = 0;
-
 }
 
 int game_is_on() {
@@ -99,11 +84,9 @@ void game_set_everything() {
 		if (increase_score) {
 			score++;
 			scoring_now = 1;
-			printf("score %d\r\n", score);
 
-			//Send score-melding til Node1
 			message_t score_msg = {
-				201,
+				MSG2_SCORE_INGAME,
 				1,
 				score
 			};
@@ -113,7 +96,6 @@ void game_set_everything() {
 	} else if (ir > SCORE_TRESHOLD) {
 		scoring_now = 0;
 	}
-
 	//printf("game_set_everything x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
 
@@ -135,9 +117,14 @@ void game_update_from_node1(char* data) {
 	//printf("game_update_from_node1 x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
 
+void game_set_input_source(int new_input_source) {
+	input_source = new_input_source;
+}
+
+
 ISR(TIMER3_COMPB_vect) {
 	if (game_initialized) {
 		game_set_everything();
 	}
-	TCNT3 = 0; // Resetter telleren
+	TCNT3 = 0; // Reset counter
 }

@@ -12,39 +12,14 @@ void draw_init() {
 	draw_clear();
 }
 
-// Tegner linje fra punktet (x1, y1) til punktet (x2, y2) med størrelse size
-void draw_line(int x1, int y1, int x2, int y2, int size) {
-
-	if (x1 > x2) {
-		int tmp = x1;
-		x1 = x2;
-		x2 = tmp;
-	}
-		for (int x = x1; x < x2; x++) {
-			unsigned int y2y1 = abs(y2 - y1)*1000;
-			int s = y2y1 / (x2 - x1);
-			int y;
-			if (y2 > y1) {
-				y = y1 + (s*(x - x1)) / 1000;
-			} else {
-				y = y1 - (s*(x - x1)) / 1000;
-			}
-			draw_point(x, y, size);
+void draw_push() {
+	for (int x = 0; x < 128; x++) {
+		for (int line = 0; line < 8; line++) {
+			int address = x*8 + line;
+			char byte = sram_read(address);
+			oled_goto_pos(line, x);
+			oled_write_data(byte);
 		}
-}
-
-void draw_lines(point * points, int length, int size) {
-	for (int i = 0; i < length - 1; i++) {
-		draw_line(points[i].x, points[i].y, points[i+1].x, points[i+1].y, size);
-	}
-}
-
-void draw_circle(int x1, int y1, int width, int size) {
-	int r = width/2;
-	for (double theta = 0; theta < 2*M_PI; theta += 0.1) {
-		int x = r * cos(theta) + x1;
-		int y = r * sin(theta) + y1;
-		draw_set_bit(x, y);
 	}
 }
 
@@ -69,6 +44,42 @@ void draw_point(int x1, int y1, int size) {
 			}
 		}
 
+	}
+}
+
+// Tegner linje fra punktet (x1, y1) til punktet (x2, y2) med størrelse size
+void draw_line(int x1, int y1, int x2, int y2, int size) {
+	if (x1 > x2) {
+		int tmp = x1;
+		x1 = x2;
+		x2 = tmp;
+	}
+	for (int x = x1; x < x2; x++) {
+		unsigned int y2y1 = abs(y2 - y1)*1000;
+		int s = y2y1 / (x2 - x1);
+		int y;
+		if (y2 > y1) {
+			y = y1 + (s*(x - x1)) / 1000;
+		} else {
+			y = y1 - (s*(x - x1)) / 1000;
+		}
+		draw_point(x, y, size);
+	}
+}
+
+void draw_lines(point * points, int length, int size) {
+	for (int i = 0; i < length - 1; i++) {
+		draw_line(points[i].x, points[i].y, points[i+1].x, points[i+1].y, size);
+	}
+}
+
+void draw_circle(int x1, int y1, int width, int size) {
+	int r = width/2;
+	int spacing = 0.1; // Function of width
+	for (double theta = 0; theta < 2*M_PI; theta += spacing) {
+		int x = r * cos(theta) + x1;
+		int y = r * sin(theta) + y1;
+		draw_set_bit(x, y);
 	}
 }
 
@@ -127,17 +138,6 @@ void draw_print(int line, int x, char c[]) {
 		}
 		x = x + 8;
   }
-}
-
-void draw_push() {
-	for (int x = 0; x < 128; x++) {
-		for (int line = 0; line < 8; line++) {
-			int address = x*8 + line;
-			char byte = sram_read(address);
-			oled_goto_pos(line, x);
-			oled_write_data(byte);
-		}
-	}
 }
 
 void draw_keyboard(int marked_char) {
