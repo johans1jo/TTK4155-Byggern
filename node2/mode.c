@@ -1,6 +1,6 @@
 #include "mode.h"
 
-int mode = 0;
+int mode = MODE_IDLE;
 
 void mode_set(int m) {
 	mode = m;

@@ -31,10 +31,11 @@ int input_source = JOYSTICKS;
 
 void game_init() {
 	motor_enable();
-	encoder_calibrate();
+	if (!game_is_initialized()) {
+		encoder_calibrate();
+	}
 	motor_controller_init();
 	_delay_ms(100);
-	//motor_set_speed(0); //hæ
 	motor_set_position(0);
 	_delay_ms(1000);
 }

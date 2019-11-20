@@ -16,11 +16,9 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 *
 * node2: reset når spillet avsluttes
 * node1: menu: prikk ved valgt bruker mm
-* node12: game: startrespons og loading... på oled
 * microbit
 * node1: highscore: liste+graf, navigering
 * node1: game/draw: fireworks
-* musikk
 * labyrint
 *
 * node2: adc: generell funksjon

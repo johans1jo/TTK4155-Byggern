@@ -46,9 +46,13 @@ int main(void){
 	printf("\r\nStart\r\n");
 
 	while(1) {
-		if (mode_get() == MODE_PLAY_GAME && !game_is_on()) {
-			printf("Game on:\r\n");
+		int mode = mode_get();
+		if (mode == MODE_IDLE) {
+		} else if (mode == MODE_PLAY_GAME && !game_is_on()) {
 			game_play();
+		} else if (mode == MODE_STOP_GAME) {
+			game_stop();
+			mode_set(MODE_IDLE);
 		}
 	}
 
@@ -59,6 +63,7 @@ int main(void){
 // Tar imot CAN-melding
 ISR(INT3_vect) {
 	message_t receive = can_receive();
+	printf("canid %d\r\n", receive.id);
 	if (receive.id == MSG1_SET_MODE) {
 		mode_set(receive.data[0]); // 0 = IDLE, 1 = GAME
 	} else if (receive.id == MSG1_GAME_VALUES) {
@@ -69,8 +74,7 @@ ISR(INT3_vect) {
 
 	} else if (receive.id == MSG1_GAME_STOP) {
 		// Quit game
-		game_stop();
-		mode_set(MODE_IDLE);
+		mode_set(MODE_STOP_GAME);
 
 	} else if (receive.id == MSG1_CONTROLLER_PARAMETERS) {
 		// Set difficulty

@@ -47,7 +47,6 @@ int main(void){
 	menu_ptr menu_highscore = menu_init(HIGHSCORE);
 
 	while(1) {
-		printf("Main while\r\n");
 		mode_t mode = mode_get();
 
 		if (mode == MODE_IDLE) {
