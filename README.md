@@ -12,13 +12,17 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 ## Todo
 
 * node2: tuning, i-ledd
-* node12: vanskelighetsgrader
 *
 * node1: menu: prikk ved valgt bruker mm
 * microbit
+* mer ir
+* ballslipp ved start og ved tap
+*
 * node1: highscore: liste+graf, navigering
 * node1: game/draw: fireworks
 * labyrint
+* 
+* shift i tastaturet
 *
 * node2: adc: generell funksjon
 * node12: fjern double/float

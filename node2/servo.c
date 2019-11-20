@@ -4,7 +4,7 @@
 void servo_set_angle(double angle) {
 	angle = (angle + 0) * 1.8;
 	double ms = 1.5 + (0.5 / 90.0) * angle;
-	pwm_set_ms(ms);
+	pwm_shoot_set_ms(ms);
 }
 
 void servo_set_from_joystick(int y) {

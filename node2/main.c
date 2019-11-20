@@ -24,6 +24,7 @@
 #include "mode.h"
 #include "led.h"
 #include "microbit.h"
+#include "dispenser.h"
 
 #define FOSC 16000000UL
 #define BAUD 9600

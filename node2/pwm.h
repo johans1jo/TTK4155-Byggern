@@ -15,4 +15,6 @@ void pwm_init();
  *
  * @param[in] The on-time.
  */
-void pwm_set_ms(double ms);
+void pwm_shoot_set_ms(double ms);
+
+void pwm_dispenser_set_ms(double ms);
