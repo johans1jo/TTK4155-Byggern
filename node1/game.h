@@ -92,5 +92,6 @@ void game_set_user_name(int user_id, char * user_name);
 
 void game_set_input_source(int new_input_source);
 void game_send_everything();
+void game_set_on();
 
 #endif

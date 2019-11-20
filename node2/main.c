@@ -61,15 +61,6 @@ ISR(INT3_vect) {
 	message_t receive = can_receive();
 	if (receive.id == MSG1_SET_MODE) {
 		mode_set(receive.data[0]); // 0 = IDLE, 1 = GAME
-		/*
-		//Responderer med modus:
-		message_t mode_msg = {
-			MSG2_MODE_RESPONSE,
-			1,
-			mode_get()
-		};
-		can_send(&mode_msg);
-		*/
 	} else if (receive.id == MSG1_GAME_VALUES) {
 		// Receive values from node1
 		if (mode_get() == MODE_PLAY_GAME && game_is_initialized()) {

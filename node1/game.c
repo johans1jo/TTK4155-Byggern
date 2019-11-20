@@ -49,6 +49,10 @@ int game_is_on() {
 	return game_on;
 }
 
+void game_set_on() {
+	game_on = 1;
+}
+
 void game_init() {
   // Set mode CTC (4)
   TCCR3B &= ~(1 << WGM33);
@@ -84,11 +88,8 @@ void game_play() {
 		MODE_PLAY_GAME
 	};
 	can_send(&mode_msg);
-	_delay_ms(100);
 
-	// Enable timer interrupt for sending user input values to node2 via CAN
-	game_timer_enable();
-	game_on = 1;
+	// Wait for mode response from node2
 }
 
 void game_stop() {

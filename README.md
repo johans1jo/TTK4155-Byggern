@@ -11,8 +11,6 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 
 ## Todo
 
-* node12: fiks can
-*
 * node2: tuning, i-ledd
 * node12: vanskelighetsgrader
 *

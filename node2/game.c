@@ -9,6 +9,7 @@
 #define F_CPU 16000000UL
 #include <util/delay.h>
 #include "can.h"
+#include "mode.h"
 
 #define SCORE_TRESHOLD 300
 
@@ -41,6 +42,15 @@ void game_init() {
 void game_play() {
 	game_on = 1;
 	game_init();
+
+	//Responderer med modus:
+	message_t mode_msg = {
+		MSG2_MODE_RESPONSE,
+		1,
+		mode_get()
+	};
+	can_send(&mode_msg);
+
 	game_initialized = 1;
 }
 

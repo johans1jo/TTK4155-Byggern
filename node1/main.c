@@ -50,7 +50,9 @@ int main(void){
 		printf("Main while\r\n");
 		mode_t mode = mode_get();
 
-		if (mode == MODE_MAIN_MENU) {
+		if (mode == MODE_IDLE) {
+
+		} else if (mode == MODE_MAIN_MENU) {
 			menu_start(menu_main, CLEAR);
 
 		} else if (mode == MODE_PLAY_GAME) {
@@ -58,13 +60,24 @@ int main(void){
 			if (parameter == 0) {
 				// Start game
 				game_play();
-				menu_start(menu_in_game, CLEAR);
+				mode_set(MODE_PLAY_GAME, 2);
 
 			} else if (parameter == 1) {
 				// Quit game
 				game_stop();
 				mode_set(MODE_MAIN_MENU, 0);
+			} else if (parameter == 2) {
+				// Wait for node2 to send mode response
+				oled_clear();
+				oled_goto_pos(0,0);
+				oled_print("Loading...");
+				mode_set(MODE_IDLE, 0);
+
+			} else if (parameter == 3) {
+				// Game on!
+				menu_start(menu_in_game, CLEAR);
 			}
+
 
 		} else if (mode == MODE_SHOW_HIGHSCORE) {
 			highscore_show();
@@ -105,6 +118,10 @@ ISR(INT0_vect) {
 	printf("canid: %d\r\n", receive.id);
 	printf("candata: %s\r\n", receive.data);
 	if (receive.id == MSG2_MODE_RESPONSE) {
+		// Enable timer interrupt for sending user input values to node2 via CAN
+		game_timer_enable();
+		game_set_on();
+		mode_set(MODE_PLAY_GAME, 3);
 		// Mode response
 	} else if (receive.id == MSG2_SCORE_INGAME) {
 		// Receive score while the user is playing
