@@ -32,15 +32,15 @@ const char text_microbit[] PROGMEM = "Microbit";
 menu_ptr menu_init(menu_type_t menu_type) {
 	menu_ptr menu = malloc(sizeof(menu_t));
 	menu->submenu_count = 0;
-	menu->mode = NO_MODE;
+	menu->mode = MODE_IDLE;
 	printf("malloc %d\r\n", menu);
 
 	if (menu_type == MAIN) {
 		menu->text = text_main_menu;
 		menu_add_submenus(menu, 3);
-		menu_add(menu, text_play, PLAY_GAME, 0);
+		menu_add(menu, text_play, MODE_PLAY_GAME, 0);
 		menu_ptr menu_settings = menu_add(menu, text_settings, 0, 0);
-		menu_add(menu, text_highscores, SHOW_HIGHSCORE, 0);
+		menu_add(menu, text_highscores, MODE_SHOW_HIGHSCORE, 0);
 
 		menu_add_submenus(menu_settings, 4);
 		menu_ptr menu_choose_users = menu_add(menu_settings, text_choose_user, 0, 0);
@@ -49,37 +49,37 @@ menu_ptr menu_init(menu_type_t menu_type) {
 		menu_ptr menu_input_sources = menu_add(menu_settings, text_input_sources, 0, 0);
 
 		menu_add_submenus(menu_edit_users, 5);
-		menu_add(menu_edit_users, game_get_user_name(0), EDIT_USER, 0);
-		menu_add(menu_edit_users, game_get_user_name(1), EDIT_USER, 1);
-		menu_add(menu_edit_users, game_get_user_name(2), EDIT_USER, 2);
-		menu_add(menu_edit_users, game_get_user_name(3), EDIT_USER, 3);
-		menu_add(menu_edit_users, game_get_user_name(4), EDIT_USER, 4);
+		menu_add(menu_edit_users, game_get_user_name(0), MODE_EDIT_USER, 0);
+		menu_add(menu_edit_users, game_get_user_name(1), MODE_EDIT_USER, 1);
+		menu_add(menu_edit_users, game_get_user_name(2), MODE_EDIT_USER, 2);
+		menu_add(menu_edit_users, game_get_user_name(3), MODE_EDIT_USER, 3);
+		menu_add(menu_edit_users, game_get_user_name(4), MODE_EDIT_USER, 4);
 
 		menu_add_submenus(menu_choose_users, 5);
-		menu_add(menu_choose_users, game_get_user_name(0), CHOOSE_USER, 0);
-		menu_add(menu_choose_users, game_get_user_name(1), CHOOSE_USER, 1);
-		menu_add(menu_choose_users, game_get_user_name(2), CHOOSE_USER, 2);
-		menu_add(menu_choose_users, game_get_user_name(3), CHOOSE_USER, 3);
-		menu_add(menu_choose_users, game_get_user_name(4), CHOOSE_USER, 4);
+		menu_add(menu_choose_users, game_get_user_name(0), MODE_CHOOSE_USER, 0);
+		menu_add(menu_choose_users, game_get_user_name(1), MODE_CHOOSE_USER, 1);
+		menu_add(menu_choose_users, game_get_user_name(2), MODE_CHOOSE_USER, 2);
+		menu_add(menu_choose_users, game_get_user_name(3), MODE_CHOOSE_USER, 3);
+		menu_add(menu_choose_users, game_get_user_name(4), MODE_CHOOSE_USER, 4);
 
 		menu_add_submenus(menu_difficulty, 3);
-		menu_add(menu_difficulty, text_hard, CHOOSE_DIFFICULTY, 3);
-		menu_add(menu_difficulty, text_medium, CHOOSE_DIFFICULTY, 2);
-		menu_add(menu_difficulty, text_easy, CHOOSE_DIFFICULTY, 1);
+		menu_add(menu_difficulty, text_hard, MODE_CHOOSE_DIFFICULTY, 3);
+		menu_add(menu_difficulty, text_medium, MODE_CHOOSE_DIFFICULTY, 2);
+		menu_add(menu_difficulty, text_easy, MODE_CHOOSE_DIFFICULTY, 1);
 
 		menu_add_submenus(menu_input_sources, 2);
-		menu_add(menu_input_sources, text_joysticks, SET_INPUT_SOURCE, JOYSTICKS);
-		menu_add(menu_input_sources, text_microbit, SET_INPUT_SOURCE, MICROBIT);
+		menu_add(menu_input_sources, text_joysticks, MODE_SET_INPUT_SOURCE, JOYSTICKS);
+		menu_add(menu_input_sources, text_microbit, MODE_SET_INPUT_SOURCE, MICROBIT);
 
 	} else if (menu_type == IN_GAME) {
 		menu->text = text_in_game;
 		menu_add_submenus(menu, 1);
-		menu_add(menu, text_quit, PLAY_GAME, 1);
+		menu_add(menu, text_quit, MODE_PLAY_GAME, 1);
 
 	} else if (menu_type == HIGHSCORE) {
 		menu->text = text_highscores;
 		menu_add_submenus(menu, 1);
-		menu_add(menu, text_quit, MAIN_MENU, 0);
+		menu_add(menu, text_quit, MODE_MAIN_MENU, 0);
 	}
 	return menu;
 }
@@ -172,7 +172,7 @@ menu_ptr menu_goto(menu_ptr currentMenu, int depthDirection, int element, int cl
 	}
 
 	// Change mode if we encounter a mode-settings menu element
-	if (currentMenu->mode != NO_MODE) {
+	if (currentMenu->mode != MODE_IDLE) {
 		mode_set(currentMenu->mode, currentMenu->parameter);
 		return NULL;
 	}

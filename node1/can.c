@@ -52,27 +52,3 @@ message_t can_receive() {
 
 	return message;
 }
-
-void can_send_everything() {
-	int x = joy_read_x();
-	int y = joy_read_y();
-	int button_joystick = buttons_joystick();
-	int button_left = buttons_left();
-	int button_right = buttons_right();
-	int slider_left = adc_read(SLIDER_LEFT);
-	int slider_right = adc_read(SLIDER_RIGHT);
-	//printf("x %d y %d bj %d bl %d br %d sl %d sr %d\r\n", x, y, button_joystick, button_left, button_right, slider_left, slider_right);
-
-	message_t everything_msg = {
-		101, //Multifunk-verdier-id
-		7,
-		x,
-		y,
-		button_joystick,
-		button_left,
-		button_right,
-		slider_left,
-		slider_right
-	};
-	can_send(&everything_msg);
-}

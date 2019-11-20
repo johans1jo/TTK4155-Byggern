@@ -14,6 +14,22 @@ typedef struct Message {
 	char data[8];    /**< The data of the message */
 } message_t, *message_ptr;
 
+// CAN ID's for messages sent from node1
+enum {
+	MSG1_SET_MODE = 100,
+	MSG1_GAME_VALUES = 101,
+	MSG1_GAME_STOP = 102,
+	MSG1_CONTROLLER_PARAMETERS = 103,
+	MSG1_INPUT_SOURCE = 104
+};
+
+// CAN ID's for messages received from node2
+enum {
+	MSG2_MODE_RESPONSE = 200,
+	MSG2_SCORE_INGAME = 201,
+	MSG2_SCORE_TOTAL = 202
+};
+
 /**
  * @brief Initializes the CAN by calling the function mcp_init.
  */
@@ -37,4 +53,3 @@ void can_send(message_ptr message);
  * @return The data byte(s) of the received message from the RXBnDm register(s).
  */
 message_t can_receive();
-void can_send_everything();

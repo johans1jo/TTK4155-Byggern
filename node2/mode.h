@@ -3,10 +3,16 @@
  * @brief Implementation of the functions for the mode of the game.
  */
 
-enum {
-	IDLE = 0,
-  GAME
-};
+typedef enum {
+	MODE_IDLE = 0,
+	MODE_MAIN_MENU,
+	MODE_PLAY_GAME,
+	MODE_SHOW_HIGHSCORE,
+	MODE_EDIT_USER,
+	MODE_CHOOSE_USER,
+	MODE_CHOOSE_DIFFICULTY,
+	MODE_SET_INPUT_SOURCE
+} mode_t;
 
 /**
  * @brief Sets the mode and the parameter.

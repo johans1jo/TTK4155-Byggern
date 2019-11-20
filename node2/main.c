@@ -46,7 +46,7 @@ int main(void){
 	printf("\r\nStart\r\n");
 
 	while(1) {
-		if (mode_get() == GAME && !game_is_on()) {
+		if (mode_get() == MODE_PLAY_GAME && !game_is_on()) {
 			printf("Game on:\r\n");
 			game_play();
 		}
@@ -56,49 +56,37 @@ int main(void){
 }
 
 // Tar imot CAN-melding
-// 100: modus
-// 101: multifunk-data
-// 102: stopp spill
 ISR(INT3_vect) {
 	message_t receive = can_receive();
 	printf("canid: %d\r\n", receive.id);
 	printf("candata: %s\r\n", receive.data);
-	if (receive.id == 100) {
+	if (receive.id == MSG1_SET_MODE) {
 		mode_set(receive.data[0]); // 0 = IDLE, 1 = GAME
 		/*
 		//Responderer med modus:
 		message_t mode_msg = {
-			200,
+			MSG2_MODE_RESPONSE,
 			1,
 			mode_get()
 		};
 		can_send(&mode_msg);
 		*/
-	} else if (receive.id == 101) {
+	} else if (receive.id == MSG1_GAME_VALUES) {
 		// Receive values from node1
-		if (mode_get() == GAME && game_is_initialized()) {
+		if (mode_get() == MODE_PLAY_GAME && game_is_initialized()) {
 			game_update_from_node1(receive.data);
 		}
 
-	} else if (receive.id == 102) {
+	} else if (receive.id == MSG1_GAME_STOP) {
 		// Quit game
 		game_stop();
-		mode_set(IDLE);
+		mode_set(MODE_IDLE);
 
-	} else if (receive.id == 103) {
+	} else if (receive.id == MSG1_CONTROLLER_PARAMETERS) {
 		// Set difficulty
 		motor_set_controller_parameters(receive.data[0], receive.data[1]);
 
-		// Respond with the new parameters
-		message_t param_msg = {
-			203,
-			2,
-			motor_get_controller_parameter_p(),
-			motor_get_controller_parameter_i()
-		};
-		can_send(&param_msg);
-
-	} else if (receive.id == 104) {
+	} else if (receive.id == MSG1_INPUT_SOURCE) {
 		game_set_input_source(receive.data[0]);
 	} else {
 		printf("CAN!id %d\r\n", receive.id);

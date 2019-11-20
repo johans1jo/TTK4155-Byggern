@@ -10,8 +10,9 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 
 
 ## Todo
-* node1: can_send_everything() -> game_send_values()
+node12: fiks can
 * node1: draw_circle(): tettere prikker ved større sirkel
+* node12: fjern double/float
 * node1: menu: prikk ved valgt bruker mm
 * node1: game: loading
 * node2: game: startrespons
@@ -26,3 +27,4 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 * node12: bruk can-enum
 * node12: stacke initer
 * node2: solenoid-timer-interrupt
+* node12: can/game: game_stop -> set mode idle

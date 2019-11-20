@@ -47,7 +47,7 @@ void game_stop() {
 	motor_disable();
 
 	message_t score_msg = {
-		202,
+		MSG2_SCORE_TOTAL,
 		1,
 		score
 	};
@@ -84,10 +84,9 @@ void game_set_everything() {
 		if (increase_score) {
 			score++;
 			scoring_now = 1;
-			printf("score %d\r\n", score);
 
 			message_t score_msg = {
-				201,
+				MSG2_SCORE_INGAME,
 				1,
 				score
 			};

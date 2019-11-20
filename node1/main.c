@@ -50,10 +50,10 @@ int main(void){
 		printf("Main while\r\n");
 		mode_t mode = mode_get();
 
-		if (mode == MAIN_MENU) {
+		if (mode == MODE_MAIN_MENU) {
 			menu_start(menu_main, CLEAR);
 
-		} else if (mode == PLAY_GAME) {
+		} else if (mode == MODE_PLAY_GAME) {
 			int parameter = mode_parameter_get();
 			if (parameter == 0) {
 				// Start game
@@ -63,37 +63,37 @@ int main(void){
 			} else if (parameter == 1) {
 				// Quit game
 				game_stop();
-				mode_set(MAIN_MENU, 0);
+				mode_set(MODE_MAIN_MENU, 0);
 			}
 
-		} else if (mode == SHOW_HIGHSCORE) {
+		} else if (mode == MODE_SHOW_HIGHSCORE) {
 			highscore_show();
 			menu_start(menu_highscore, DONT_CLEAR);
 			// Set mode?
 
-		} else if (mode == EDIT_USER) {
+		} else if (mode == MODE_EDIT_USER) {
 			int user = mode_parameter_get();
 			game_edit_user(user);
 			// Set mode?
 
-		} else if (mode == CHOOSE_USER) {
+		} else if (mode == MODE_CHOOSE_USER) {
 			int user = mode_parameter_get();
 			game_choose_user(user);
-			mode_set(MAIN_MENU, 0);
+			mode_set(MODE_MAIN_MENU, 0);
 
-		} else if (mode == CHOOSE_DIFFICULTY) {
+		} else if (mode == MODE_CHOOSE_DIFFICULTY) {
 			int difficulty = mode_parameter_get();
 
 			game_set_difficulty(difficulty);
-			mode_set(MAIN_MENU, 0);
+			mode_set(MODE_MAIN_MENU, 0);
 
-		} else if (mode == SET_INPUT_SOURCE) {
+		} else if (mode == MODE_SET_INPUT_SOURCE) {
 			int new_input_source = mode_parameter_get();
 			game_set_input_source(new_input_source);
-			mode_set(MAIN_MENU, 0);
+			mode_set(MODE_MAIN_MENU, 0);
 
 		} else {
-			mode_set(MAIN_MENU, 0);
+			mode_set(MODE_MAIN_MENU, 0);
 		}
 		led_fire();
 	}
@@ -105,16 +105,14 @@ ISR(INT0_vect) {
 	message_t receive = can_receive();
 	printf("canid: %d\r\n", receive.id);
 	printf("candata: %s\r\n", receive.data);
-	if (receive.id == 200) {
+	if (receive.id == MSG2_MODE_RESPONSE) {
 		// Mode response
-	} else if (receive.id == 201) {
+	} else if (receive.id == MSG2_SCORE_INGAME) {
 		// Receive score while the user is playing
 		game_update_score(receive.data[0]);
-	} else if (receive.id == 202) {
+	} else if (receive.id == MSG2_SCORE_TOTAL) {
 		// Receive score after user quits game
 		highscore_save(receive.data[0], game_get_user());
-	} else if (receive.id == 203) {
-		// Receive the new parameters set by the user
 	} else {
 		// Unknown CAN ID
 	}
