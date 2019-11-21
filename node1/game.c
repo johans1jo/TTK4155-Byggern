@@ -27,8 +27,6 @@ char users[5][20] = {
 	"User 4"
 };
 
-const char text_lives_left[] PROGMEM = "lives left";
-
 void game_set_input_source(int new_input_source) {
 	input_source = new_input_source;
 
@@ -216,18 +214,35 @@ int game_get_user() {
 void game_update_fails(int fails) {
 	oled_goto_pos(7,0);
 	char fails_str[2];
-	sprintf(fails_str, "%d", 3 - fails);
-	oled_print(fails_str);
+	if (fails == 3) {
 
-	/*
-	// Fireworks :)
-	draw_clear();
-	for (int i = 0; i < 10; i++) {
-		draw_fireworks(i);
-		draw_push();
-		_delay_ms(10);
+	} else {
+		sprintf(fails_str, "%d", 3 - fails);
+		oled_print(fails_str);
+
+		oled_goto_pos(5,0);
+		oled_print("5");
+		_delay_ms(1000);
+
+		oled_goto_pos(5,0);
+		oled_print("4");
+		_delay_ms(1000);
+
+		oled_goto_pos(5,0);
+		oled_print("3");
+		_delay_ms(1000);
+
+		oled_goto_pos(5,0);
+		oled_print("2");
+		_delay_ms(1000);
+
+		oled_goto_pos(5,0);
+		oled_print("1");
+
+		_delay_ms(1000);
+		oled_goto_pos(5,0);
+		oled_print(" ");
 	}
-	*/
 }
 
 void game_send_everything() {

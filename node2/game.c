@@ -30,6 +30,7 @@ int fails = 0;
 int failing_now = 0;
 int input_source = JOYSTICKS;
 int time_score = 0;
+int pause = 0;
 
 int difficulty = EASY;
 
@@ -79,7 +80,7 @@ void game_timer_disable() {
 void game_play() {
 	game_on = 1;
 	game_init();
-	dispenser_drop_ball();
+	dispenser_drop_ball(0);
 
 	//Responderer med modus:
 	message_t mode_msg = {
@@ -141,7 +142,7 @@ void game_set_everything() {
 
 	// IR
 	int ir = ir_read();
-	if (!failing_now) {
+	if (!failing_now && !pause) {
 		int increase_fails = (ir < FAIL_TRESHOLD);
 		if (increase_fails) {
 			fails++;
@@ -164,7 +165,8 @@ void game_set_everything() {
 				_delay_ms(100);
 				mode_set(MODE_STOP_GAME);
 			} else {
-				dispenser_drop_ball();
+				pause = 1;
+				dispenser_drop_ball(5);
 			}
 		}
 	} else if (ir > FAIL_TRESHOLD) {
@@ -214,6 +216,10 @@ void game_set_difficulty(int new_difficulty) {
 		Ki = 6;
 	}
 	motor_set_controller_parameters(Kp, Ki);
+}
+
+void game_clear_pause() {
+	pause = 0;
 }
 
 ISR(TIMER3_COMPB_vect) {

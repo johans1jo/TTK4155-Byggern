@@ -67,5 +67,5 @@ int game_is_initialized();
 void game_stop();
 void game_set_input_source(int new_input_source);
 void game_set_difficulty(int new_difficulty);
-
+void game_clear_pause();
 #endif

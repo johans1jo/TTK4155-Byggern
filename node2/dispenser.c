@@ -5,6 +5,7 @@
 #include <avr/io.h>
 #include <stdio.h>
 #include <avr/interrupt.h>
+#include "game.h"
 
 int state = 0;
 int last_state = -1;
@@ -71,9 +72,9 @@ void dispenser_select_bottom() {
 		PORTF |= (1 << PF0);
 }
 
-void dispenser_drop_ball() {
+void dispenser_drop_ball(int new_pre_time) {
+	state = -new_pre_time;
 	operation = DROP_BALL;
-	state = 0;
 	dispenser_start_timer();
 }
 
@@ -92,6 +93,7 @@ void dispenser_do() {
 		} else if (operation == DROP_BALL) {
 			printf("drop_ball\r\n");
 			if (state == 1) {
+				game_clear_pause();
 				dispenser_select_top();
 				dispenser_close();
 			} else if (state == 2) {
