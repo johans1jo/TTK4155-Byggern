@@ -12,8 +12,6 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 ## Todo
 
 * node2: tuning, i-ledd
-* highscore på tid
-* shift i tastaturet
 * microbit
 *
 * node1: menu: prikk ved valgt bruker mm

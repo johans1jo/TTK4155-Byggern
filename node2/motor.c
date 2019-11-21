@@ -17,12 +17,11 @@
 #define RST PH6
 
 int Kp = 1; // Controller parameters in use at the moment
-int Ki = 0; // ...
+int Ki = 1; // ...
 int Kp_user = 1; // User defined controller parameters
-int Ki_user = 0; // ...
+int Ki_user = 1; // ...
 int Kp_init = 1; // Initial parameters. Used in encoder_calibrate()
-int Ki_init = 0; // ...
-int Tt = 20/1000;
+int Ki_init = 1; // ...
 
 void motor_init() {
 	twi_init();
@@ -71,12 +70,7 @@ void motor_set_position(int reference) {
 	reference = encoder_map(reference);
 	unsigned int encoder_value = encoder_read();
 	int e = reference - encoder_value;
-	unsigned long total_error = 0;
-	total_error = total_error + e; // Wrong
-	unsigned int u = Kp*e + Tt*Ki*total_error;
-	int k_ledd = Kp*e;
-	int i_ledd = Tt*Ki*total_error;
-	//printf("total_error: %lu K-ledd: %d I-ledd: %d ", total_error, k_ledd, i_ledd);
+	unsigned int u = Kp*e;
 	int speed = abs(u)/40;
 	if (e < 0) {
 		motor_set_direction(RIGHT);
@@ -84,7 +78,6 @@ void motor_set_position(int reference) {
 		motor_set_direction(LEFT);
 	}
 	motor_set_speed(speed);
-	//printf("ref %d enc %d e %d u %d speed %d\r\n", reference, encoder_value, e, u, speed);
 }
 
 void motor_set_controller_parameters(int param_p, int param_i) {

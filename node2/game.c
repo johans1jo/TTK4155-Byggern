@@ -123,7 +123,7 @@ int game_is_initialized() {
 
 void game_set_everything() {
 	// Motor
-	int reference = -(sr - 127)*30;
+	int reference = -(sr - 127)*40;
 	motor_set_position(reference);
 
 	// Solenoid
