@@ -112,7 +112,12 @@ void game_set_everything() {
 				fails
 			};
 			can_send(&fail_msg);
-			_delay_ms(100);
+
+			if (fails == 3) {
+				mode_set(MODE_STOP_GAME);
+			} else {
+				dispenser_drop_ball();
+			}
 		}
 	} else if (ir > FAIL_TRESHOLD) {
 		failing_now = 0;
