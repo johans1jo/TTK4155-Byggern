@@ -27,7 +27,7 @@ enum {
 // CAN ID's for messages received from node2
 enum {
 	MSG2_MODE_RESPONSE = 200,
-	MSG2_SCORE_INGAME = 201,
+	MSG2_FAIL_INGAME = 201,
 	MSG2_SCORE_TOTAL = 202
 };
 

@@ -122,9 +122,9 @@ ISR(INT0_vect) {
 		game_set_on();
 		mode_set(MODE_PLAY_GAME, 3);
 		// Mode response
-	} else if (receive.id == MSG2_SCORE_INGAME) {
-		// Receive score while the user is playing
-		game_update_score(receive.data[0]);
+	} else if (receive.id == MSG2_FAIL_INGAME) {
+		// Receive fails while the user is playing
+		game_update_fails(receive.data[0]);
 	} else if (receive.id == MSG2_SCORE_TOTAL) {
 		// Receive score after user quits game
 		highscore_save(receive.data[0], game_get_user());

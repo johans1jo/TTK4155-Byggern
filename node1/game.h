@@ -81,8 +81,8 @@ void game_edit_user(int user_edit);
  *
  * @param[in] The score.
  */
-void game_show_score(int score);
-void game_update_score(int score);
+void game_show_fails(int fails);
+void game_update_fails(int fails);
 
 char * game_get_user_name(int user_id);
 void game_set_user_name(int user_id, char * user_name);

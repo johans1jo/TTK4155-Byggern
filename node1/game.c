@@ -204,11 +204,11 @@ int game_get_user() {
 	return user;
 }
 
-void game_update_score(int score) {
+void game_update_fails(int fails) {
 	oled_goto_pos(7,0);
-	char score_str[2];
-	sprintf(score_str, "%d", score);
-	oled_print(score_str);
+	char fails_str[2];
+	sprintf(fails_str, "%d", fails);
+	oled_print(fails_str);
 
 	/*
 	// Fireworks :)

@@ -12,7 +12,7 @@
 #include "mode.h"
 #include "dispenser.h"
 
-#define SCORE_TRESHOLD 300
+#define FAIL_TRESHOLD 300
 
 int x = 0;
 int y = 0;
@@ -26,8 +26,8 @@ int bl_previous = 0;
 
 int game_on = 0;
 int game_initialized = 0;
-int score = 0;
-int scoring_now = 0;
+int fails = 0;
+int failing_now = 0;
 int input_source = JOYSTICKS;
 
 int difficulty = EASY;
@@ -69,11 +69,11 @@ void game_stop() {
 	message_t score_msg = {
 		MSG2_SCORE_TOTAL,
 		1,
-		score
+		1 //score
 	};
 	can_send(&score_msg);
 
-	score = 0;
+	fails = 0;
 }
 
 int game_is_on() {
@@ -100,22 +100,22 @@ void game_set_everything() {
 
 	// IR
 	int ir = ir_read();
-	if (!scoring_now) {
-		int increase_score = (ir < SCORE_TRESHOLD);
-		if (increase_score) {
-			score++;
-			scoring_now = 1;
+	if (!failing_now) {
+		int increase_fails = (ir < FAIL_TRESHOLD);
+		if (increase_fails) {
+			fails++;
+			failing_now = 1;
 
-			message_t score_msg = {
-				MSG2_SCORE_INGAME,
+			message_t fail_msg = {
+				MSG2_FAIL_INGAME,
 				1,
-				score
+				fails
 			};
-			can_send(&score_msg);
+			can_send(&fail_msg);
 			_delay_ms(100);
 		}
-	} else if (ir > SCORE_TRESHOLD) {
-		scoring_now = 0;
+	} else if (ir > FAIL_TRESHOLD) {
+		failing_now = 0;
 	}
 	//printf("game_set_everything x: %d y: %d bj: %d bl: %d br: %d sl: %d sr: %d\r\n", x, y, bj, bl, br, sl, sr);
 }
