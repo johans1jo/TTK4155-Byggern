@@ -10,6 +10,7 @@
 #include <util/delay.h>
 #include "can.h"
 #include "mode.h"
+#include "dispenser.h"
 
 #define SCORE_TRESHOLD 300
 
@@ -32,6 +33,7 @@ int input_source = JOYSTICKS;
 int difficulty = EASY;
 
 void game_init() {
+	dispenser_init();
 	motor_enable();
 	motor_clear_controller_parameters();
 	if (!game_is_initialized()) {
@@ -47,6 +49,7 @@ void game_init() {
 void game_play() {
 	game_on = 1;
 	game_init();
+	dispenser_drop_ball();
 
 	//Responderer med modus:
 	message_t mode_msg = {

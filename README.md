@@ -13,20 +13,19 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 
 * node2: tuning, i-ledd
 *
-* node1: menu: prikk ved valgt bruker mm
+* tidtaking
 * microbit
-* mer ir
-* ballslipp ved start og ved tap
+* ballslipp ved start og ved tap - timer
 *
+* node1: menu: prikk ved valgt bruker mm
 * node1: highscore: liste+graf, navigering
 * node1: game/draw: fireworks
-* labyrint
-* 
+*
 * shift i tastaturet
 *
 * node2: adc: generell funksjon
-* node12: fjern double/float
 * node2: adc: enum
+* node12: fjern double/float
 * node12: stacke initer
 * node2: solenoid-timer-interrupt
 * node12: can/game: game_stop -> set mode idle

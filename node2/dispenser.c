@@ -1,3 +1,4 @@
+#include "dispenser.h"
 #include "pwm.h"
 #define F_CPU 16000000UL
 #include <util/delay.h>
@@ -40,21 +41,5 @@ void dispenser_drop_ball() {
 	dispenser_select_top();
 	dispenser_open();
 	_delay_ms(1000);
-	/*
-	dispenser_open();
-	_delay_ms(1000);
-	dispenser_close();
-	_delay_ms(1000);
-	PINF |= (1 << PF0);
-	PINF &= ~(1 << PF0);
-	_delay_ms(100);
-
-	dispenser_open();
-	_delay_ms(1000);
-	dispenser_close();
-	_delay_ms(1000);
-	PINF |= (1 << PF0);
-	PINF &= ~(1 << PF0);
-	*/
 
 }
