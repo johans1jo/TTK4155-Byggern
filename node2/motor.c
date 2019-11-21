@@ -26,7 +26,7 @@ int Ki_init = 1; // ...
 void motor_init() {
 	twi_init();
 
-  DDRH |= (1 << DIR);
+  DDRH |= (1 << DIR); 
   //DDRH |= (1 << EN); // Enable
 	motor_disable();
 
