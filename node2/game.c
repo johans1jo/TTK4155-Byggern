@@ -33,7 +33,7 @@ int input_source = JOYSTICKS;
 int difficulty = EASY;
 
 void game_init() {
-	dispenser_init();
+	//dispenser_clear();
 	motor_enable();
 	motor_clear_controller_parameters();
 	if (!game_is_initialized()) {
@@ -114,7 +114,7 @@ void game_set_everything() {
 			can_send(&fail_msg);
 
 			if (fails == 3) {
-				mode_set(MODE_STOP_GAME);
+				mode_set(MSG2_GAME_FAILED);
 			} else {
 				dispenser_drop_ball();
 			}

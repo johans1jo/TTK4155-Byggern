@@ -43,10 +43,12 @@ int main(void){
 	encoder_init();
 	solenoid_init();
 	led_init();
+	dispenser_init();
 	sei();
 	printf("\r\nStart\r\n");
 
 	while(1) {
+		dispenser_do();
 		int mode = mode_get();
 		if (mode == MODE_IDLE) {
 		} else if (mode == MODE_PLAY_GAME && !game_is_on()) {

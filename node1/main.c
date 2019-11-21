@@ -128,6 +128,9 @@ ISR(INT0_vect) {
 	} else if (receive.id == MSG2_SCORE_TOTAL) {
 		// Receive score after user quits game
 		highscore_save(receive.data[0], game_get_user());
+	} else if (receive.id == MSG2_GAME_FAILED) {
+		game_stop();
+		mode_set(MODE_MAIN_MENU, 0);
 	} else {
 		// Unknown CAN ID
 	}

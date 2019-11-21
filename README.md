@@ -12,10 +12,8 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 ## Todo
 
 * node2: tuning, i-ledd
-*
-* tidtaking
+* fail > 3 bug
 * microbit
-* ballslipp ved start og ved tap - timer
 *
 * node1: menu: prikk ved valgt bruker mm
 * node1: highscore: liste+graf, navigering
