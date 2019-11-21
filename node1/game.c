@@ -13,6 +13,7 @@
 #include "joystick.h"
 #include <string.h>
 #include "buttons.h"
+#include <avr/pgmspace.h>
 
 int game_on = 0;
 int user = 0;
@@ -25,6 +26,8 @@ char users[5][20] = {
 	"User 3",
 	"User 4"
 };
+
+const char text_lives_left[] PROGMEM = "lives left";
 
 void game_set_input_source(int new_input_source) {
 	input_source = new_input_source;
@@ -213,7 +216,7 @@ int game_get_user() {
 void game_update_fails(int fails) {
 	oled_goto_pos(7,0);
 	char fails_str[2];
-	sprintf(fails_str, "%d", fails);
+	sprintf(fails_str, "%d", 3 - fails);
 	oled_print(fails_str);
 
 	/*
