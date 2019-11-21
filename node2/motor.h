@@ -21,7 +21,6 @@ void motor_init();
  * OCR3B is continuously compared with counter (TCNT1).
  * Enables timer 3 interrupt, compare match
  */
-void motor_controller_init();
 
 /**
  * @brief Enables the motor.

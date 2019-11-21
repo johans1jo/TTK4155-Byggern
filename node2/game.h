@@ -26,6 +26,12 @@ void game_init();
 /**
  * @brief Starts the game.
  */
+void game_timer_init();
+
+void game_timer_enable();
+
+void game_timer_disable();
+
 void game_play();
 
 /**

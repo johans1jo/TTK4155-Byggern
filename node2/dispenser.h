@@ -6,6 +6,7 @@ enum {
 void dispenser_open();
 void dispenser_close();
 void dispenser_clear();
+void dispenser_clear_hard();
 void dispenser_select_top();
 void dispenser_select_bottom();
 void dispenser_drop_ball();

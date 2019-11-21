@@ -52,14 +52,15 @@ void dispenser_clear() {
 	operation = CLEAR_DISPENSER;
 	state = 0;
 	dispenser_start_timer();
+}
 
-	/*
+void dispenser_clear_hard() {
 	dispenser_select_bottom();
 	dispenser_close();
 	_delay_ms(1000);
 	dispenser_select_top();
 	dispenser_open();
-	_delay_ms(1000);*/
+	_delay_ms(1000);
 }
 
 void dispenser_select_top() {
@@ -74,18 +75,6 @@ void dispenser_drop_ball() {
 	operation = DROP_BALL;
 	state = 0;
 	dispenser_start_timer();
-	/*
-	dispenser_select_top();
-	dispenser_close();
-	_delay_ms(1000);
-	dispenser_select_bottom();
-	dispenser_open();
-	_delay_ms(1000);
-	dispenser_close();
-	_delay_ms(1000);
-	dispenser_select_top();
-	dispenser_open();
-	_delay_ms(1000);*/
 }
 
 void dispenser_do() {

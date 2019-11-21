@@ -134,9 +134,15 @@ void menu_start(menu_ptr menu, int clear) {
 
 		// Retrieve inputs and go the right direction in the menu system
 		while (joy_read_dir() != 0 || !(game_is_on() == (buttons_right() > 0))) {
+			if (mode_get() == MODE_MAIN_MENU && mode_parameter_get() == 1) {
+				return;
+			}
 			_delay_ms(10);
 		};
 		while (joy_read_dir() == 0 || !(game_is_on() == (buttons_right() > 0))) {
+			if (mode_get() == MODE_MAIN_MENU && mode_parameter_get() == 1) {
+				return;
+			}
 			_delay_ms(10);
 		};
 		int input = joy_read_dir();

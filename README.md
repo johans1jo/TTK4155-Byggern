@@ -12,7 +12,7 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 ## Todo
 
 * node2: tuning, i-ledd
-* fail > 3 bug
+* bug: avslutte fra node2 aka fail > 3
 * microbit
 *
 * node1: menu: prikk ved valgt bruker mm

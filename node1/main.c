@@ -52,7 +52,12 @@ int main(void){
 		if (mode == MODE_IDLE) {
 
 		} else if (mode == MODE_MAIN_MENU) {
-			menu_start(menu_main, CLEAR);
+			int parameter = mode_parameter_get();
+			if (parameter == 1) {
+				mode_set(MODE_MAIN_MENU, 0);
+			} else {
+				menu_start(menu_main, CLEAR);
+			}
 
 		} else if (mode == MODE_PLAY_GAME) {
 			int parameter = mode_parameter_get();
@@ -128,9 +133,10 @@ ISR(INT0_vect) {
 	} else if (receive.id == MSG2_SCORE_TOTAL) {
 		// Receive score after user quits game
 		highscore_save(receive.data[0], game_get_user());
+		mode_set(MODE_MAIN_MENU, 1);
 	} else if (receive.id == MSG2_GAME_FAILED) {
 		game_stop();
-		mode_set(MODE_MAIN_MENU, 0);
+		mode_set(MODE_MAIN_MENU, 1); //Hard to main menu
 	} else {
 		// Unknown CAN ID
 	}

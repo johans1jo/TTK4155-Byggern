@@ -12,7 +12,7 @@
 #include "mode.h"
 #include "dispenser.h"
 
-#define FAIL_TRESHOLD 300
+#define FAIL_TRESHOLD 500
 
 int x = 0;
 int y = 0;
@@ -33,17 +33,46 @@ int input_source = JOYSTICKS;
 int difficulty = EASY;
 
 void game_init() {
-	//dispenser_clear();
+	dispenser_clear_hard();
 	motor_enable();
 	motor_clear_controller_parameters();
 	if (!game_is_initialized()) {
 		encoder_calibrate();
 	}
-	motor_controller_init();
+	game_timer_init();
+	game_timer_enable();
 	_delay_ms(100);
 	motor_set_position(0);
 	_delay_ms(1000);
 	motor_set_user_defined_controller_parameters();
+}
+
+void game_timer_init() {
+	// In CTC mode the counter is cleared to zero when the counter value (TCNTn) matches either the OCRnA (WGMn3:0 = 4)
+  // Setter mode CTC (4)
+  TCCR3B &= ~(1 << WGM33);
+	TCCR3B |= (1 << WGM32);
+  TCCR3A &= ~(1 << WGM31); // Be aware of A- and B-registers
+  TCCR3A &= ~(0 << WGM30);
+
+  // Normal port operation
+  TCCR3A &= ~(1 << COM3B1);
+  TCCR3A &= ~(1 << COM3B0);
+
+  // Prescaler = 1024
+  TCCR3B |= (1 << CS32);
+  TCCR3B &= ~(1 << CS31);
+  TCCR3B |= (1 << CS30);
+
+	OCR3B = (F_CPU/1024)*0.02;
+}
+
+void game_timer_enable() {
+	TIMSK3 |= (1 << OCIE3B);
+}
+
+void game_timer_disable() {
+	TIMSK3 &= ~(1 << OCIE3B);
 }
 
 void game_play() {
@@ -65,6 +94,7 @@ void game_play() {
 void game_stop() {
 	game_on = 0;
 	motor_disable();
+	game_timer_disable();
 
 	message_t score_msg = {
 		MSG2_SCORE_TOTAL,
@@ -113,8 +143,15 @@ void game_set_everything() {
 			};
 			can_send(&fail_msg);
 
-			if (fails == 3) {
-				mode_set(MSG2_GAME_FAILED);
+			if (fails >= 3) {
+				message_t fail_msg = {
+					MSG2_GAME_FAILED,
+					1,
+					fails //score
+				};
+				can_send(&fail_msg);
+				_delay_ms(100);
+				mode_set(MODE_STOP_GAME);
 			} else {
 				dispenser_drop_ball();
 			}
