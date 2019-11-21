@@ -29,6 +29,7 @@ int game_initialized = 0;
 int fails = 0;
 int failing_now = 0;
 int input_source = JOYSTICKS;
+int time_score = 0;
 
 int difficulty = EASY;
 
@@ -96,14 +97,20 @@ void game_stop() {
 	motor_disable();
 	game_timer_disable();
 
+	int score = time_score/50;
+	if (score > 254) {
+		score = 254;
+	}
+
 	message_t score_msg = {
 		MSG2_SCORE_TOTAL,
 		1,
-		1 //score
+		score // Seconds
 	};
 	can_send(&score_msg);
 
 	fails = 0;
+	time_score = 0;
 }
 
 int game_is_on() {
@@ -151,7 +158,7 @@ void game_set_everything() {
 				message_t fail_msg = {
 					MSG2_GAME_FAILED,
 					1,
-					fails //score
+					time_score //score
 				};
 				can_send(&fail_msg);
 				_delay_ms(100);
@@ -211,6 +218,7 @@ void game_set_difficulty(int new_difficulty) {
 
 ISR(TIMER3_COMPB_vect) {
 	if (game_initialized) {
+		time_score++;
 		game_set_everything();
 	}
 	TCNT3 = 0; // Reset counter
