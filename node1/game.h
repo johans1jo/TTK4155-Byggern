@@ -20,7 +20,8 @@ enum {
 enum {
 	EASY,
 	MEDIUM,
-	HARD
+	HARD,
+	CRAZY
 };
 
 void game_init();

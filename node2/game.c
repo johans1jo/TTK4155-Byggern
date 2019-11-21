@@ -126,7 +126,11 @@ void game_set_everything() {
 	bl_previous = bl;
 
 	// Servo
-	servo_set_from_joystick(y);
+	if (difficulty == CRAZY) {
+		servo_set_from_joystick(-y);
+	} else {
+		servo_set_from_joystick(y);
+	}
 
 	// IR
 	int ir = ir_read();
@@ -198,6 +202,9 @@ void game_set_difficulty(int new_difficulty) {
 	} else if (difficulty == HARD) {
 		Kp = 4;
 		Ki = 5;
+	} else if (difficulty == CRAZY) {
+		Kp = 10;
+		Ki = 6;
 	}
 	motor_set_controller_parameters(Kp, Ki);
 }

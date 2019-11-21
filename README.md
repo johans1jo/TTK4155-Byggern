@@ -12,14 +12,15 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 ## Todo
 
 * node2: tuning, i-ledd
-* bug: avslutte fra node2 aka fail > 3
+* highscore på tid
+* shift i tastaturet
 * microbit
+* supervanskelig vanskelighetsgrad
 *
 * node1: menu: prikk ved valgt bruker mm
 * node1: highscore: liste+graf, navigering
 * node1: game/draw: fireworks
 *
-* shift i tastaturet
 *
 * node2: adc: generell funksjon
 * node2: adc: enum
