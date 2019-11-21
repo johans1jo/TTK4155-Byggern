@@ -23,7 +23,6 @@
 #include "game.h"
 #include "mode.h"
 #include "led.h"
-#include "microbit.h"
 #include "dispenser.h"
 
 #define FOSC 16000000UL

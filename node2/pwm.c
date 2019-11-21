@@ -60,8 +60,8 @@ void pwm_init() {
 void pwm_shoot_set_ms(double ms) {
   if (ms < 0.9) { // 0.9
     ms = 0.9;
-  } else if (ms > 2.4) { // 2.1
-    ms = 2.4;
+  } else if (ms > 2.1) { // 2.1
+    ms = 2.1;
   }
 
   OCR1B = (pwm_period/0x14)*ms;
