@@ -122,11 +122,12 @@ void game_edit_user(int user_edit) {
 	char * user_name = game_get_user_name(user_edit);
 	int user_name_length = strlen(user_name);
 	int keyboard_position = 0;
+	int caps_lock = 0;
 
 	while(1) {
 		draw_clear();
 		draw_print(0, 0, user_name);
-		draw_keyboard(keyboard_position);
+		draw_keyboard(keyboard_position, caps_lock);
 		if (keyboard_position > 26 && keyboard_position <= 30) {
 			draw_print(7, 0, "SAVE");
 		} else {
@@ -145,11 +146,12 @@ void game_edit_user(int user_edit) {
 			_delay_ms(10);
 		};
 		// Waiting for joystick to be pushed in some direction.
-		while (joy_read_dir() == 0 && !buttons_right()) {
+		while (joy_read_dir() == 0 && !buttons_right() && !buttons_left()) {
 			_delay_ms(10);
 		};
-
-		if (buttons_right()) {
+		if (buttons_left()) {
+			caps_lock = !caps_lock;
+		} else if (buttons_right()) {
 			if (keyboard_position > 26 && keyboard_position <= 30) {
 				// Save
 				mode_set(MODE_MAIN_MENU, 0);
@@ -165,7 +167,11 @@ void game_edit_user(int user_edit) {
 				if (keyboard_position == 26) {
 					new_char = ' ';
 				} else {
-					new_char = 'a' + keyboard_position;
+					if (caps_lock) {
+						new_char = 'A' + keyboard_position;
+					} else {
+						new_char = 'a' + keyboard_position;
+					}
 				}
 				user_name[user_name_length] = new_char;
 				user_name_length++;

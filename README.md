@@ -15,7 +15,6 @@ Det ambisiøse og framoverlente teamet bestod av følgende partnere:
 * highscore på tid
 * shift i tastaturet
 * microbit
-* supervanskelig vanskelighetsgrad
 *
 * node1: menu: prikk ved valgt bruker mm
 * node1: highscore: liste+graf, navigering

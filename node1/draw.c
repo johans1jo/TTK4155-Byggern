@@ -139,7 +139,7 @@ void draw_print(int line, int x, char c[]) {
   }
 }
 
-void draw_keyboard(int marked_char) {
+void draw_keyboard(int marked_char, int caps_lock) {
 	int line = 1;
 	int x = 0;
 	for (int i = 0; i < 26; i++) {
@@ -147,7 +147,12 @@ void draw_keyboard(int marked_char) {
 			line = line + 2;
 			x = 0;
 		}
-		draw_print_char(line, x, 'a' + i);
+		if (caps_lock) {
+			draw_print_char(line, x, 'A' + i);
+		} else {
+			draw_print_char(line, x, 'a' + i);
+
+		}
 		x = x + 7*2;
 	}
 	if (marked_char >=0 && marked_char <= 26) {
