@@ -1,4 +1,4 @@
 #!/bin/bash
 
 doxygen
-open -a "Google Chrome" docs/index.html
+open -a chromium-browser docs/index.html

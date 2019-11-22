@@ -36,7 +36,7 @@ menu_ptr menu_init(menu_type_t menu_type) {
 	menu_ptr menu = malloc(sizeof(menu_t));
 	menu->submenu_count = 0;
 	menu->mode = MODE_IDLE;
-	printf("malloc %d\r\n", menu);
+	//printf("malloc %d\r\n", menu);
 
 	if (menu_type == MAIN) {
 		menu->text = text_main_menu;
@@ -90,7 +90,7 @@ menu_ptr menu_init(menu_type_t menu_type) {
 
 void menu_add_submenus(menu_ptr menu, int submenu_count) {
 	menu_ptr submenus = malloc(sizeof(menu_t)*submenu_count);
-	printf("malloc (%d) %d\r\n", submenu_count, submenus);
+	//printf("malloc (%d) %d\r\n", submenu_count, submenus);
 	menu->submenus = submenus;
 }
 
